@@ -10,9 +10,13 @@ SCRIPT_PATH=$0
 REAL_SCRIPT_PATH=$(readlink -f ${SCRIPT_PATH})
 SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 
-pwd
+ORIG_DIR=$(pwd)
 
 echo '** installing project deps! **'
-cd src/test/javascript/sdet-assignment-service-codeceptsjs
+cd /
+sudo ln -sf /workspaces/pltsci-sdet-assignment/service/application.properties
+cd "${ORIG_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 
-yarn install
+npm install
+npx playwright install
+npx codeceptjs def

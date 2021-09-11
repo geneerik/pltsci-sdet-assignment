@@ -204,3 +204,19 @@ CMD [ "sleep", "infinity" ]
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+# install stuff needed for nightmare browser (xvbf)
+#RUN apt-get update && \
+#	DEBIAN_FRONTEND=noninteractive apt-get install \
+#		pkg-config libjpeg-dev libgif-dev g++ git-all xvfb libgtk2.0-0 dbus-x11 libnss3-dev \
+#		gtk2-engines-pixbuf xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable libgbm1 -y && \
+#	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+RUN export DEBIAN_FRONTEND=noninteractive; \
+	apt-get update && \
+	apt-get install emacs -y && \
+	apt-get install pkg-config libjpeg-dev libgif-dev g++ git-all xvfb libgtk2.0-0 dbus-x11 -y && \
+	apt-get install libnss3-dev -y && \
+	apt-get install gtk2-engines-pixbuf xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable -y && \
+	apt-get install libgbm1 -y && \
+	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
