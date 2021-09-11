@@ -1,0 +1,84 @@
+{
+	"name": "Node.js",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick a Node version: 16, 14, 12.
+		// Append -bullseye or -buster to pin to an OS version.
+		// Use the -bullseye variants if you are on a M1 mac.
+		"args": {
+			"VARIANT": "16-bullseye",
+			// Options
+			"INSTALL_MAVEN": "true",
+			"MAVEN_VERSION": "3.5.3",
+			"INSTALL_GRADLE": "false",
+			"USERNAME": "node"
+		}
+	},
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"terminal.integrated.shellArgs.linux": ["-l"],
+		"debug.internalConsoleOptions": "openOnSessionStart",
+
+		"eslint.workingDirectories": [
+			{
+				"directory": "./src/test/javascript/sdet-assignment-service-codeceptsjs",
+				"changeProcessCWD": true
+			}
+		],
+
+		"java.home": "/docker-java-home",
+		"maven.executable.path": "/usr/local/sdkman/candidates/maven/current/bin/mvn",
+		"java.configuration.runtimes": [
+			{
+				"name": "JavaSE-1.8",
+				"path": "/usr/local/sdkman/candidates/java/current",
+				"default": true
+			},
+			{
+				"name": "JavaSE-11",
+				"path": "/docker-java-home"
+			},
+		],
+		"java.test.log.level": "debug",
+		"java.configuration.updateBuildConfiguration": "interactive"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		// node
+		"dbaeumer.vscode-eslint",
+
+		// java
+		"vscjava.vscode-java-pack",
+		"pivotal.vscode-boot-dev-pack",
+		"vscjava.vscode-spring-initializr",
+		"pivotal.vscode-spring-boot",
+		"vscjava.vscode-spring-boot-dashboard",
+
+		// docker
+		"ms-azuretools.vscode-docker",
+		/* nice idea, but wont work without login to github. and its annoying about it */
+		//"cschleiden.vscode-github-actions",
+		"yzhang.markdown-all-in-one"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "pwd && ((.devcontainer/post-install.sh) 2>&1)",
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node",
+
+	"runArgs": ["--init"],
+	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
+	"overrideCommand": false,
+	
+	// Use this environment variable if you need to bind mount your local source code into a new container.
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	}
+}
