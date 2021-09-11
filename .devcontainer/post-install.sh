@@ -13,6 +13,6 @@ SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 pwd
 
 echo '** installing project deps! **'
-cd src/test/javascript
+cd src/test/javascript/sdet-assignment-service-codeceptsjs
 
 yarn install
