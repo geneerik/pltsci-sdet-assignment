@@ -1,5 +1,5 @@
 exports.config = {
-  output: './output',
+  output: './src/test/javascript/sdet-assignment-service-codeceptsjs/output',
   helpers: {
     Playwright: {
       url: 'http://localhost:8080',
@@ -8,15 +8,15 @@ exports.config = {
     }
   },
   include: {
-    I: './steps_file.js'
+    I: './src/test/javascript/sdet-assignment-service-codeceptsjs/steps_file.js'
   },
   mocha: {},
   bootstrap: null,
   teardown: null,
   hooks: [],
   gherkin: {
-    features: './features/*.feature',
-    steps: ['./step_definitions/steps.js']
+    features: './src/test/javascript/sdet-assignment-service-codeceptsjs/features/*.feature',
+    steps: ['./src/test/javascript/sdet-assignment-service-codeceptsjs/step_definitions/steps.js']
   },
   plugins: {
     screenshotOnFail: {
@@ -30,6 +30,6 @@ exports.config = {
       enabled: true
     }
   },
-  tests: './*_test.js',
+  tests: './src/test/javascript/sdet-assignment-service-codeceptsjs/*_test.js',
   name: 'sdet-assignment-service-codeceptsjs'
 }
