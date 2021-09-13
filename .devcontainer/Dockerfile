@@ -139,6 +139,35 @@ RUN set -eux; \
 	javac -version; \
 	java -version
 
+# install stuff needed for nightmare browser (xvbf)
+RUN export DEBIAN_FRONTEND=noninteractive; \
+	apt-get update && \
+	apt-get install emacs -y && \
+	apt-get install -y pkg-config libjpeg-dev libgif-dev g++ git-all xvfb libgtk2.0-0 dbus-x11 \
+					libnss3-dev \
+					gtk2-engines-pixbuf xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
+					libgbm1 && \
+	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+# install stuff for allure reports ()
+# NOTE: cannot do the apt install method as it provides an ANCIENT version (2.4.1) and there is no new deb package
+#       we will instead do the manual install by unzipping the maven zip as recomended by allure project
+#       (https://docs.qameta.io/allure/#_manual_installation)
+# NOTE: neither of these is needed; the npm install allure-commandline installs the needed binaries; keeping for notes
+#RUN gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 81DF7E991C478191896F126635AEAEA4134BF6F3 && \
+#	(gpg --export --armor 81DF7E991C478191896F126635AEAEA4134BF6F3 > qameta_allure_ppa.gpg.key) && \
+#	apt-key add qameta_allure_ppa.gpg.key && \
+#	rm qameta_allure_ppa.gpg.key && \
+#	(echo 'deb http://ppa.launchpad.net/fkrull/deadsnakes/ubuntu xenial main' > /etc/apt/sources.list.d/qameta-allure-ppa-xenial.list) && \
+#	apt-get update && \
+#	apt-get install allure && \
+#	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+#RUN curl -fL https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.zip -o allure.zip && \
+#	(DL_DIR=$(pwd); cd /usr/local/share && unzip "${DL_DIR}"/allure.zip) && \
+#	rm allure.zip && \
+#	cd /usr/local/bin && \
+#	ln -s /usr/local/share/allure-2.14.0/bin/allure
+
 ## MS Java cust
 
 # ms base
@@ -204,19 +233,3 @@ CMD [ "sleep", "infinity" ]
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# install stuff needed for nightmare browser (xvbf)
-#RUN apt-get update && \
-#	DEBIAN_FRONTEND=noninteractive apt-get install \
-#		pkg-config libjpeg-dev libgif-dev g++ git-all xvfb libgtk2.0-0 dbus-x11 libnss3-dev \
-#		gtk2-engines-pixbuf xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable libgbm1 -y && \
-#	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-RUN export DEBIAN_FRONTEND=noninteractive; \
-	apt-get update && \
-	apt-get install emacs -y && \
-	apt-get install pkg-config libjpeg-dev libgif-dev g++ git-all xvfb libgtk2.0-0 dbus-x11 -y && \
-	apt-get install libnss3-dev -y && \
-	apt-get install gtk2-engines-pixbuf xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable -y && \
-	apt-get install libgbm1 -y && \
-	apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*

@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import 'expect';
-import expectExport, { extractExpectedAssertionsErrors } from 'expect';
+// import expectExport, { extractExpectedAssertionsErrors } from 'expect';
+// const allure = codeceptjs.container.plugins('allure');
 
 Feature('cleaning-sessions (REST)');
 
@@ -24,7 +25,9 @@ Scenario('Verify example input', async ({ I }) => {
 	await I.assertEqual(expectedData, data);
 });
 
+
 Scenario('Verify some input validation', async ({ I }) => {
+	// allure.issue("8675309");
 	const res:AxiosResponse = await I.cleaningSessionsPost(
 		{
 			"roomSize" : [5, 5],

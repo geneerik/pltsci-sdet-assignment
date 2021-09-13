@@ -39,8 +39,9 @@ exports.config = {
         },
         tryTo: {
             enabled: true
-        }
+        },
+        allure: {}
     },
     tests: "./*_test.ts",
-    name: "codeptjs"
+    name: "codeceptjs"
 };

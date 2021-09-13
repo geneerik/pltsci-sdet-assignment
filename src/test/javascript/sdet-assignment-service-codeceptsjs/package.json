@@ -15,6 +15,7 @@
         "@codeceptjs/examples": "^1.2.1",
         "@codeceptjs/ui": "^0.4.6",
         "@types/node": "^16.9.1",
+        "allure-commandline": "^2.13.8",
         "codeceptjs": "^3.1.2",
         "codeceptjs-expectwrapper": "^1.0.2",
         "eslint": "^7.32.0",
