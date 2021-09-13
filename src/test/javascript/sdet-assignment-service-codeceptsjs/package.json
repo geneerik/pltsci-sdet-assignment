@@ -10,11 +10,18 @@
         "codeceptjs:demo:headless": "HEADLESS=true codeceptjs run --steps -c node_modules/@codeceptjs/examples",
         "codeceptjs:demo:ui": "codecept-ui --app  -c node_modules/@codeceptjs/examples"
     },
-    "dependencies": {
+    "devDependencies": {
         "@codeceptjs/configure": "^0.7.0",
         "@codeceptjs/examples": "^1.2.1",
         "@codeceptjs/ui": "^0.4.6",
+        "@types/node": "^16.9.1",
         "codeceptjs": "^3.1.2",
-        "playwright": "^1.14.1"
+        "codeceptjs-expectwrapper": "^1.0.2",
+        "eslint": "^7.32.0",
+        "eslint-plugin-codeceptjs": "^1.3.0",
+        "expect": "^27.1.1",
+        "playwright": "^1.14.1",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.4.3"
     }
 }

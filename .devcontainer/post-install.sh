@@ -17,6 +17,6 @@ cd /
 sudo ln -sf /workspaces/pltsci-sdet-assignment/service/application.properties
 cd "${ORIG_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 
-npm install
+npm install --dev
 npx playwright install
 npx codeceptjs def
