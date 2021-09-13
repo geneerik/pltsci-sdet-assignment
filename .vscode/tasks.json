@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Allure Report",
+            "type": "shell",
+            "command": "${workspaceFolder}/generate_report.sh"
+        },
+        {
+            "label": "Prepare Test Environment",
+            "type": "shell",
+            "command": "${workspaceFolder}/prepare_test_env.sh"
+        }
+    ]
+}

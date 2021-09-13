@@ -13,11 +13,7 @@ cd "${SCRIPT_DIR}"
 
 TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 
-# prepare test setup
-./prepare_test_env
+./test_npm.sh install --include=dev
 
-# run tests
-./test_npx.sh codeceptjs run --plugins allure || true
-
-# generate report and fix issue links
-exec ./generate_report.sh
+# clean test setup
+rm -rf "${TEST_DIR}"/output/*
