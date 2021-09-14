@@ -6,7 +6,11 @@ import { ChildProcess, spawn } from "child_process";
 const TEST_OUTPUT_DIR = './output';
 const REPORT_OUTPUT_DIR = './report';
 
-const allureCli = function (args:string[], appendEnv?:{}, cwd?:string) : ChildProcess {
+interface NullableLooseObject {
+    [key: string]: string | null
+}
+
+const allureCli = function (args:string[], appendEnv?:NullableLooseObject, cwd?:string, timeout?:number) : ChildProcess {
     const allure_commandline_module_path = require.resolve("allure-commandline");
     const allure_commandline_module_dirname = path.dirname(allure_commandline_module_path);
     const isWindows = path.sep === "\\";
@@ -15,11 +19,27 @@ const allureCli = function (args:string[], appendEnv?:{}, cwd?:string) : ChildPr
 
     console.debug(`Allure commandline binary path: ${allure_binary_path}`);
 
+    // Copy the process env so we can append to the child process env
+    const envCopy:NullableLooseObject = {};
+    for (const e in process.env){
+        const envVal = process.env[e];
+        envCopy[e] = envVal?envVal:null;
+    }
+    // Override with requested env settings
+    if (appendEnv) {
+        for (const e in appendEnv){
+            const envVal = appendEnv[e];
+            envCopy[e] = envVal?envVal:null;
+        }
+    }
+
     return spawn(
         allure_binary_path, args, {
             cwd: cwd,    
             env: process.env,
-            stdio: 'inherit'});
+            stdio: 'inherit',
+            timeout: timeout
+        });
 }
 
 const cleanDir = function (options: {path:string}) {
@@ -55,11 +75,9 @@ function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport
                 ALLURE_OPTS: "-Dallure.link.mylink.pattern=https://example.org/mylink/{} " +
                              "-Dallure.link.issue.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/{} " +
                              "-Dallure.link.tms.pattern=https://example.org/tms/{} " +
-                             "-Dallure.issues.tracker.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s"});
-        // TODO: make this a timeout with bail
-        setTimeout(() => {
-           allure_proc.kill();
-        }, 30000);
+                             "-Dallure.issues.tracker.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s"},
+            undefined,
+            30000);
     }
 
     console.log(`Allure reports are collected at "${destinationDir}" ...`);

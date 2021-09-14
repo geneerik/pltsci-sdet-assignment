@@ -1,4 +1,7 @@
 import { AxiosResponse } from 'axios';
+import { CodeceptJSAllurePlugin, DataTable, CleaningResponseObject } from '..';
+
+const allure:CodeceptJSAllurePlugin = codeceptjs.container.plugins('allure');
 
 const { I } = inject();
 
@@ -31,15 +34,25 @@ Given('I have a hoover web service running', () => { // eslint-disable-line
     I.sendGetRequest('/v1/cleaning-sessions');
 });
 
-Given('I have a room with {int} width units and {int} height units', (x: number, y: number) => { // eslint-disable-line
-    state.request.roomSize = [x,y];
+Given('I have a room with {int} width units and {int} height units', async (x: number, y: number) => { // eslint-disable-line
+    const coords = [x, y];
+    I.performSimpleAction(()=>{
+        state.request.roomSize = coords;
+    })
 });
 
 Given('I have a hoover at coordinates {int} width units and {int} height units', (x: number, y: number) => { // eslint-disable-line
-    state.request.coords = [x,y];
+    const coords = [x, y];
+    I.performSimpleAction(()=>{
+        state.request.coords = coords;
+    })
 });
 
-Given('I have dirt to clean a some coordinates', (patchesTable: DataTable) => { // eslint-disable-line
+Given("I have no dirt to clean", () => { // eslint-disable-line
+    state.request.patches = [];
+});
+
+Given("I have dirt to clean a some coordinates", (patchesTable: DataTable) => { // eslint-disable-line
     
     if (!state.request.hasOwnProperty("patches")){
         state.request.patches = [];
@@ -47,21 +60,24 @@ Given('I have dirt to clean a some coordinates', (patchesTable: DataTable) => { 
 
     // parse the table by header
     const patchesTableParsed = patchesTable.parse();
-    const patchesTableByHeader = patchesTableParsed.hashes();
 
-    // Loop through rows
-    for (const row of patchesTableByHeader) {
-        // take values
-        const width_units = Number(row.width_units);6
-        const height_units = Number(row.height_units);
+    I.performSimpleAction(()=>{
+        const patchesTableByHeader = patchesTableParsed.hashes();
 
-        // append new array to existing array
-        // if the strings converted to numbers dont match when returned to strings, fallback to original value
-        state.request.patches = state.request.patches.concat([[
-            row.width_units == `${width_units}` ? width_units : row.width_units,
-            row.height_units == `${height_units}` ? height_units : row.height_units,
-        ]]);
-    }
+        // Loop through rows
+        for (const row of patchesTableByHeader) {
+            // take values
+            const width_units = Number(row.width_units);6
+            const height_units = Number(row.height_units);
+
+            // append new array to existing array
+            // if the strings converted to numbers dont match when returned to strings, fallback to original value
+            state.request.patches = state.request.patches.concat([[
+                row.width_units == `${width_units}` ? width_units : row.width_units,
+                row.height_units == `${height_units}` ? height_units : row.height_units,
+            ]]);
+        }
+    });
 });
 
 When('I give cleaning instructions to move {word}', async (instructions: string) => { // eslint-disable-line
@@ -85,21 +101,25 @@ When('I give cleaning instructions to move {string}', async (instructions: strin
 });
 
 Then('I should see that total number of clean spots is {int}', async (patches: number) => { // eslint-disable-line
-    const res:AxiosResponse = state.response.actualResponse;
-    await I.assertEqual(res.status, 200);
-	const data:CleaningResponseObject = res.data;
-	
-    await I.assertToBeTrue(data.hasOwnProperty("patches"));
-	await I.assertEqual(data.patches, patches);
+    const expectedPatches = patches;
+    I.performSimpleAction(async ()=>{
+        const res:AxiosResponse = state.response.actualResponse;
+        await I.assertEqual(res.status, 200);
+        const data:CleaningResponseObject = res.data;
+        
+        await I.assertToBeTrue(data.hasOwnProperty("patches"));
+        await I.assertEqual(data.patches, patches);
+    });
 });
 
 Then('I should see a hoover at coordinates {int} width units and {int} height units', async (x: number, y: number) => { // eslint-disable-line
     const coords = [x, y];
-
-    const res:AxiosResponse = state.response.actualResponse;
-    await I.assertEqual(res.status, 200);
-	const data:CleaningResponseObject = res.data;
-	
-    await I.assertToBeTrue(data.hasOwnProperty("coords"));
-	await I.assertEqual(data.coords, coords);
+    I.performSimpleAction(async ()=>{
+        const res:AxiosResponse = state.response.actualResponse;
+        await I.assertEqual(res.status, 200);
+        const data:CleaningResponseObject = res.data;
+        
+        await I.assertToBeTrue(data.hasOwnProperty("coords"));
+        await I.assertEqual(data.coords, coords);
+    });
 });

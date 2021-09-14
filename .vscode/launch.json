@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/.bin/codeceptjs",
-            "args": ["run", "--verbose", "--plugins", "allure"],
+            "args": ["run", "--plugins", "allure"],
             "cwd": "${workspaceFolder}/src/test/javascript/sdet-assignment-service-codeceptsjs",
             "preLaunchTask": "Prepare Test Environment",
             //"postDebugTask": "Generate Allure Report"

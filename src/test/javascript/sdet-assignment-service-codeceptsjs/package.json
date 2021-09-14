@@ -11,6 +11,7 @@
         "@codeceptjs/configure": "^0.7.0",
         "@codeceptjs/examples": "^1.2.1",
         "@codeceptjs/ui": "^0.4.6",
+        "@types/allure-js-commons": "^0.0.1",
         "@types/fs-extra": "^9.0.12",
         "@types/node": "^16.9.1",
         "allure-commandline": "^2.13.8",

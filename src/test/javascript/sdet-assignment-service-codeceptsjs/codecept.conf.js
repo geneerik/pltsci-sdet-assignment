@@ -17,6 +17,9 @@ exports.config = {
         REST: {
             endpoint: "http://localhost:8080"
         },
+        SimpleHelper: {
+            require: "./simplehelper"
+        }
     },
     include: {
         I: "./steps_file.ts"

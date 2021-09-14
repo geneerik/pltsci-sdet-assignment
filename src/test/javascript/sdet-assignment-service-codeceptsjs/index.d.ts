@@ -1,3 +1,5 @@
+import { TYPE as AllureTYPE } from "allure-js-commons";
+
 interface DataTableArgument {
   /**
    * returns the table as a 2-D array
@@ -24,4 +26,18 @@ interface DataTable {
 interface CleaningResponseObject {
     patches:number,
     coords:number[]
+}
+
+interface CodeceptJSAllurePlugin{
+    addAttachment(name: string, buffer: any, type: string): void;
+    setDescription(description: string, type: AllureTYPE): void
+    createStep(name: string, stepFunc:  () => void): void;
+    createAttachment(name: string, content: any, type: string): void;
+    severity(severity: string): void;
+    epic(epic: string): void;
+    feature(feature: string): void;
+    story(story: string): void;
+    issue(issue: string): void;
+    addLabel(name: string, value: string): void;
+    addParameter(kind: any, name: string, value: string): void;
 }
