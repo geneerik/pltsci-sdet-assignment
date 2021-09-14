@@ -16,4 +16,6 @@ TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 ./test_npm.sh install --include=dev
 
 # clean test setup
-rm -rf "${TEST_DIR}"/output/*
+if [[ 'false' != "${CLEAN_TEST_OUTPUT:-}" ]]; then
+    rm -rf "${TEST_DIR}"/output/*
+fi

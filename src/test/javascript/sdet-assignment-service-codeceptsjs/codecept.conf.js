@@ -1,6 +1,6 @@
 require("ts-node/register");
 const { setHeadlessWhen } = require("@codeceptjs/configure");
-const { bootstrap } = require("./presettings.ts");
+const { bootstrap, bootstrapAll, teardown, teardownAll } = require("./presettings");
 
 // turn on headless mode when running with HEADLESS=true environment variable
 // HEADLESS=true npx codecept run
@@ -22,12 +22,14 @@ exports.config = {
         I: "./steps_file.ts"
     },
     mocha: {},
-    bootstrap,
-    teardown: null,
+    bootstrap: bootstrap,
+    bootstrapAll: bootstrapAll,
+    teardown: teardown,
+    teardownAll: teardownAll,
     hooks: [],
     gherkin: {
         features: "./features/*.feature",
-        steps: ["./step_definitions/steps.js"]
+        steps: ["./step_definitions/steps.ts"]
     },
     plugins: {
         screenshotOnFail: {

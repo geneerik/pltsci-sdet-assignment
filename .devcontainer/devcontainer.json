@@ -73,6 +73,7 @@
 		// node
 		"dbaeumer.vscode-eslint",
 		"eg2.vscode-npm-script",
+		"stevencl.adddoccomments",
 
 		// java
 		"vscjava.vscode-java-pack",

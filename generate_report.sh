@@ -17,5 +17,5 @@ TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 rm -rf allure-report
 
 # generate report and fix issue links
-export ALLURE_OPTS="-Dallure.link.mylink.pattern=https://example.org/mylink/{} -Dallure.link.issue.pattern=https://example.org/issue/{} -Dallure.link.tms.pattern=https://example.org/tms/{} -Dallure.issues.tracker.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s"
-allure generate "${TEST_DIR}"/output
+export ALLURE_OPTS=${ALLURE_OPTS:-"-Dallure.link.mylink.pattern=https://example.org/mylink/{} -Dallure.link.issue.pattern=https://example.org/issue/{} -Dallure.link.tms.pattern=https://example.org/tms/{} -Dallure.issues.tracker.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s"}
+allure generate --report-dir "${TEST_DIR}"/report "${TEST_DIR}"/output
