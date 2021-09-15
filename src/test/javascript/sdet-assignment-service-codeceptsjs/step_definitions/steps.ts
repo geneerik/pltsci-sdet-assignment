@@ -49,7 +49,9 @@ Given('I have a hoover at coordinates {int} width units and {int} height units',
 });
 
 Given("I have no dirt to clean", () => { // eslint-disable-line
-    state.request.patches = [];
+    I.performSimpleAction(()=>{
+        state.request.patches = [];
+    });
 });
 
 Given("I have dirt to clean a some coordinates", (patchesTable: DataTable) => { // eslint-disable-line

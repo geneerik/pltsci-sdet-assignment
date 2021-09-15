@@ -16,7 +16,8 @@ ORIG_DIR=$(pwd)
 
 echo '** installing project deps! **'
 cd /
-sudo ln -sf "${TEST_DIR}"/service/application.properties
+sudo ln -sf "${WORKSPACE_DIR}"/service/application.properties
+sudo mkdir -p /javalogs
 cd /usr/local/bin
 sudo ln -sf "${TEST_DIR}"/node_modules
 cd "${TEST_DIR}"
