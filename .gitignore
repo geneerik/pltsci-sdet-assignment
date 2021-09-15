@@ -48,6 +48,4 @@ Thumbs.db
 *.mov
 *.wmv
 
-/src/test/javascript/sdet-assignment-service-codeceptsjs/output/
-/src/test/javascript/sdet-assignment-service-codeceptsjs/report/
-/allure-report/
+/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output/

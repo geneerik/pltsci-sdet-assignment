@@ -3,8 +3,9 @@ import { emptyDirSync } from "fs-extra";
 import path from "path/posix";
 import { ChildProcess, spawn } from "child_process";
 
-const TEST_OUTPUT_DIR = './output';
-const REPORT_OUTPUT_DIR = './report';
+// TODO: these values need to be read from the codecept.conf.js file
+const TEST_OUTPUT_DIR = './test_output/output';
+const REPORT_OUTPUT_DIR = './test_output/report';
 
 interface NullableLooseObject {
     [key: string]: string | null

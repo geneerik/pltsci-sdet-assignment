@@ -23,6 +23,10 @@ let state: TestState = {
 
 // inside step_definitions
 Before(() => {
+    // TODO: stop and start the service in the background if not in docker compose mode
+
+    // TODO: wait for the log file to exist
+
     state = {
         request: {},
         response: {}

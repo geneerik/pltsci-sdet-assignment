@@ -16,8 +16,8 @@ ORIG_DIR=$(pwd)
 
 echo '** installing project deps! **'
 APPLICATION_HOME=/usr/local/demo-app
-sudo mkdir -p "${APPLICATION_HOME}"
-sudo chmod 777 "${APPLICATION_HOME}"
+sudo mkdir -p "${APPLICATION_HOME}"/logs
+sudo chmod 777 "${APPLICATION_HOME}"/logs
 cd service
 JAR_NAME=$(ls *.jar)
 cd /usr/local/demo-app
