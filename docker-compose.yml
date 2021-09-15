@@ -7,8 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
     user: pwuser
+    command: ["run", "--plugins", "allure"]
     volumes:
-      application_home:/usr/local/demo-app
+      - application_home:/usr/local/demo-app
+      - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
     environment:
       CODECEPT_ARGS: '--plugins allure'
       USING_DOCKERCOMPOSE: 'true'
@@ -17,7 +19,7 @@ services:
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}
     build:
       context: ./service
-      dockerfile: ./serviceDockerfile
+      dockerfile: Dockerfile
     # run as non-root. good for security and the ability for the test container to manipulate the log file
     user: www-data
     container_name: pltsci-sdet-assignment
@@ -26,7 +28,7 @@ services:
     depends_on:
       - codeceptjs
     volumes:
-      application_home:/usr/local/demo-app
+      - application_home:/usr/local/demo-app
     # This health check allow the indication of a healthy container.  It also gives the ability to the tests
     # to restart the server when paired with a health monitor
     healthcheck:
@@ -37,8 +39,8 @@ services:
       retries: 0
       start_period: 20s
     labels:
-      autoheal.stop.timeout: 10
-      autoheal: true
+      autoheal.stop.timeout: 1
+      autoheal: "true"
     restart: always
     expose:
       - 8080

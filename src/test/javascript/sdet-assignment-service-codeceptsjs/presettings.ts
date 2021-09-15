@@ -1,6 +1,6 @@
-import {} from "path";
+import * as path from "path";
 import { emptyDirSync } from "fs-extra";
-import path from "path/posix";
+//import path from "path/posix";
 import { ChildProcess, spawn } from "child_process";
 
 // TODO: these values need to be read from the codecept.conf.js file
@@ -64,15 +64,15 @@ function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport
         options.reportOutputDir?
             (path.isAbsolute(options.reportOutputDir)?options.reportOutputDir:path.join(process.cwd(), options.reportOutputDir)):
             path.join(process.cwd(), REPORT_OUTPUT_DIR);
-    
 
     // generate launcher
     if (options.shouldGenerateReport) {
         console.log("*** making report now");
         
         const allure_proc = allureCli(
-            ["generate", "--report-dir", destinationDir, "output"],
+            ["generate", "--report-dir", destinationDir, TEST_OUTPUT_DIR],
             {
+                // TODO: make this NOT hardcoded
                 ALLURE_OPTS: "-Dallure.link.mylink.pattern=https://example.org/mylink/{} " +
                              "-Dallure.link.issue.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/{} " +
                              "-Dallure.link.tms.pattern=https://example.org/tms/{} " +

@@ -1,4 +1,3 @@
-FROM codeceptjs/codeceptjs
 # The details can be found in the following web page.
 # https://codecept.io/docker.html
 ARG IMAGE_VERSION=${IMAGE_VERSION:-latest}
@@ -14,7 +13,7 @@ RUN APPLICATION_HOME=/usr/local/demo-app; \
     TEST_DIR=/src/test/javascript/sdet-assignment-service-codeceptsjs; \
     mkdir -p "${APPLICATION_HOME}"/logs && \
     chmod 777 "${APPLICATION_HOME}"/logs && \
-    sudo ln -sf "${TEST_DIR}"/node_modules/allure-commandline/dist/bin/allure /usr/local/bin/allure
+    ln -sf "${TEST_DIR}"/node_modules/allure-commandline/dist/bin/allure /usr/local/bin/allure
 
 # Enable headless (cli) package installs
 ARG DEBIAN_FRONTEND=noninteractive
@@ -168,16 +167,27 @@ RUN (date > /etc/fossdevops_apt_date) && \
 COPY /src /src
 
 # Copy in the application.properties file to enable logging; this will be shared in docker compose
-COPY application-logging.properties application.properties
+COPY application-logging.properties /usr/local/demo-app/application.properties
+# Have to copy the jar in too; this is a work-around since we clobber the directory it would normally be in
+COPY service/*.jar /usr/local/demo-app/
 
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
+
+# make sure non-root can write to node_modules and install requested modules
+RUN mkdir node_modules && \
+    chown pwuser:pwuser node_modules && \
+    npm install -g npm && \
+    chown pwuser:pwuser package-lock.json
 
 USER pwuser
 
 # install packages
 RUN npm install --include=dev && \
     npx playwright install && \
-    npx codeceptjs def
+    #npx codeceptjs def
+    echo "build success"
 
-ENTRYPOINT [ "/usr/local/bin/npx", "codeceptjs" ]
+# TODO: tweak this a little so the npm install only happens once daily like the apt upgrade
+
+ENTRYPOINT [ "/usr/bin/npx", "codeceptjs" ]
 CMD [ "run", "$CODECEPT_ARGS" ]

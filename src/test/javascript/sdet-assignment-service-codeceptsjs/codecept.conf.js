@@ -6,8 +6,9 @@ const { bootstrap, bootstrapAll, teardown, teardownAll } = require("./presetting
 // HEADLESS=true npx codecept run
 setHeadlessWhen(process.env.HEADLESS);
 
+// TODO: need to change url to an env variable
 exports.config = {
-    output: "./output",
+    output: "./test_output/output",
     helpers: {
         Playwright: {
             url: "http://localhost:8080",
