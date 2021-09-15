@@ -12,4 +12,7 @@ SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 
 JAR_ROOT="${SCRIPT_DIR}"/service
 
-APPLICATION_FILE="${JAR_ROOT}"/sdet-assignment-service-0.0.1-SNAPSHOT.jar "${JAR_ROOT}/run.sh"
+export APPLICATION_HOME=/usr/local/demo-app
+export APPLICATION_FILE="${APPLICATION_HOME}"/sdet-assignment-service-0.0.1-SNAPSHOT.jar
+cd ${APPLICATION_HOME}
+exec "${JAR_ROOT}/run.sh"

@@ -15,11 +15,15 @@ TEST_DIR="${WORKSPACE_DIR}"/src/test/javascript/sdet-assignment-service-codecept
 ORIG_DIR=$(pwd)
 
 echo '** installing project deps! **'
-cd /
-sudo ln -sf "${WORKSPACE_DIR}"/service/application.properties
-sudo mkdir -p /javalogs
-cd /usr/local/bin
-sudo ln -sf "${TEST_DIR}"/node_modules
+APPLICATION_HOME=/usr/local/demo-app
+sudo mkdir -p "${APPLICATION_HOME}"
+sudo chmod 777 "${APPLICATION_HOME}"
+cd service
+JAR_NAME=$(ls *.jar)
+cd /usr/local/demo-app
+sudo ln -sf "${WORKSPACE_DIR}"/service/"${JAR_NAME}"
+sudo ln -sf "${WORKSPACE_DIR}"/application-logging.properties application.properties
+
 cd "${TEST_DIR}"
 
 npm install --include=dev
