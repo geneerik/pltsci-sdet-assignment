@@ -210,6 +210,10 @@ jobs:
       contents: read
       packages: read
 
+    needs:
+      - build-and-push-server-image
+      - build-and-push-test-image
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
