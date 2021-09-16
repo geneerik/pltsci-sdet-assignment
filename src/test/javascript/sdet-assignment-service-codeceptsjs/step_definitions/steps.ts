@@ -1,10 +1,9 @@
 import { AxiosResponse } from 'axios';
 import { CodeceptJSAllurePlugin, DataTable, CleaningResponseObject } from '..';
 import * as path from "path";
-import { rmSync, access, constants as fs_constants, watch, FSWatcher } from "fs-extra";
+import { rmSync, access, constants as fs_constants, watch, FSWatcher, readFileSync } from "fs-extra";
 import { ChildProcess, spawn } from "child_process";
 import { clearTimeout } from 'timers';
-import { Resolver } from 'dns';
 
 const allure:CodeceptJSAllurePlugin = codeceptjs.container.plugins('allure');
 
@@ -164,7 +163,41 @@ Given('I have freshly started hoover web server instance', async () => { // esli
         // wait for the log file to exist
         await checkExistsWithTimeout(serverReadyFile, 20000);
 
-        // TODO: check for message that the app has started
+        // wait for message that the app has started
+        const stringWaiter = new Promise<void>(function (resolve, reject) {
+            console.debug("Waiting for logfile to contain string");
+            // Set max timeout
+            var pollingTimer:NodeJS.Timeout|undefined = undefined;
+            const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
+                ()=>{
+                    if (pollingTimer) {
+                        clearTimeout(pollingTimer);
+                    }
+                    reject(new TimeoutError("Timeout waiting for logfile to contain string"));
+                }, 10000);
+            const pollingFunction = ()=>{
+                var logContents: Buffer|undefined;
+                try{
+                    logContents = readFileSync(serverReadyFile);
+                } catch(err){
+                    reject(err);
+                    // just in case...
+                    throw err;
+                }
+                
+                if(logContents!==undefined && logContents.includes("Started AppRunner in ")){
+                    console.debug("String found in logfile!");
+                    clearTimeout(maxTimeoutTimer);
+                    resolve();
+                }
+                else{
+                    console.debug("Still waiting for logfile to contain string");
+                    pollingTimer = setTimeout(pollingFunction, 100);
+                }
+            }
+            pollingTimer = setTimeout(pollingFunction, 100);
+        });
+        await stringWaiter;
     }
 
     state = {
@@ -177,51 +210,58 @@ Given('I have freshly started hoover web server instance', async () => { // esli
         // This will throw an exception if the service is not running
         console.debug(">>> Start in afterSuite");
     
-        if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
-            const pid = state.server_process.process_object.pid;
-            const process_object = state.server_process.process_object;
-            // stop the service in the background if not in docker compose mode and the state object has server_process object 
-            if (state.server_process.process_object.kill()){
-                console.debug(`** Server process with PID ${pid} was killed`);
-            }
-            else{
-                console.warn(`** Server process with PID ${pid} was not killed`);
-            }
-            // Now wait for it to really be gone
-            const killWaiter = new Promise<void>(function (resolve, reject) {
-                // Set max timeout
-                var pollingTimer:NodeJS.Timeout|undefined = undefined;
-                const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
-                    ()=>{
-                        if (pollingTimer) {
-                            clearTimeout(pollingTimer);
-                        }
-                        reject(new TimeoutError(`Timeout shutting down server process with pid ${pid}`));
-                    }, 10000);
-                    pollingTimer = setTimeout(
+        if(!process.env.NO_SERVER_MANAGEMENT===undefined || process.env.NO_SERVER_MANAGEMENT!="true") {
+            if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
+                const pid = state.server_process.process_object.pid;
+                const process_object = state.server_process.process_object;
+    
+                // stop the service in the background if not in docker compose mode and the state object has server_process object 
+                if (state.server_process.process_object.kill()){
+                    console.debug(`** Server process with PID ${pid} was killed`);
+                }
+                else{
+                    console.warn(`** Server process with PID ${pid} was not killed`);
+                }
+                // Now wait for it to really be gone
+                const killWaiter = new Promise<void>(function (resolve, reject) {
+                    console.debug(`Waiting for pid ${pid} to finish`);
+                    // Set max timeout
+                    var pollingTimer:NodeJS.Timeout|undefined = undefined;
+                    const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
+                        ()=>{
+                            if (pollingTimer) {
+                                clearTimeout(pollingTimer);
+                            }
+                            reject(new TimeoutError(`Timeout shutting down server process with pid ${pid}`));
+                        }, 10000);
+                    const pollingFunction =
                     ()=>{
                         if(null!==process_object.exitCode){
+                            console.debug(`Server process with pid ${pid} exitted with code ${process_object.exitCode}`);
                             clearTimeout(maxTimeoutTimer);
                             resolve();
                         }
                         else{
                             console.debug(`Still waiting for pid ${pid} to finish`);
+                            pollingTimer = setTimeout(pollingFunction, 100);
                         }
-                    }, 10000);
-            });
-            try{
-                await killWaiter;
-            } catch(err){
-                if (err instanceof TimeoutError){
-                    console.error(err);
-                }
-                else{
-                    throw err;
+                    }
+                    pollingTimer = setTimeout(pollingFunction, 100);
+                });
+                try{
+                    await killWaiter;
+                } catch(err){
+                    if (err instanceof TimeoutError){
+                        console.error(err);
+                    }
+                    else{
+                        throw err;
+                    }
                 }
             }
-
-            console.debug("<<< End afterSuite");
         }
+
+        console.debug("<<< End afterSuite");
     });
 
     console.debug("<<< End in given");
