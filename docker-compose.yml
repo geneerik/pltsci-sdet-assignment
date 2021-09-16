@@ -1,19 +1,19 @@
 # version: '3.9' # This now uses Compose Spec (https://github.com/compose-spec/compose-spec/blob/master/spec.md)
 services:
   codeceptjs:
-    # Node: codeceptjs have not tagged their "latest" build with a persistent (ala 3.04) version tag =(
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment-tests${IMAGE_VERSION:-:latest}
     build:
       context: .
       dockerfile: Dockerfile
     user: pwuser
+    container_name: pltsci-sdet-assignment-tests
     command: ["run", "--plugins", "allure"]
     volumes:
       - application_home:/usr/local/demo-app
       - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
     environment:
-      CODECEPT_ARGS: '--plugins allure'
-      USING_DOCKERCOMPOSE: 'true'
+      SERVER_RESTART_TRIGGER_FILE: /usr/local/demo-app/logs/application.log
+      TARGET_BASE_URI: http://pltsci-sdet-assignment:8080
 
   pltsci-sdet-assignment:
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}

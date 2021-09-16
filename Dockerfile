@@ -1,5 +1,6 @@
 # The details can be found in the following web page.
 # https://codecept.io/docker.html
+# Note: codeceptjs have not tagged their "latest" build with a persistent (ala 3.04) version tag =(
 ARG IMAGE_VERSION=${IMAGE_VERSION:-latest}
 ARG REGISTRY_URI=${REGISTRY_URI:-}
 ARG IMAGE_NAME=${IMAGE_NAME:-codeceptjs/codeceptjs}
@@ -156,15 +157,33 @@ RUN set -eux; \
 	java -version
 ## end java stuff
 
+# make sure non-root can install node_modules. update npm
+RUN mkdir -p /npm_packages/node_modules && \
+    chown pwuser:pwuser -R /npm_packages && \
+    npm install -g npm
+
+# Copy in the package requirements and resolve them
+COPY /src/test/javascript/sdet-assignment-service-codeceptsjs/package*.json /npm_packages
+USER pwuser
+RUN cd /npm_packages && \
+    ls -la && \
+    npm install --include=dev && \
+    npx playwright install
+
 # enable upgrade periodic (daily) trigger and do upgrades
 ARG UPDATE_TIMESTAMP
-RUN (date > /etc/fossdevops_apt_date) && \
+RUN (date > /etc/geneerik_apt_date) && \
     apt-get update -y && \
     apt-get -o Dpkg::Options::="--force-confold" upgrade -y && \
     apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Copy in the tests
 COPY /src /src
+USER 0
+# Fix the package lock file and link in the node_modules directory
+RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
+    cp -a /npm_packages/package-lock.json . && \
+    ln -s /npm_packages/node_modules
 
 # Copy in the application.properties file to enable logging; this will be shared in docker compose
 COPY application-logging.properties /usr/local/demo-app/application.properties
@@ -173,21 +192,31 @@ COPY service/*.jar /usr/local/demo-app/
 
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 
-# make sure non-root can write to node_modules and install requested modules
-RUN mkdir node_modules && \
-    chown pwuser:pwuser node_modules && \
-    npm install -g npm && \
-    chown pwuser:pwuser package-lock.json
-
 USER pwuser
 
-# install packages
+# install packages (if needed; unlikely, but quick step.  can show new vulns/package issues)
 RUN npm install --include=dev && \
     npx playwright install && \
     #npx codeceptjs def
     echo "build success"
 
-# TODO: tweak this a little so the npm install only happens once daily like the apt upgrade
-
+# Update the entrypoint. Note: CODECEPT_ARGS is no longer used
 ENTRYPOINT [ "/usr/bin/npx", "codeceptjs" ]
-CMD [ "run", "$CODECEPT_ARGS" ]
+CMD [ "run" ]
+
+# Versioning and docker metadata stuff
+LABEL org.opencontainers.image.authors='GeneErik <support@fossdevops.com>'
+LABEL org.opencontainers.image.url='https://github.com/geneerik/pltsci-sdet-assignment'
+LABEL org.opencontainers.image.documentation='https://geneerik.github.io/pltsci-sdet-assignment'
+LABEL org.opencontainers.image.source='https://github.com/geneerik/pltsci-sdet-assignment.git'
+LABEL org.opencontainers.image.vendor='GeneErik'
+#LABEL org.opencontainers.image.licenses=''
+LABEL org.opencontainers.image.title='ghcr.io/geneerik/pltsci-sdet-assignment'
+LABEL org.opencontainers.image.description="Docker image containing prerequisites and code to execute BDD tests against the com.yoti.sdet.assignment.service web service"
+
+# set version stuff
+ARG VERSION=unset
+ARG LONG_FORM_VERSION=unset
+RUN (printf 'com.yoti.sdet.assignment.service.AppRunner e2e Test Container' > /etc/geneerik_product) && \
+    (printf '%s' "${VERSION}" > /etc/geneerik_version) && \
+    (printf '%s' "${LONG_FORM_VERSION}" > /etc/geneerik_version_long)

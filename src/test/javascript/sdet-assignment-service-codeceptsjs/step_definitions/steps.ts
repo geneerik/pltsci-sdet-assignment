@@ -1,5 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { CodeceptJSAllurePlugin, DataTable, CleaningResponseObject } from '..';
+import * as path from "path";
+import { rm, access, constants as fs_constants, watch } from "fs-extra";
+import { ChildProcess, spawn } from "child_process";
 
 const allure:CodeceptJSAllurePlugin = codeceptjs.container.plugins('allure');
 
@@ -9,27 +12,98 @@ interface LooseObject {
     [key: string]: any
 }
 
+interface ProcessInfoHolderObject extends LooseObject {
+    process_object: ChildProcess
+}
+
 interface TestState {
     request: LooseObject,
     // TODO: response could be less loose
     response: LooseObject,
-    [key: string]: LooseObject
+    server_process: ProcessInfoHolderObject | null,
+    [key: string]: LooseObject | null
 }
 
 let state: TestState = {
     request: {},
-    response: {}
+    response: {},
+    server_process: null
 };
 
-// inside step_definitions
-Before(() => {
-    // TODO: stop and start the service in the background if not in docker compose mode
+/**
+ * Wait for a file to exist
+ * 
+ * @param  {string} filePath The path to the file to be waited for
+ * @param  {number|undefined} timeout Time to wait for file to exist in milliseconds
+ */
+function checkExistsWithTimeout(filePath: string, timeout:number | undefined) {
+    return new Promise<void>(function (resolve, reject) {
 
-    // TODO: wait for the log file to exist
+        var timer = setTimeout(function () {
+            watcher.close();
+            reject(new Error('File did not exists and was not created during the timeout.'));
+        }, timeout);
+
+        access(filePath, fs_constants.R_OK, function (err) {
+            if (!err) {
+                clearTimeout(timer);
+                watcher.close();
+                resolve();
+            }
+        });
+
+        var dir = path.dirname(filePath);
+        var basename = path.basename(filePath);
+        var watcher = watch(dir, function (eventType, filename) {
+            if (eventType === 'rename' && filename === basename) {
+                clearTimeout(timer);
+                watcher.close();
+                resolve();
+            }
+        });
+    });
+}
+
+// Things to do before each test starts
+Before(async () => {
+    let server_process_object:ProcessInfoHolderObject|null = null;
+    if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
+        // stop the service in the background if not in docker compose mode and the state object has server_process object 
+        if (state.server_process.process_object.kill()){
+            console.warn(`** Server process with PID ${state.server_process.process_object.pid} was not killed`);
+        }
+    }
+    const serverReadyFile =
+        process.env.SERVER_RESTART_TRIGGER_FILE?process.env.SERVER_RESTART_TRIGGER_FILE:"/usr/local/demo-app/logs/application.log";
+    
+    // delete the "ready" file if it exists
+    await rm(serverReadyFile, {force: true});
+
+    if(!process.env.SERVER_RESTART_TRIGGER_FILE) {
+        // start the service in the background if not in docker compose mode and update the state.server_process object
+        const start_script_path = path.join(__dirname, "start_server_no_container.sh");
+        const process_object = spawn(
+            start_script_path, [], {
+                env: process.env,
+                stdio: 'inherit'});
+
+        process_object.on('close', (code, signal) => {
+            console.log(
+                `** Server process terminated due to receipt of signal ${signal}`);
+            });
+
+        server_process_object = {
+            process_object: process_object
+        };
+    }
+
+    // wait for the log file to exist
+    await checkExistsWithTimeout(serverReadyFile, 20000);
 
     state = {
         request: {},
-        response: {}
+        response: {},
+        server_process: server_process_object
     };
 });
 

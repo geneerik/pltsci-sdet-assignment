@@ -1,6 +1,5 @@
 import * as path from "path";
 import { emptyDirSync } from "fs-extra";
-//import path from "path/posix";
 import { ChildProcess, spawn } from "child_process";
 
 // TODO: these values need to be read from the codecept.conf.js file

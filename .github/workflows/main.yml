@@ -8,8 +8,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# These values more or less define the external software load that will be
-# added to the image and any cache-bust values needed
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -23,7 +21,6 @@ jobs:
       contents: read
       packages: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -60,10 +57,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          path: /tmp/.buildx-server-cache
+          key: ${{ runner.os }}-buildx-server-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-server-
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
@@ -84,6 +81,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=semver,pattern={{major}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=sha
+            latest
           labels: |
             org.opencontainers.image.ref.name=${{ github.ref }}
 
@@ -94,8 +92,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=local,src=/tmp/.buildx-server-cache
+          cache-to: type=local,dest=/tmp/.buildx-server-cache-new
           # TODO: need to add the timestamp parameter
           build-args: |
             VERSION=${{ steps.get_versions.outputs.cur_version }}
@@ -106,8 +104,8 @@ jobs:
       # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-server-cache
+          mv /tmp/.buildx-server-cache-new /tmp/.buildx-server-cache
 
   build-and-push-test-image:
     # The type of runner that the job will run on
@@ -154,10 +152,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          path: /tmp/.buildx-test-cache
+          key: ${{ runner.os }}-buildx-test-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-test-
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
@@ -178,6 +176,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=semver,pattern={{major}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=sha
+            latest
           labels: |
             org.opencontainers.image.ref.name=${{ github.ref }}
 
@@ -188,8 +187,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=local,src=/tmp/.buildx-test-cache
+          cache-to: type=local,dest=/tmp/.buildx-test-cache-new
           # TODO: need to add the timestamp parameter
           build-args: |
             VERSION=${{ steps.get_versions.outputs.cur_version }}
@@ -200,8 +199,8 @@ jobs:
       # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-test-cache
+          mv /tmp/.buildx-test-cache-new /tmp/.buildx-test-cache
 
   execute-codeceptjs-tests-on-server:
     # The type of runner that the job will run on
@@ -248,10 +247,18 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          path: /tmp/.buildx-server-cache
+          key: ${{ runner.os }}-buildx-server-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-server-
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-test-cache
+          key: ${{ runner.os }}-buildx-test-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-test-
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
@@ -260,6 +267,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # TODO: execute tests
+      # execute tests
+      - name: Start server and tests
+        run: |
+          export IMAGE_VERSION=sha-${{ steps.shortsha.outputs.sha_short }}
+          ./run_tests.sh
 
       # TODO: artifact report to github pages

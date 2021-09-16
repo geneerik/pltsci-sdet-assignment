@@ -50,3 +50,4 @@ Thumbs.db
 
 /src/test/javascript/sdet-assignment-service-codeceptsjs/test_output/
 /test_output/
+/.env

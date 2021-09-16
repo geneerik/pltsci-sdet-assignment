@@ -1,22 +1,22 @@
 require("ts-node/register");
 const { setHeadlessWhen } = require("@codeceptjs/configure");
 const { bootstrap, bootstrapAll, teardown, teardownAll } = require("./presettings");
+const target_base_uri = process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:8080";
 
 // turn on headless mode when running with HEADLESS=true environment variable
 // HEADLESS=true npx codecept run
 setHeadlessWhen(process.env.HEADLESS);
 
-// TODO: need to change url to an env variable
 exports.config = {
     output: "./test_output/output",
     helpers: {
         Playwright: {
-            url: "http://localhost:8080",
+            url: target_base_uri,
             show: false,
             browser: "chromium"
         },
         REST: {
-            endpoint: "http://localhost:8080"
+            endpoint: target_base_uri
         },
         SimpleHelper: {
             require: "./simplehelper"
