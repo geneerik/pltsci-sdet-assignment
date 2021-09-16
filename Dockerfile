@@ -157,18 +157,33 @@ RUN set -eux; \
 	java -version
 ## end java stuff
 
-# make sure non-root can install node_modules. update npm
-RUN mkdir -p /npm_packages/node_modules && \
-    chown pwuser:pwuser -R /npm_packages && \
-    npm install -g npm
+# prepare for node_modules. update npm
+RUN mkdir -p /npm_packages && \
+    mkdir -p /src/test/javascript/sdet-assignment-service-codeceptsjs && \
+    npm install -g npm && \
+    which -a npm && \
+    npm --version
 
 # Copy in the package requirements and resolve them
-COPY /src/test/javascript/sdet-assignment-service-codeceptsjs/package*.json /npm_packages
+COPY /src/test/javascript/sdet-assignment-service-codeceptsjs/package*.json /src/test/javascript/sdet-assignment-service-codeceptsjs/
+# make sure non-root can install node_modules.
+RUN chown pwuser:pwuser -R /src/test/javascript/sdet-assignment-service-codeceptsjs
+
 USER pwuser
-RUN cd /npm_packages && \
+RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     ls -la && \
+    which -a npm && \
+    npm --version && \
     npm install --include=dev && \
-    npx playwright install
+    npx playwright install && \
+    which -a npm && \
+    npm --version
+USER 0
+# Move the node_modules to a backup location and nuke /src for copy
+RUN cd /npm_packages && \
+    mv /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules . && \
+    mv /src/test/javascript/sdet-assignment-service-codeceptsjs/package-lock.json . && \
+    rm -rf /src
 
 # enable upgrade periodic (daily) trigger and do upgrades
 ARG UPDATE_TIMESTAMP
@@ -179,11 +194,14 @@ RUN (date > /etc/geneerik_apt_date) && \
 
 # Copy in the tests
 COPY /src /src
-USER 0
 # Fix the package lock file and link in the node_modules directory
 RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     cp -a /npm_packages/package-lock.json . && \
-    ln -s /npm_packages/node_modules
+    cp -a /npm_packages/node_modules . && \
+    # Fix npm.  again.
+    npm install -g npm && \
+    which -a npm && \
+    npm --version
 
 # Copy in the application.properties file to enable logging; this will be shared in docker compose
 COPY application-logging.properties /usr/local/demo-app/application.properties
@@ -195,7 +213,9 @@ WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 USER pwuser
 
 # install packages (if needed; unlikely, but quick step.  can show new vulns/package issues)
-RUN npm install --include=dev && \
+RUN which -a npm && \
+    npm --version && \
+    npm install --include=dev && \
     npx playwright install && \
     #npx codeceptjs def
     echo "build success"
@@ -217,6 +237,8 @@ LABEL org.opencontainers.image.description="Docker image containing prerequisite
 # set version stuff
 ARG VERSION=unset
 ARG LONG_FORM_VERSION=unset
+USER 0
 RUN (printf 'com.yoti.sdet.assignment.service.AppRunner e2e Test Container' > /etc/geneerik_product) && \
     (printf '%s' "${VERSION}" > /etc/geneerik_version) && \
     (printf '%s' "${LONG_FORM_VERSION}" > /etc/geneerik_version_long)
+USER pwuser

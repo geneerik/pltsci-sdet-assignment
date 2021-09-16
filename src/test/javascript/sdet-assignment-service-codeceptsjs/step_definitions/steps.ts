@@ -132,6 +132,7 @@ Given('I have freshly started hoover web server instance', async () => { // esli
             process.env.SERVER_RESTART_TRIGGER_FILE?process.env.SERVER_RESTART_TRIGGER_FILE:"/usr/local/demo-app/logs/application.log";
         
         // delete the "ready" file if it exists
+        console.debug(`** Deleting ready file ${serverReadyFile}`);
         rmSync(serverReadyFile, {force: true});
 
         if(!process.env.SERVER_RESTART_TRIGGER_FILE) {
