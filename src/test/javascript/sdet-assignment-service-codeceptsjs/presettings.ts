@@ -1,6 +1,6 @@
 import * as path from "path";
 import { emptyDirSync } from "fs-extra";
-import { ChildProcess, spawn } from "child_process";
+import { ChildProcess, spawn, SpawnOptions } from "child_process";
 
 // TODO: these values need to be read from the codecept.conf.js file
 const TEST_OUTPUT_DIR = './test_output/output';
@@ -10,7 +10,7 @@ interface NullableLooseObject {
     [key: string]: string | null
 }
 
-const allureCli = function (args:string[], appendEnv?:NullableLooseObject, cwd?:string, timeout?:number) : ChildProcess {
+function allureCli(args:string[], appendEnv?:NullableLooseObject, cwd?:string, timeout?:number) : ChildProcess {
     const allure_commandline_module_path = require.resolve("allure-commandline");
     const allure_commandline_module_dirname = path.dirname(allure_commandline_module_path);
     const isWindows = path.sep === "\\";
@@ -33,13 +33,28 @@ const allureCli = function (args:string[], appendEnv?:NullableLooseObject, cwd?:
         }
     }
 
-    return spawn(
-        allure_binary_path, args, {
-            cwd: cwd,    
-            env: process.env,
-            stdio: 'inherit',
-            timeout: timeout
+    const allure_spawn_opts:SpawnOptions = {
+        cwd: cwd,    
+        env: process.env,
+        //stdio: 'inherit',
+        timeout: timeout
+    };
+
+    const proc = spawn(
+        allure_binary_path, args, allure_spawn_opts);
+    
+    if (proc.stdout){
+        proc.stdout.on('data', (data: any) => {
+            console.log(`${data}`);
         });
+    }
+    if (proc.stderr){
+        proc.stderr.on('data', (data: any) => {
+            console.error(`${data}`);
+        });
+    }
+
+    return proc;
 }
 
 const cleanDir = function (options: {path:string}) {

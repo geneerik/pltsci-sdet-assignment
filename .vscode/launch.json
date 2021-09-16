@@ -12,6 +12,9 @@
             "args": ["run", "--plugins", "allure"],
             "cwd": "${workspaceFolder}/src/test/javascript/sdet-assignment-service-codeceptsjs",
             "preLaunchTask": "Prepare Test Environment",
+            "env": {
+                //"NO_SERVER_MANAGEMENT":"true"
+            }
             //"postDebugTask": "Generate Allure Report"
             /*
             "type": "java",

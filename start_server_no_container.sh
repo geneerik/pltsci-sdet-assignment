@@ -18,4 +18,5 @@ if [[ ! -e "${SCRIPT_DIR}"/application-logging.properties ]]; then
 fi
 export APPLICATION_FILE="${APPLICATION_HOME}"/sdet-assignment-service-0.0.1-SNAPSHOT.jar
 cd ${APPLICATION_HOME}
-exec "${JAR_ROOT}/run.sh"
+#exec "${JAR_ROOT}/run.sh"
+exec java -Dproperties.location=/application.properties -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n -jar $APPLICATION_FILE

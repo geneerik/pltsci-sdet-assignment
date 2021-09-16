@@ -1,6 +1,9 @@
 Feature: Cleaning Session Service (basic)
   To ensure the cleaning service is up and capable of performing basic cleaning operations with nominal input
 
+  Background:
+    Given I have freshly started hoover web server instance
+
   Scenario: Nothing to clean
     Given I have a room with 5 width units and 5 height units
     And I have a hoover at coordinates 1 width units and 2 height units
