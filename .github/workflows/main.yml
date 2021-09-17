@@ -207,7 +207,8 @@ jobs:
     runs-on: ubuntu-latest
     # allow access to github docker registry
     permissions:
-      contents: read
+      # Need write access for github pages
+      contents: write
       packages: read
 
     needs:
@@ -276,6 +277,7 @@ jobs:
         run: |
           export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
           ./run_tests.sh
+          ls -la test_output/report
 
       # artifact report to github pages
       - name: Publish Github pages
