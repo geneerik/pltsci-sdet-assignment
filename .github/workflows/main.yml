@@ -277,7 +277,7 @@ jobs:
         run: |
           export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
           ./run_tests.sh
-          ls -la test_output/report
+          find test_output
 
       # artifact report to github pages
       - name: Publish Github pages
