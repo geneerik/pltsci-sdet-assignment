@@ -5,8 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    user: pwuser
+    user: root
     container_name: pltsci-sdet-assignment-tests
+    depends_on:
+      - pltsci-sdet-assignment
+    entrypoint: ["/test_compose_entrypoint.sh"]
     command: ["run", "--plugins", "allure"]
     volumes:
       - application_home:/usr/local/demo-app
@@ -23,10 +26,6 @@ services:
     # run as non-root. good for security and the ability for the test container to manipulate the log file
     user: www-data
     container_name: pltsci-sdet-assignment
-    # This may be counter intuitive, but it allows the use of the contents of the application_home directory
-    # from the test image.  Further, the tests are designed to wait until the server is ready
-    depends_on:
-      - codeceptjs
     volumes:
       - application_home:/usr/local/demo-app
     # This health check allow the indication of a healthy container.  It also gives the ability to the tests
@@ -51,7 +50,7 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
     depends_on:
-      - pltsci-sdet-assignment
+      - codeceptjs
     environment:
       AUTOHEAL_CONTAINER_LABEL: autoheal
       AUTOHEAL_INTERVAL: "1"   # check every 5 seconds

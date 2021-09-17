@@ -12,8 +12,8 @@ RUN usermod -aG audio,video,www-data pwuser
 # setup server logging directory and future link to allure binary for reporting
 RUN APPLICATION_HOME=/usr/local/demo-app; \
     TEST_DIR=/src/test/javascript/sdet-assignment-service-codeceptsjs; \
-    mkdir -p "${APPLICATION_HOME}"/logs && \
-    chmod 777 "${APPLICATION_HOME}"/logs && \
+    #mkdir -p "${APPLICATION_HOME}"/logs && \
+    #chmod 777 "${APPLICATION_HOME}"/logs && \
     ln -sf "${TEST_DIR}"/node_modules/allure-commandline/dist/bin/allure /usr/local/bin/allure
 
 # Enable headless (cli) package installs
@@ -194,6 +194,7 @@ RUN (date > /etc/geneerik_apt_date) && \
 
 # Copy in the tests
 COPY /src /src
+
 # Fix the package lock file and link in the node_modules directory
 RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     cp -a /npm_packages/package-lock.json . && \
@@ -203,10 +204,13 @@ RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     which -a npm && \
     npm --version
 
+COPY application-logging.properties /src/test/javascript/sdet-assignment-service-codeceptsjs/
+COPY test_compose_entrypoint.sh /
+
 # Copy in the application.properties file to enable logging; this will be shared in docker compose
-COPY application-logging.properties /usr/local/demo-app/application.properties
+#COPY application-logging.properties /usr/local/demo-app/application.properties
 # Have to copy the jar in too; this is a work-around since we clobber the directory it would normally be in
-COPY service/*.jar /usr/local/demo-app/
+#COPY service/*.jar /usr/local/demo-app/
 
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 

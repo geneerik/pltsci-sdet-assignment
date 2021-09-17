@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { CodeceptJSAllurePlugin, DataTable, CleaningResponseObject } from '..';
 import * as path from "path";
-import { rmSync, access, constants as fs_constants, watch, FSWatcher, readFileSync } from "fs-extra";
+import { access, constants as fs_constants, watch, FSWatcher, readFileSync, accessSync} from "fs-extra";
+import { rm } from "fs";
 import { ChildProcess, spawn } from "child_process";
 import { clearTimeout } from 'timers';
 
@@ -132,8 +133,32 @@ Given('I have freshly started hoover web server instance', async () => { // esli
             process.env.SERVER_RESTART_TRIGGER_FILE?process.env.SERVER_RESTART_TRIGGER_FILE:"/usr/local/demo-app/logs/application.log";
         
         // delete the "ready" file if it exists
-        console.debug(`** Deleting ready file ${serverReadyFile}`);
-        rmSync(serverReadyFile, {force: true});
+        var fileDidExist:boolean = false;
+
+        try {
+            accessSync(serverReadyFile, fs_constants.F_OK);
+            fileDidExist = true;
+        } catch (err) {
+            // eat the exception
+        }
+
+        // delete the file if it existed
+        if(fileDidExist){
+            console.debug(`** Deleting ready file ${serverReadyFile}`);
+            const rmWaiter = new Promise<void>((resolve, reject) => {
+                rm(
+                    serverReadyFile,
+                    (err) => {
+                        if(err!==undefined && err!==null){
+                            reject(err);
+                        }
+                        resolve();
+                    });
+            });
+            await rmWaiter;
+        } else {
+            console.debug(`** Ready file ${serverReadyFile} did not exist`);
+        }
 
         if(!process.env.SERVER_RESTART_TRIGGER_FILE) {
             // start the service in the background if not in docker compose mode and update the state.server_process object
