@@ -28,10 +28,11 @@ echo "docker-compose rendered from vars >>>"
 docker-compose config && echo "<<<"
 
 # create test output dir if it doesnt already exist
-mkdir -p "${SCRIPT_DIR}/test_output"
+mkdir -p "${SCRIPT_DIR}/test_output/report"
 # set permissive permissions to write to test directory since it is likely being used
 # by a different user than created it (inside the container)
 chmod 777 "${SCRIPT_DIR}/test_output"
+chmod 777 "${SCRIPT_DIR}/test_output/report"
 
 echo "Taking down any existing containers and volumes for this project"
 docker-compose down -v || true
