@@ -274,7 +274,7 @@ jobs:
       # execute tests
       - name: Start server and tests
         run: |
-          export IMAGE_VERSION=sha-${{ steps.shortsha.outputs.sha_short }}
+          export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
           ./run_tests.sh
 
       # TODO: artifact report to github pages
