@@ -24,6 +24,13 @@ IMAGE_VERSION=${IMAGE_VERSION:-}" > .env
   cat .env && echo "<<<"
 fi
 
+echo "docker-compose rendered from vars >>>"
+docker-compose config && echo "<<<"
+
+# create test output dir if it doesnt already exist
+mkdir -p "${SCRIPT_DIR}/test_output"
+
+echo "Taking down any existing containers and volumes for this project"
 docker-compose down -v || true
 
 # try to pull the associated docker images from the remote repo; will build otherwise
@@ -32,9 +39,6 @@ if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   docker-compose pull || true
   echo "** done trying to pull"
 fi
-
-echo "docker-compose rendered from vars >>>"
-docker-compose config && echo "<<<"
 
 # docker-compose up will build any needed images
 docker-compose up &
@@ -62,4 +66,13 @@ while [[ 'true' == "${DOCKER_COMPOSE_PID_ALIVE}" ]]; do
 done
 
 docker wait pltsci-sdet-assignment-tests
+TEST_CONTAINER_EXIT_CODE=$?
+
 ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose down -v)
+
+# Exit with the same exit code as the test container; this allows
+# success or failure of test execution to be tracked by the caller
+# but should NOT be non-zero if all tests did not pass.  this should
+# only indicate test execution failure.  Build failure base on test
+# results can be more subjective and different metrics should be used
+exit ${TEST_CONTAINER_EXIT_CODE}

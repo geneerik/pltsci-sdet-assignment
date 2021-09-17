@@ -277,4 +277,8 @@ jobs:
           export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
           ./run_tests.sh
 
-      # TODO: artifact report to github pages
+      # artifact report to github pages
+      - name: Publish Github pages
+        uses: rayluo/github-pages-overwriter@v1.2
+        with:
+          source-directory: test_output/report
