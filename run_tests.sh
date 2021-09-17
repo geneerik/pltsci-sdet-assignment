@@ -29,6 +29,9 @@ docker-compose config && echo "<<<"
 
 # create test output dir if it doesnt already exist
 mkdir -p "${SCRIPT_DIR}/test_output"
+# set permissive permissions to write to test directory since it is likely being used
+# by a different user than created it (inside the container)
+chmod 777 "${SCRIPT_DIR}/test_output"
 
 echo "Taking down any existing containers and volumes for this project"
 docker-compose down -v || true
@@ -65,8 +68,7 @@ while [[ 'true' == "${DOCKER_COMPOSE_PID_ALIVE}" ]]; do
     fi
 done
 
-docker wait pltsci-sdet-assignment-tests
-TEST_CONTAINER_EXIT_CODE=$?
+TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests)
 
 ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose down -v)
 
