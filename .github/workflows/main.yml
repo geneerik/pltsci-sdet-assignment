@@ -168,7 +168,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-codeceptjs
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-tests
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
