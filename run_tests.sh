@@ -19,14 +19,22 @@ if [[ 'true' != "${SKIP_ENV_FILE:-}" ]]; then
 DOCKER_NAMESPACE=geneerik/
 PWD=${SCRIPT_DIR}
 IMAGE_VERSION=${IMAGE_VERSION:-}" > .env
+
+  echo "generated .env file >>>"
+  cat .env && echo "<<<"
 fi
 
 docker-compose down -v || true
 
-# try to pull the assocaite docker images from the remote repo; will build otherwise
+# try to pull the associated docker images from the remote repo; will build otherwise
 if [[ 'true' != "${SKIP_PULL:-}" ]]; then
+  echo "** trying to pull"
   docker-compose pull || true
+  echo "** done trying to pull"
 fi
+
+echo "docker-compose rendered from vars >>>"
+docker-compose config && echo "<<<"
 
 # docker-compose up will build any needed images
 docker-compose up &
