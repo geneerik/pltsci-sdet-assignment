@@ -11,7 +11,7 @@ REAL_SCRIPT_PATH=$(readlink -f ${SCRIPT_PATH})
 SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 
 # need to start as UID 0, create the /usr/local/demo-app/logs dir,
-mkdir /usr/local/demo-app/logs
+mkdir -p /usr/local/demo-app/logs
 # copy in the application-logging.properties file to /usr/local/demo-app/application.properties ,
 cp /src/test/javascript/sdet-assignment-service-codeceptsjs/application-logging.properties /usr/local/demo-app/application.properties
 # and 

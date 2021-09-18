@@ -91,11 +91,11 @@ Given('I have freshly started hoover web server instance', async () => { // esli
     let server_process_object:ProcessInfoHolderObject|null = null;
     if(!process.env.NO_SERVER_MANAGEMENT===undefined || process.env.NO_SERVER_MANAGEMENT!="true") {
         if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
-            const pid = state.server_process.process_object.pid;
             const process_object = state.server_process.process_object;
+            const pid = process_object.pid;
 
             // stop the service in the background if not in docker compose mode and the state object has server_process object 
-            if (state.server_process.process_object.kill()){
+            if (process_object.kill()){
                 console.debug(`** Server process with PID ${pid} was killed`);
             }
             else{
