@@ -278,6 +278,8 @@ jobs:
           export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
           ./run_tests.sh
           find test_output
+          # allow test_output/report directory to be committed; gitignore normally wont let you
+          rm .gitignore
 
       # artifact report to github pages
       - name: Publish Github pages
