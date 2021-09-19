@@ -6,7 +6,10 @@
         {
             "label": "Generate Allure Report",
             "type": "shell",
-            "command": "${workspaceFolder}/generate_report.sh"
+            "command": "${workspaceFolder}/generate_report.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/src/test/javascript/sdet-assignment-service-codeceptsjs"
+            }
         },
         {
             "label": "Prepare Test Environment",

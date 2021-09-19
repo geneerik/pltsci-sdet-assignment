@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TYPE as AllureTYPE } from "allure-js-commons";
 
 interface DataTableArgument {
@@ -41,3 +42,6 @@ interface CodeceptJSAllurePlugin{
     addLabel(name: string, value: string): void;
     addParameter(kind: any, name: string, value: string): void;
 }
+
+type CodeceptJSWithTranslation<T> = T &
+    import("codeceptjs/typings/utils").Translate<T, any>;

@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Script to execute npx from the node_modules of the test project
+
 set -e
 trap 'catch $? $LINENO' ERR
 catch() {

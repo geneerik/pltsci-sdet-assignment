@@ -207,11 +207,6 @@ RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
 COPY application-logging.properties /src/test/javascript/sdet-assignment-service-codeceptsjs/
 COPY test_compose_entrypoint.sh /
 
-# Copy in the application.properties file to enable logging; this will be shared in docker compose
-#COPY application-logging.properties /usr/local/demo-app/application.properties
-# Have to copy the jar in too; this is a work-around since we clobber the directory it would normally be in
-#COPY service/*.jar /usr/local/demo-app/
-
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 
 USER pwuser

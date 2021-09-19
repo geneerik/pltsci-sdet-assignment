@@ -15,7 +15,7 @@ Feature: Cleaning Session Service (basic)
   Scenario: service is running example
     Given I have a room with 5 width units and 5 height units
     And I have a hoover at coordinates 1 width units and 2 height units
-    And I have dirt to clean a some coordinates
+    And I have dirt to clean at some coordinates
       | width_units | height_units |
       |      1      |       0      |
       |      2      |       2      |

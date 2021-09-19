@@ -4,11 +4,20 @@ module.exports = {
         "es6": true,
         "node": true
     },
-    "extends": ["plugin:codeceptjs/recommended", "eslint:recommended"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2017
     },
+    "extends": [
+        "plugin:codeceptjs/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "rules": {
         "indent": [
             "error",
@@ -25,6 +34,12 @@ module.exports = {
         "semi": [
             "error",
             "always"
+        ],
+        "max-len": [
+            "error", 
+            {
+                "code": 100
+            }
         ],
         "no-control-regex": 0
     }

@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Script to start the server to test via its java jar locally and NOT within its container image
+# This is used for better process lifecyle management
+
 set -e
 trap 'catch $? $LINENO' ERR
 catch() {
@@ -19,4 +23,5 @@ fi
 export APPLICATION_FILE="${APPLICATION_HOME}"/sdet-assignment-service-0.0.1-SNAPSHOT.jar
 cd ${APPLICATION_HOME}
 #exec "${JAR_ROOT}/run.sh"
+# Running this directly gives better control over process lifecycle since that shell script does not use exec
 exec java -Dproperties.location=/application.properties -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n -jar $APPLICATION_FILE

@@ -1,11 +1,7 @@
 import * as path from "path";
 import { emptyDirSync } from "fs-extra";
-import { execFileSync, ExecFileSyncOptions, spawnSync, SpawnOptions, StdioOptions } from "child_process";
-import { Writable } from "stream";
-
-// TODO: these values need to be read from the codecept.conf.js file
-const TEST_OUTPUT_DIR = './test_output/output';
-const REPORT_OUTPUT_DIR = './test_output/report';
+import { spawnSync, SpawnOptions, StdioOptions } from "child_process";
+import { config as codeceptjs_config } from "codeceptjs";
 
 interface NullableLooseObject {
     [key: string]: string | null
@@ -23,7 +19,8 @@ function allureCli(args:string[], appendEnv?:NullableLooseObject, cwd?:string, t
     const allure_commandline_module_dirname = path.dirname(allure_commandline_module_path);
     const isWindows = path.sep === "\\";
     const allureCommand = "allure" + (isWindows ? ".bat" : "");
-    const allure_binary_path = path.join(allure_commandline_module_dirname, "dist/bin", allureCommand)
+    const allure_binary_path =
+        path.join(allure_commandline_module_dirname, "dist/bin", allureCommand);
 
     console.debug(`Allure commandline binary path: ${allure_binary_path}`);
 
@@ -37,32 +34,24 @@ function allureCli(args:string[], appendEnv?:NullableLooseObject, cwd?:string, t
     if (appendEnv) {
         for (const e in appendEnv){
             const envVal = appendEnv[e];
-            envCopy[e] = envVal?envVal:null;
+            envCopy[e] = envVal ?? null;
         }
     }
 
-    var grabber = new Writable();
-
-    grabber._write = function(chunk, enc, done) {
-        console.log('Chunk:');
-        console.log(String(chunk));
-        done();
-    };
-    
-
-    const a:StdioOptions = [
+    const allureSpawnStioOpts:StdioOptions = [
         "inherit",
         "inherit",
         "inherit"
     ];
-    const allure_spawn_opts:SpawnOptions = {
+
+    const allureSpawnOpts:SpawnOptions = {
         cwd: cwd,    
         env: process.env,
-        stdio: a,
+        stdio: allureSpawnStioOpts,
         timeout: timeout
     };
 
-    spawnSync(allure_binary_path, args, allure_spawn_opts);
+    spawnSync(allure_binary_path, args, allureSpawnOpts);
 }
 
 /**
@@ -72,7 +61,7 @@ function allureCli(args:string[], appendEnv?:NullableLooseObject, cwd?:string, t
  */
 function cleanDir (dirPath:string) {
     if (!dirPath) {
-        throw Error('Dir path to clean is not defined');
+        throw Error("Dir path to clean is not defined");
     }
 
     const targetDir = path.isAbsolute(dirPath)?dirPath:path.join(process.cwd(), dirPath);
@@ -80,10 +69,7 @@ function cleanDir (dirPath:string) {
     console.log(`cleaning dir "${targetDir}" ...`);
 
     emptyDirSync(targetDir);
-};
-
-// TODO: package this (and other stuff) so we dont have to repeat the definition
-class TimeoutError extends Error {}
+}
 
 /**
  * Generate Allure Report
@@ -91,41 +77,51 @@ class TimeoutError extends Error {}
  * @param {{reportOutputDir?:string, shouldGenerateReport?:boolean}} options
  */
 function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport?:boolean}) {
+    const TEST_OUTPUT_DIR = codeceptjs_config.get("output") ?? "./output";
+    const REPORT_OUTPUT_DIR = codeceptjs_config.get("report_output") ?? "./report";
+
+    const reportOutputDir = options.reportOutputDir ?? REPORT_OUTPUT_DIR;
+    const testOutputDir = options.reportOutputDir ?? TEST_OUTPUT_DIR;
+    const shouldGenerateReport = options.shouldGenerateReport ?? true;
+
     const destinationDir = 
-        options.reportOutputDir?
-            (path.isAbsolute(options.reportOutputDir)?options.reportOutputDir:path.join(process.cwd(), options.reportOutputDir)):
-            path.join(process.cwd(), REPORT_OUTPUT_DIR);
+        path.isAbsolute(reportOutputDir)?reportOutputDir:path.join(process.cwd(), reportOutputDir);
+
+    const xunitOutputDir = 
+        path.isAbsolute(testOutputDir)?testOutputDir:path.join(process.cwd(), testOutputDir);
 
     // generate launcher
-    if (options.shouldGenerateReport) {
+    if (shouldGenerateReport) {
         console.log("*** making report now");
         
         allureCli(
             [
                 "-v",
-                "generate", "--report-dir", destinationDir, TEST_OUTPUT_DIR],
+                "generate", "--report-dir", destinationDir, xunitOutputDir],
             {
                 // TODO: make this NOT hardcoded
-                ALLURE_OPTS: "-Dallure.link.mylink.pattern=https://example.org/mylink/{} " +
-                             "-Dallure.link.issue.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/{} " +
-                             "-Dallure.link.tms.pattern=https://example.org/tms/{} " +
-                             "-Dallure.issues.tracker.pattern=https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s"},
+                ALLURE_OPTS: 
+                    codeceptjs_config.get("allure_issue_tracker_pattern") ? 
+                        "-Dallure.issues.tracker.pattern=" + 
+                            codeceptjs_config.get("allure_issue_tracker_pattern") :
+                        ""
+            },                             
             undefined,
             30000);
 
-        console.log(`Allure reports generate in "${destinationDir}" ...`);
+        console.log(`Allure reports generated in "${destinationDir}" ...`);
     }
 }
 
 module.exports = {
     bootstrap: () => {
         //console.log("#$%^ imported bootstrap is called");
-        cleanDir(TEST_OUTPUT_DIR);
-        cleanDir(REPORT_OUTPUT_DIR);
+        cleanDir(codeceptjs_config.get("output") ?? "./output");
+        cleanDir(codeceptjs_config.get("report_output") ?? "./report");
     },
     teardown: () => {
         //console.log("#$%^ imported teardown is called");
-        reportGenerator({ reportOutputDir: REPORT_OUTPUT_DIR, shouldGenerateReport: true });
+        reportGenerator({ shouldGenerateReport: true });
 
         //console.log("#$%^ imported teardown is done");
     },
@@ -134,5 +130,5 @@ module.exports = {
     },
     teardownAll: () => {
         //console.log("#$%^ imported teardownAll is called");
-    }  
-}
+    }
+};

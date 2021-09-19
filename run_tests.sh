@@ -11,8 +11,6 @@ REAL_SCRIPT_PATH=$(readlink -f ${SCRIPT_PATH})
 SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 cd "${SCRIPT_DIR}"
 
-TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
-
 # build the .env file
 if [[ 'true' != "${SKIP_ENV_FILE:-}" ]]; then
   echo "REGISTRY_URI=ghcr.io/
@@ -56,26 +54,37 @@ DOCKER_COMPOSE_PID_ALIVE=$( (kill -0 "${DOCKER_COMPOSE_PID}" && echo "true") || 
 LOOP_COUNT=0
 MAX_START_TIMEOUT_SECONDS=${MAX_START_TIMEOUT_SECONDS:-10}
 while [[ 'true' == "${DOCKER_COMPOSE_PID_ALIVE}" ]]; do
-    # check if the container exists yet
-    ( (2>&1 docker inspect --type container pltsci-sdet-assignment-tests > /dev/null) && echo '** test container creation detected') && break || true
-    echo '** STILL WAITING FOR test container creation'
-    sleep 1
-    DOCKER_COMPOSE_PID_ALIVE=$( (kill -0 "${DOCKER_COMPOSE_PID}" && echo "true") || echo "false" )
-    LOOP_COUNT=$(("${LOOP_COUNT}" + 1))
+  # check if the container exists yet
+  ( (2>&1 docker inspect --type container pltsci-sdet-assignment-tests > /dev/null) && echo '** test container creation detected') && break || true
+  echo '** STILL WAITING FOR test container creation'
+  sleep 1
+  DOCKER_COMPOSE_PID_ALIVE=$( (kill -0 "${DOCKER_COMPOSE_PID}" && echo "true") || echo "false" )
+  LOOP_COUNT=$(("${LOOP_COUNT}" + 1))
 
-    # Lets not wait forever; trigger failure after max loop count (rough timeout guess)
-    if [[ "${LOOP_COUNT}" -gt "${MAX_START_TIMEOUT_SECONDS}" ]]; then
-      echo "TIMEOUT waiting for test container to start" >&2 && false
-    fi
+  # Lets not wait forever; trigger failure after max loop count (rough timeout guess)
+  if [[ "${LOOP_COUNT}" -gt "${MAX_START_TIMEOUT_SECONDS}" ]]; then
+    echo "TIMEOUT waiting for test container to start" >&2 && false
+  fi
 done
 
+# Wait for the test container to complete execution and capture its exit code
 TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests)
 
+# Shut down and remove the remaing containers and any volumes not marked external
 ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose down -v)
 
 # Exit with the same exit code as the test container; this allows
 # success or failure of test execution to be tracked by the caller
-# but should NOT be non-zero if all tests did not pass.  this should
+# but should NOT be non-zero if all tests did not pass.  This should
 # only indicate test execution failure.  Build failure base on test
 # results can be more subjective and different metrics should be used
-exit ${TEST_CONTAINER_EXIT_CODE}
+if [[ "0" != "${TEST_CONTAINER_EXIT_CODE}" ]]; then
+  exit ${TEST_CONTAINER_EXIT_CODE}
+fi
+
+# Serve the generate html reports using a basic server unless otherwise specified
+if [[ "true" != "${SKIP_SERVE_REPORT}" ]]; then
+  REPORT_HTTP_PORT=${REPORT_HTTP_PORT:-8000}
+  echo "** Starting a simple server to host the generate test report at http://localhost:${REPORT_HTTP_PORT}"
+  exec docker run --rm -v "${SCRIPT_DIR}"/test_output/report:/usr/share/nginx/html:ro -p "${REPORT_HTTP_PORT}":80 nginx:alpine
+fi

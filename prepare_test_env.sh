@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# ??
+
 set -e
 trap 'catch $? $LINENO' ERR
 catch() {
@@ -17,5 +20,5 @@ TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
 
 # clean test setup
 if [[ 'false' != "${CLEAN_TEST_OUTPUT:-}" ]]; then
-    rm -rf "${TEST_DIR}"/output/*
+    rm -rf "${TEST_DIR}"/test_output/*
 fi

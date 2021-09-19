@@ -53,12 +53,6 @@
 		"workbench.editorAssociations": {
 			"*.ipynb": "jupyter.notebook.ipynb"
 		},
-		"files.exclude": {
-			"**/.classpath": true,
-			"**/.project": true,
-			"**/.settings": true,
-			"**/.factorypath": true
-		},
 		"editor.suggestSelection": "first",
 		"github-actions.workflows.pinned.refresh.enabled": false,
 		"vscode-codeception.codeceptBinary": "/workspaces/pltsci-sdet-assignment/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/.bin/codeceptjs",
