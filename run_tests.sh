@@ -34,8 +34,16 @@ fi
 
 cd "${SCRIPT_DIR}"
 
-if [[ ! -e 'docker-compose.yml' ]]; then
-  curl -fL https://github.com/geneerik/pltsci-sdet-assignment/blob/main/docker-compose.yml -O
+if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
+  if [[ ! -e 'docker-compose.ui.yml' ]]; then
+    curl -fL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/docker-compose.ui.yml' -O
+  fi
+  COMPOSE_FILE_PATH="${SCRIPT_DIR}"/docker-compose.ui.yml
+else
+  if [[ ! -e 'docker-compose.yml' ]]; then
+    curl -fL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/docker-compose.yml' -O
+  fi
+  COMPOSE_FILE_PATH="${SCRIPT_DIR}"/docker-compose.yml
 fi
 
 # build the .env file
@@ -50,7 +58,7 @@ IMAGE_VERSION=${IMAGE_VERSION:-}" > .env
 fi
 
 echo "docker-compose rendered from vars >>>"
-docker-compose config && echo "<<<"
+docker-compose -f "${COMPOSE_FILE_PATH}" config && echo "<<<"
 
 # create test output dir if it doesnt already exist
 mkdir -p "${SCRIPT_DIR}/test_output/report"
@@ -60,26 +68,44 @@ chmod 777 "${SCRIPT_DIR}/test_output"
 chmod 777 "${SCRIPT_DIR}/test_output/report"
 
 echo "Taking down any existing containers and volumes for this project"
-docker-compose down -v || true
+docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
 
 # try to pull the associated docker images from the remote repo; will build otherwise
 if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** trying to pull"
-  docker-compose pull || true
+  docker-compose -f "${COMPOSE_FILE_PATH}" pull || true
   echo "** done trying to pull"
 fi
 
 if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
   # docker-compose up will build any needed images
-  exec docker-compose up -f docker-compose.ui.yml
+  docker-compose -f "${COMPOSE_FILE_PATH}" up || true
+
+  # Capture the eixt code of the test container
+  TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests || true)
+
+  # Shut down and remove the remaing containers and any volumes not marked external
+  docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
+
+  # Exit with the same exit code as the test container; this allows
+  # success or failure of test execution to be tracked by the caller
+  # but should NOT be non-zero if all tests did not pass.  This should
+  # only indicate test execution failure.  Build failure base on test
+  # results can be more subjective and different metrics should be used
+  if [[ "0" != "${TEST_CONTAINER_EXIT_CODE:-}" ]]; then
+    exit "${TEST_CONTAINER_EXIT_CODE:-1}"
+  fi
+
+  # exec true allows script shutdown without using exit
+  exec true
 fi
 
 # docker-compose up will build any needed images
-docker-compose up &
+docker-compose -f "${COMPOSE_FILE_PATH}" up &
 DOCKER_COMPOSE_PID=$!
 
 # If this script is killed, down the containers and kill docker-compose if needed
-trap 'catch $? $LINENO && ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose down -v || true)' ERR
+trap 'catch $? $LINENO && ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true)' ERR
 
 # While docker-compose is running...
 DOCKER_COMPOSE_PID_ALIVE=$( (kill -0 "${DOCKER_COMPOSE_PID}" && echo "true") || echo "false" )
@@ -103,7 +129,7 @@ done
 TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests)
 
 # Shut down and remove the remaing containers and any volumes not marked external
-( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose down -v)
+( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" down -v)
 
 # Exit with the same exit code as the test container; this allows
 # success or failure of test execution to be tracked by the caller
