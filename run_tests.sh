@@ -57,9 +57,6 @@ IMAGE_VERSION=${IMAGE_VERSION:-}" > .env
   cat .env && echo "<<<"
 fi
 
-echo "docker-compose rendered from vars >>>"
-docker-compose -f "${COMPOSE_FILE_PATH}" config && echo "<<<"
-
 # create test output dir if it doesnt already exist
 mkdir -p "${SCRIPT_DIR}/test_output/report"
 # set permissive permissions to write to test directory since it is likely being used
@@ -67,15 +64,18 @@ mkdir -p "${SCRIPT_DIR}/test_output/report"
 chmod 777 "${SCRIPT_DIR}/test_output"
 chmod 777 "${SCRIPT_DIR}/test_output/report"
 
-echo "Taking down any existing containers and volumes for this project"
-docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
-
 # try to pull the associated docker images from the remote repo; will build otherwise
 if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** trying to pull"
   docker-compose -f "${COMPOSE_FILE_PATH}" pull || true
   echo "** done trying to pull"
 fi
+
+echo "docker-compose rendered from vars >>>"
+docker-compose -f "${COMPOSE_FILE_PATH}" config && echo "<<<"
+
+echo "Taking down any existing containers and volumes for this project"
+docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
 
 if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
   # docker-compose up will build any needed images
