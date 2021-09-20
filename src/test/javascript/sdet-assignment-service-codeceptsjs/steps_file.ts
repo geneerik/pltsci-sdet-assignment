@@ -1,22 +1,15 @@
-import { actor } from 'codeceptjs';
-import ex from 'codeceptjs-expectwrapper';
-import { AxiosResponse } from 'axios';
-const Step = require("codeceptjs/lib/step");
+import { actor } from "codeceptjs";
+import ex from "codeceptjs-expectwrapper";
+import { AxiosResponse } from "axios";
+import { CodeceptJSWithTranslation } from ".";
 
-export = function () {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export = function (): CodeceptJSWithTranslation<any> {
     return actor({
-        async meh() : Promise<void> {
-            
-            const action = () => 'done';
-            const step = new Step({ doSomething: action }, 'doSomething');
+        async cleaningSessionsPost(cleaningData:unknown) : Promise<AxiosResponse> {
+            const payload = cleaningData;
 
-            // add methods to promise chain
-            return step;
+            return this.sendPostRequest("/v1/cleaning-sessions", payload);
         },
-        async cleaningSessionsPost(cleaningData:object) : Promise<AxiosResponse> {
-            let payload = cleaningData;
-
-            return this.sendPostRequest('/v1/cleaning-sessions', payload);
-        }
-    , ...ex});
+        ...ex});
 }
