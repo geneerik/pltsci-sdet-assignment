@@ -96,7 +96,7 @@ TODO
 
 TODO
 ```shell
-(export USE_CODECEPTJS_UI=true; (curl -sL 'https://github.com/geneerik/pltsci-sdet-assignment/blob/main/run_tests.sh' | bash))
+(export USE_CODECEPTJS_UI=true; (curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash))
 ```
 
 &nbsp;
