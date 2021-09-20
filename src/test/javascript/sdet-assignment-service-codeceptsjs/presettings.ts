@@ -99,7 +99,6 @@ function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport
                 "-v",
                 "generate", "--report-dir", destinationDir, xunitOutputDir],
             {
-                // TODO: make this NOT hardcoded
                 ALLURE_OPTS: 
                     codeceptjs_config.get("allure_issue_tracker_pattern") ? 
                         "-Dallure.issues.tracker.pattern=" + 

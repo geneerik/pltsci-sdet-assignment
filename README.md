@@ -2,16 +2,16 @@ Solution to Platform Science Software Development Engineer in Test assignment
 ==========================================
 
 ## Introduction
-Response to initial inquiry [here](blob/main/README-Request.md).
+Response to initial inquiry [here](README-Request.md).
 
 &nbsp;
 ### View the Test Report
 
 [Report](https://geneerik.github.io/pltsci-sdet-assignment)
 
-[Bugs](issues)
+[Bugs](/issues)
 
-[BDD Tests](tree/main/src/test/javascript/sdet-assignment-service-codeceptsjs/features)
+[BDD Tests](src/test/javascript/sdet-assignment-service-codeceptsjs/features/)
 
 &nbsp;
 # How to Run the Tests
@@ -20,7 +20,7 @@ multiple ways
 
 &nbsp;
 ## Using Pre-created Docker Images (fastest)
----
+
 This repository has the images.  DL 1 script to do everything for you.
 
 &nbsp;
@@ -46,14 +46,14 @@ This repository has the images.  DL 1 script to do everything for you.
 
 ### Steps to Run Tests
 
-1) Download the [run_tests.sh](blob/main/run_tests.sh).  The following command can be use to download AND start the tests.  It is the quickest way to do eveything in a single command.
+1) Download the [run_tests.sh](run_tests.sh).  The following command can be use to download AND start the tests.  It is the quickest way to do eveything in a single command.
 
 ```shell
 curl -sL 'https://github.com/geneerik/pltsci-sdet-assignment/blob/main/run_tests.sh' | bash
 ```
 ### Alternative Steps to Run Tests
 
-1) If the curl method was not desirable, download the [run_tests.sh](blob/main/run_tests.sh) file using your browser.
+1) If the curl method was not desirable, download the [run_tests.sh](run_tests.sh) file using your browser.
 
 2) On a command unix-like shell, navigate to wherever files are downloaded.  Most Operation systems will put those files in the `Downloads` directory in the user's home directory. The following command is usually enough to reach this location.
 
@@ -76,13 +76,13 @@ The test results will also be save in the `test_output` directory, including the
 
 &nbsp;
 ## Build the images yourself
----
+
 You can build it youself from the repo
 
 &nbsp;
 ### Prerequisites
 
-You will first need to satisfy the prerequisites for the [Pre-created Docker Images](#markdown-header-using-pre-created-docker-images-fastest) method.  In addition to those, you will need the following pre-requisites:
+You will first need to satisfy the prerequisites for the [Pre-created Docker Images](#prerequisites) method.  In addition to those, you will need the following pre-requisites:
 
 1) `git` .  This tool is used to capture the contents of this repository keeping many important extra bits of information intact.
 

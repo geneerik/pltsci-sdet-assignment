@@ -10,7 +10,7 @@ services:
     depends_on:
       - pltsci-sdet-assignment
     entrypoint: ["/test_compose_entrypoint.sh"]
-    command: ["run", "--plugins", "allure"]
+    command: []
     volumes:
       - application_home:/usr/local/demo-app
       - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
@@ -18,6 +18,9 @@ services:
       CODECEPT_UI: "true"
       SERVER_RESTART_TRIGGER_FILE: /usr/local/demo-app/logs/application.log
       TARGET_BASE_URI: http://pltsci-sdet-assignment:8080
+    EXPOSE:
+      - 3333:3333
+      - 2999:2999
 
   pltsci-sdet-assignment:
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}
