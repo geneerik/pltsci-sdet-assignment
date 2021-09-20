@@ -115,7 +115,7 @@ if [[ "0" != "${TEST_CONTAINER_EXIT_CODE}" ]]; then
 fi
 
 # Serve the generate html reports using a basic server unless otherwise specified
-if [[ "true" != "${SKIP_SERVE_REPORT}" ]]; then
+if [[ "true" != "${SKIP_SERVE_REPORT:-}" ]]; then
   REPORT_HTTP_PORT=${REPORT_HTTP_PORT:-8000}
   echo "** Starting a simple server to host the generate test report at http://localhost:${REPORT_HTTP_PORT}"
   # we could also do this with the allure serve command
