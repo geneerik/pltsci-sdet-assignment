@@ -205,7 +205,7 @@ RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     npm --version
 
 COPY application-logging.properties /src/test/javascript/sdet-assignment-service-codeceptsjs/
-COPY test_compose_entrypoint.sh /
+COPY test_compose_entrypoint.sh start_codeceptjs_ui_server.sh test_npx.sh /
 
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 

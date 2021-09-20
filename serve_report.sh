@@ -15,6 +15,8 @@ SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 cd "${SCRIPT_DIR}"
 
 TEST_DIR="${SCRIPT_DIR}"/src/test/javascript/sdet-assignment-service-codeceptsjs
+REPORT_DIR=${REPORT_DIR:-"${SCRIPT_DIR}/test_output/report"}
 
 # Start a simple http server serving the report directory
-exec docker run --rm -v "${SCRIPT_DIR}"/test_output/report:/usr/share/nginx/html:ro -p 8000:80 nginx:alpine
+echo "hosting from ${REPORT_DIR}"
+exec docker run --rm -v "${REPORT_DIR}":/usr/share/nginx/html:ro -p 8000:80 nginx:alpine

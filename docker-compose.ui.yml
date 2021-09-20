@@ -1,0 +1,70 @@
+# version: '3.9' # This now uses Compose Spec (https://github.com/compose-spec/compose-spec/blob/master/spec.md)
+services:
+  codeceptjs:
+    image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment-tests${IMAGE_VERSION:-:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: root
+    container_name: pltsci-sdet-assignment-tests
+    depends_on:
+      - pltsci-sdet-assignment
+    entrypoint: ["/test_compose_entrypoint.sh"]
+    command: ["run", "--plugins", "allure"]
+    volumes:
+      - application_home:/usr/local/demo-app
+      - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
+    environment:
+      CODECEPT_UI: "true"
+      SERVER_RESTART_TRIGGER_FILE: /usr/local/demo-app/logs/application.log
+      TARGET_BASE_URI: http://pltsci-sdet-assignment:8080
+
+  pltsci-sdet-assignment:
+    image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    # run as non-root. good for security and the ability for the test container to manipulate the log file
+    user: www-data
+    container_name: pltsci-sdet-assignment
+    volumes:
+      - application_home:/usr/local/demo-app
+    # This health check allow the indication of a healthy container.  It also gives the ability to the tests
+    # to restart the server when paired with a health monitor
+    healthcheck:
+      # If the log file exists, we will assume the application has started successfully
+      test: ["CMD-SHELL", "[ -f /usr/local/demo-app/logs/application.log ]"]
+      interval: 1s
+      timeout: 1s
+      retries: 0
+      start_period: 20s
+    labels:
+      autoheal.stop.timeout: 1
+      autoheal: "true"
+    restart: always
+    expose:
+      - 8080
+
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: autoheal
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    depends_on:
+      - codeceptjs
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal
+      AUTOHEAL_INTERVAL: "1"   # check every 5 seconds
+      AUTOHEAL_START_PERIOD: "0"   # wait 0 seconds before first health check
+      AUTOHEAL_DEFAULT_STOP_TIMEOUT: "10"   # Docker waits max 10 seconds (the Docker default) for a container to stop before killing during restarts (container overridable via label, see below)
+      DOCKER_SOCK: /var/run/docker.sock   # Unix socket for curl requests to Docker API
+      CURL_TIMEOUT: "30"     # --max-time seconds for curl requests to Docker API
+
+volumes:
+  application_home:
+  test_output:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/test_output
+      o: bind

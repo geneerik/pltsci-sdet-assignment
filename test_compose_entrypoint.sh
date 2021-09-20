@@ -26,4 +26,8 @@ chmod 775 /usr/local/demo-app
 chmod 775 /usr/local/demo-app/logs
 
 # then become the pwuser and transfer exec control to npx as this user
-exec su -s /bin/bash pwuser -c 'exec /usr/bin/npx codeceptjs '"$*"
+if [[ 'true' == "${CODECEPT_UI:-}" ]]; then
+  exec su -s /bin/bash pwuser -c 'exec /start_codeceptjs_ui_server.sh '"$*"
+else
+  exec su -s /bin/bash pwuser -c 'exec /usr/bin/npx codeceptjs '"$*"
+fi
