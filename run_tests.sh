@@ -69,7 +69,7 @@ if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** done trying to pull"
 fi
 
-if [[ 'true' == "${USE_CODECEPTJS_UI}" ]]; then
+if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
   # docker-compose up will build any needed images
   exec docker-compose up -f docker-compose.ui.yml
 fi

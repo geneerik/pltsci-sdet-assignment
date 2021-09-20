@@ -9,7 +9,7 @@ Response to initial inquiry [here](README-Request.md).
 
 [Report](https://geneerik.github.io/pltsci-sdet-assignment)
 
-[Bugs](/issues)
+[Bugs]((/../../issues))
 
 [BDD Tests](src/test/javascript/sdet-assignment-service-codeceptsjs/features/)
 
@@ -49,7 +49,7 @@ This repository has the images.  DL 1 script to do everything for you.
 1) Download the [run_tests.sh](run_tests.sh).  The following command can be use to download AND start the tests.  It is the quickest way to do eveything in a single command.
 
 ```shell
-curl -sL 'https://github.com/geneerik/pltsci-sdet-assignment/blob/main/run_tests.sh' | bash
+curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash
 ```
 ### Alternative Steps to Run Tests
 
