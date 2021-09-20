@@ -9,7 +9,7 @@ Response to initial inquiry [here](README-Request.md).
 
 [Report](https://geneerik.github.io/pltsci-sdet-assignment)
 
-[Bugs]((/../../issues))
+[Bugs](/../../issues)
 
 [BDD Tests](src/test/javascript/sdet-assignment-service-codeceptsjs/features/)
 
