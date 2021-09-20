@@ -71,6 +71,10 @@ if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** done trying to pull"
 fi
 
+# the service directory must exist for this to work du to the context for build of the server
+# container
+mkdir -p service
+
 echo "docker-compose rendered from vars >>>"
 docker-compose -f "${COMPOSE_FILE_PATH}" config && echo "<<<"
 
