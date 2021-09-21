@@ -2,6 +2,7 @@ import * as path from "path";
 import { emptyDirSync } from "fs-extra";
 import { spawnSync, SpawnOptions, StdioOptions } from "child_process";
 import { config as codeceptjs_config } from "codeceptjs";
+import { threadId } from "worker_threads";
 
 interface NullableLooseObject {
     [key: string]: string | null
@@ -96,7 +97,7 @@ function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport
         
         allureCli(
             [
-                "-v",
+                // "-v",
                 "generate", "--report-dir", destinationDir, xunitOutputDir],
             {
                 ALLURE_OPTS: 
@@ -112,22 +113,35 @@ function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport
     }
 }
 
+function bootStrapStuff(){
+    cleanDir(codeceptjs_config.get("output") ?? "./output");
+    cleanDir(codeceptjs_config.get("report_output") ?? "./report");
+}
+
+function tearDownStuff(){
+    reportGenerator({ shouldGenerateReport: true });
+}
+
 module.exports = {
     bootstrap: () => {
-        //console.log("#$%^ imported bootstrap is called");
-        cleanDir(codeceptjs_config.get("output") ?? "./output");
-        cleanDir(codeceptjs_config.get("report_output") ?? "./report");
+        // console.log("#$%^ imported bootstrap is called");
+        if(!threadId){
+            bootStrapStuff();
+        }
     },
     teardown: () => {
-        //console.log("#$%^ imported teardown is called");
-        reportGenerator({ shouldGenerateReport: true });
-
-        //console.log("#$%^ imported teardown is done");
+        console.log("#$%^ imported teardown is called");
+        if(!threadId){
+            tearDownStuff();
+        }
+        // console.log("#$%^ imported teardown is done");
     },
     bootstrapAll: () => {
-        //console.log("#$%^ imported bootstrapAll is called");
+        console.log("#$%^ imported bootstrapAll is called");
+        bootStrapStuff();
     },
     teardownAll: () => {
-        //console.log("#$%^ imported teardownAll is called");
+        // console.log("#$%^ imported teardownAll is called");
+        tearDownStuff();
     }
 };

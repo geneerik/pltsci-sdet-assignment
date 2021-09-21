@@ -7,6 +7,8 @@ import {
 import { rm } from "fs";
 import { ChildProcess, spawn } from "child_process";
 import { clearTimeout } from "timers";
+import { threadId } from "worker_threads";
+//import { config as codeceptjs_config } from "codeceptjs";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const allure:CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
@@ -96,6 +98,9 @@ Given("I have freshly started hoover web server instance", async () => { // esli
     // This will throw an exception if the service is not running
     // console.debug(">>> Start in given");
 
+    const restEndpoint = await I.simpleActionGetRESTEndpoint();
+    console.debug(`** Endpoint before startup: ${restEndpoint}`);
+
     let server_process_object:ProcessInfoHolderObject|null = null;
     if(!process.env.NO_SERVER_MANAGEMENT===undefined || process.env.NO_SERVER_MANAGEMENT!="true") {
         if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
@@ -126,8 +131,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                             new TimeoutError(
                                 `Timeout shutting down server process with pid ${pid}`));
                     }, 10000);
-                const pollingFunction =
-                ()=>{
+                const pollingFunction = ()=>{
                     if(null!==process_object.exitCode){
                         console.debug(
                             `Server process with pid ${pid} exitted with code` +
@@ -145,9 +149,8 @@ Given("I have freshly started hoover web server instance", async () => { // esli
             await killWaiter;
         }
         const serverReadyFile =
-            process.env.SERVER_RESTART_TRIGGER_FILE ?
-                process.env.SERVER_RESTART_TRIGGER_FILE:
-                "/usr/local/demo-app/logs/application.log";
+            (process.env.SERVER_RESTART_TRIGGER_FILE ??
+                `/usr/local/demo-app/logs/application-${threadId}.log`);
         
         // delete the "ready" file if it exists
         let fileDidExist = false;
@@ -182,11 +185,36 @@ Given("I have freshly started hoover web server instance", async () => { // esli
              * start the service in the background if not in docker compose mode and update the
              * state.server_process object
              */
+
+            // Copy the process env so we can append to the child process env
+            const envCopy:Record<string, string | undefined> = {};
+            for (const e in process.env){
+                const envVal = process.env[e];
+                envCopy[e] = envVal?envVal:undefined;
+            }
+            // TODO: make this variable during parallel runs
+            const server_port:number|null = await I.simpleActionGetServerPort();
+
+            if (null === server_port) {
+                throw new Error();
+            }
+
+            const server_debug_port:number|null = await I.simpleActionGetServerDebugPort();
+
+            const restEndpoint = await I.simpleActionGetRESTEndpoint();
+            console.debug(`** Endpoint: ${restEndpoint}`);
+
+            //codeceptjs_REST_helper_config["endpoint"] = `http://localhost:${server_port}`;
+            // Override with requested env settings
+            envCopy["SERVER_FLAGS"] =
+                `-Dserver.port=${server_port} -Dlogging.file=${serverReadyFile}`;
+            envCopy["DEBUG_PORT"] = `${server_debug_port}`;
+
             const start_script_path = path.join(__dirname, "..", "start_server_no_container.sh");
-            console.debug("** Starting server process");
+            console.debug(`** Starting server process (port ${server_port})`);
             const process_object = spawn(
                 start_script_path, [], {
-                    env: process.env,
+                    env: envCopy,
                     //stdio: ["inherit", "inherit", "inherit"]
                 });
             process_object.stdout.on("data", (data) => {
@@ -223,13 +251,19 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                     if (pollingTimer) {
                         clearTimeout(pollingTimer);
                     }
+                    if (server_process_object) {
+                        server_process_object.process_object.kill();
+                    }
                     reject(new TimeoutError("Timeout waiting for logfile to contain string"));
-                }, 10000);
+                }, 20000);
             const pollingFunction = ()=>{
                 let logContents: Buffer|undefined;
                 try{
                     logContents = readFileSync(serverReadyFile);
                 } catch(err){
+                    if (server_process_object) {
+                        server_process_object.process_object.kill();
+                    }
                     reject(err);
                     // just in case...
                     throw err;

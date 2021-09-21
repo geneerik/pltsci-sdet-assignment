@@ -24,4 +24,4 @@ export APPLICATION_FILE="${APPLICATION_HOME}"/sdet-assignment-service-0.0.1-SNAP
 cd ${APPLICATION_HOME}
 #exec "${JAR_ROOT}/run.sh"
 # Running this directly gives better control over process lifecycle since that shell script does not use exec
-exec java -Dproperties.location=/application.properties -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n -jar $APPLICATION_FILE
+exec java -Dproperties.location=/application.properties ${SERVER_FLAGS:-} -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address="${DEBUG_PORT:-4000}",suspend=n -jar $APPLICATION_FILE
