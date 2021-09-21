@@ -19,7 +19,7 @@ Response to initial inquiry [here](README-Request.md).
 multiple ways
 
 &nbsp;
-## Using Pre-created Docker Images (fastest)
+## Using Pre-created Docker Images (fastest to get started; most closely matches request)
 
 This repository has the images.  DL 1 script to do everything for you.
 
@@ -97,6 +97,25 @@ TODO
 TODO
 ```shell
 (export USE_CODECEPTJS_UI=true; (curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash))
+```
+
+&nbsp;
+## Run with workers
+
+This will do concurrency!
+
+&nbsp;
+### Prerequisites
+
+You will first need to satisfy the prerequisites for the [Pre-created Docker Images](#prerequisites) method.  In addition to those, you will need the following pre-requisites:
+
+1) `git` .  This tool is used to capture the contents of this repository keeping many important extra bits of information intact.
+
+&nbsp;
+### Steps to Run Tests
+
+```shell
+(export USE_WORKERS=10; (curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash))
 ```
 
 &nbsp;
