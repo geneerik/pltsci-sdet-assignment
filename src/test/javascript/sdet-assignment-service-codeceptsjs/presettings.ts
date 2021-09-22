@@ -1,147 +1,53 @@
-import * as path from "path";
-import { emptyDirSync } from "fs-extra";
-import { spawnSync, SpawnOptions, StdioOptions } from "child_process";
 import { config as codeceptjs_config } from "codeceptjs";
 import { threadId } from "worker_threads";
-
-interface NullableLooseObject {
-    [key: string]: string | null
-}
-/**
- * Spawn and instance of the allure cli program for gnerating reports
- * 
- * @param  {string[]} args
- * @param  {NullableLooseObject} appendEnv?
- * @param  {string} cwd?
- * @param  {number} timeout?
-  */
-function allureCli(args:string[], appendEnv?:NullableLooseObject, cwd?:string, timeout?:number) {
-    const allure_commandline_module_path = require.resolve("allure-commandline");
-    const allure_commandline_module_dirname = path.dirname(allure_commandline_module_path);
-    const isWindows = path.sep === "\\";
-    const allureCommand = "allure" + (isWindows ? ".bat" : "");
-    const allure_binary_path =
-        path.join(allure_commandline_module_dirname, "dist/bin", allureCommand);
-
-    console.debug(`Allure commandline binary path: ${allure_binary_path}`);
-
-    // Copy the process env so we can append to the child process env
-    const envCopy:NullableLooseObject = {};
-    for (const e in process.env){
-        const envVal = process.env[e];
-        envCopy[e] = envVal?envVal:null;
-    }
-    // Override with requested env settings
-    if (appendEnv) {
-        for (const e in appendEnv){
-            const envVal = appendEnv[e];
-            envCopy[e] = envVal ?? null;
-        }
-    }
-
-    const allureSpawnStioOpts:StdioOptions = [
-        "inherit",
-        "inherit",
-        "inherit"
-    ];
-
-    const allureSpawnOpts:SpawnOptions = {
-        cwd: cwd,    
-        env: process.env,
-        stdio: allureSpawnStioOpts,
-        timeout: timeout
-    };
-
-    spawnSync(allure_binary_path, args, allureSpawnOpts);
-}
+import { cleanDir, generateAllureReport } from "sdet-assignment";
 
 /**
- * Empty out an existing directory if it has contents
- *
- * @param  {string} dirPath
+ * Function to hold the actions to perform on first start
  */
-function cleanDir (dirPath:string) {
-    if (!dirPath) {
-        throw Error("Dir path to clean is not defined");
-    }
-
-    const targetDir = path.isAbsolute(dirPath)?dirPath:path.join(process.cwd(), dirPath);
-
-    console.log(`cleaning dir "${targetDir}" ...`);
-
-    emptyDirSync(targetDir);
-}
-
-/**
- * Generate Allure Report
- *
- * @param {{reportOutputDir?:string, shouldGenerateReport?:boolean}} options
- */
-function reportGenerator(options: {reportOutputDir?:string, shouldGenerateReport?:boolean}) {
-    const TEST_OUTPUT_DIR = codeceptjs_config.get("output") ?? "./output";
-    const REPORT_OUTPUT_DIR = codeceptjs_config.get("report_output") ?? "./report";
-
-    const reportOutputDir = options.reportOutputDir ?? REPORT_OUTPUT_DIR;
-    const testOutputDir = options.reportOutputDir ?? TEST_OUTPUT_DIR;
-    const shouldGenerateReport = options.shouldGenerateReport ?? true;
-
-    const destinationDir = 
-        path.isAbsolute(reportOutputDir)?reportOutputDir:path.join(process.cwd(), reportOutputDir);
-
-    const xunitOutputDir = 
-        path.isAbsolute(testOutputDir)?testOutputDir:path.join(process.cwd(), testOutputDir);
-
-    // generate launcher
-    if (shouldGenerateReport) {
-        console.log("*** making report now");
-        
-        allureCli(
-            [
-                // "-v",
-                "generate", "--report-dir", destinationDir, xunitOutputDir],
-            {
-                ALLURE_OPTS: 
-                    codeceptjs_config.get("allure_issue_tracker_pattern") ? 
-                        "-Dallure.issues.tracker.pattern=" + 
-                            codeceptjs_config.get("allure_issue_tracker_pattern") :
-                        ""
-            },                             
-            undefined,
-            30000);
-
-        console.log(`Allure reports generated in "${destinationDir}" ...`);
-    }
-}
-
-function bootStrapStuff(){
+function bootStrapStuff() {
     cleanDir(codeceptjs_config.get("output") ?? "./output");
     cleanDir(codeceptjs_config.get("report_output") ?? "./report");
 }
 
-function tearDownStuff(){
-    reportGenerator({ shouldGenerateReport: true });
+/**
+ * Wrapper for the generateAllureReport method populationg values from the config file
+ */
+function generateAllureReportUsingConfig() {
+    const TEST_OUTPUT_DIR = codeceptjs_config.get("output") ?? "./output";
+    const REPORT_OUTPUT_DIR = codeceptjs_config.get("report_output") ?? "./report";
+    const ISSUE_TRACKER_PATTERN = codeceptjs_config.get("allure_issue_tracker_pattern") ?? "";
+
+    generateAllureReport(TEST_OUTPUT_DIR, REPORT_OUTPUT_DIR, ISSUE_TRACKER_PATTERN, true);
+}
+
+/**
+ * Function to hold the actions to perform on final shutdown
+ */
+function tearDownStuff() {
+    generateAllureReportUsingConfig();
 }
 
 module.exports = {
     bootstrap: () => {
-        // console.log("#$%^ imported bootstrap is called");
+        // console.debug(`(${threadId}) imported bootstrap is called`);
         if(!threadId){
             bootStrapStuff();
         }
     },
     teardown: () => {
-        console.log("#$%^ imported teardown is called");
+        console.debug(`(${threadId}) imported teardown is called`);
         if(!threadId){
             tearDownStuff();
         }
-        // console.log("#$%^ imported teardown is done");
+        // console.debug(`(${threadId})  imported teardown is done`);
     },
     bootstrapAll: () => {
-        console.log("#$%^ imported bootstrapAll is called");
+        console.debug(`(${threadId})  imported bootstrapAll is called`);
         bootStrapStuff();
     },
     teardownAll: () => {
-        // console.log("#$%^ imported teardownAll is called");
+        // console.debug(`(${threadId})  imported teardownAll is called`);
         tearDownStuff();
     }
 };

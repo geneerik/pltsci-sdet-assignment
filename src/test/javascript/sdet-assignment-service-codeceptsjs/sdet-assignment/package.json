@@ -1,0 +1,35 @@
+{
+  "name": "sdet-assignment",
+  "version": "1.0.0",
+  "description": "Can log \"hello world\" and \"goodbye world\" to the console!",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "nopepostbuild": "cpy --parents src test '!**/*.ts' dist",
+    "test": "mocha --reporter spec dist/test/*.js",
+    "test-lint": "eslint src --ext .js,.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/geneerik/pltsci-sdet-assignment.git"
+  },
+  "keywords": [
+  ],
+  "author": "Gene Erik <support@fossdevops.com> (https://fossdevops.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/geneerik/pltsci-sdet-assignment/issues"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "dependencies": {
+    "fs-extra": "^10.0.0"
+  }
+}

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChildProcess } from "child_process";
 import { TYPE as AllureTYPE } from "allure-js-commons";
 
-interface DataTableArgument {
+interface CodeceptJSDataTableArgument {
   /**
    * returns the table as a 2-D array
    */
@@ -16,11 +17,11 @@ interface DataTableArgument {
   hashes(): { [colName: string]: string }[],
 }
 
-interface DataTable {
+interface CodeceptJSDataTable {
     /**
      * obtain an object that allows you to get a simple version of the table parsed by column or row
      */
-    parse(): DataTableArgument
+    parse(): CodeceptJSDataTableArgument
     rows: { [id: number]: { cells: { value: string }[] } };
 }
 
@@ -42,3 +43,29 @@ interface CodeceptJSAllurePlugin{
     addLabel(name: string, value: string): void;
     addParameter(kind: any, name: string, value: string): void;
 }
+
+interface NullableLooseObject {
+    [key: string]: string | null
+}
+
+interface LooseObject {
+    [key: string]: unknown
+}
+
+interface ProcessInfoHolderObject extends LooseObject {
+    process_object: ChildProcess
+}
+
+interface TestState {
+    request: LooseObject,
+    // TODO: response could be less loose
+    response: LooseObject,
+    server_process: ProcessInfoHolderObject | null,
+    [key: string]: LooseObject | null
+}
+
+export {
+    NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState,
+    CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject,
+    CodeceptJSAllurePlugin
+};

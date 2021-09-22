@@ -1,43 +1,26 @@
 import { AxiosResponse } from "axios";
-import { CodeceptJSAllurePlugin, DataTable, CleaningResponseObject } from "..";
 import path from "path";
 import {
     access, constants as fs_constants, watch, FSWatcher, readFileSync,
     accessSync } from "fs-extra";
 import { rm } from "fs";
-import { ChildProcess, spawn } from "child_process";
+import { spawn } from "child_process";
 import { clearTimeout } from "timers";
 import { threadId } from "worker_threads";
-//import { config as codeceptjs_config } from "codeceptjs";
+import {
+    TestState, TimeoutError, ProcessInfoHolderObject, CodeceptJSAllurePlugin,
+    CleaningResponseObject, CodeceptJSDataTable } from "sdet-assignment";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const allure:CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
 
 const { I } = inject();
 
-interface LooseObject {
-    [key: string]: unknown
-}
-
-interface ProcessInfoHolderObject extends LooseObject {
-    process_object: ChildProcess
-}
-
-interface TestState {
-    request: LooseObject,
-    // TODO: response could be less loose
-    response: LooseObject,
-    server_process: ProcessInfoHolderObject | null,
-    [key: string]: LooseObject | null
-}
-
 let state: TestState = {
     request: {},
     response: {},
     server_process: null
 };
-
-class TimeoutError extends Error {}
 
 /**
  * Wait for a file to exist
@@ -394,44 +377,47 @@ Given("I have no dirt to clean", async () => { // eslint-disable-line
     });
 });
 
-Given("I have dirt to clean at some coordinates", async (patchesTable: DataTable) => { // eslint-disable-line
+Given(
+    "I have dirt to clean at some coordinates",
+    async (patchesTable: CodeceptJSDataTable) => { // eslint-disable-line
     
-    if (!Object.prototype.hasOwnProperty.call(state.request, "patches") || 
-            !Array.isArray(state.request.patches)){
-        state.request.patches = [];
-    }
-
-    // parse the table by header
-    const patchesTableParsed = patchesTable.parse();
-
-    await I.performSimpleAction(()=>{
-        const patchesTableByHeader = patchesTableParsed.hashes();
-
-        // Loop through rows
-        for (const row of patchesTableByHeader) {
-            // take values
-            const width_units = Number(row.width_units);
-            const height_units = Number(row.height_units);
-
-            if (!Array.isArray(state.request.patches)){
-                throw new Error(
-                    "state.request.patches expected to be Array but is not. type " +
-                    `${typeof state.request.patches}`);
-            }
-            const patches = state.request.patches as [[unknown]];
-
-            // append new array to existing array
-            /*
-             * if the strings converted to numbers dont match when returned to strings, fallback to
-             * original value
-             */
-            state.request.patches = patches.concat([[
-                row.width_units == `${width_units}` ? width_units : row.width_units,
-                row.height_units == `${height_units}` ? height_units : row.height_units,
-            ]]);
+        if (!Object.prototype.hasOwnProperty.call(state.request, "patches") || 
+                !Array.isArray(state.request.patches)){
+            state.request.patches = [];
         }
-    });
-});
+
+        // parse the table by header
+        const patchesTableParsed = patchesTable.parse();
+
+        await I.performSimpleAction(()=>{
+            const patchesTableByHeader = patchesTableParsed.hashes();
+
+            // Loop through rows
+            for (const row of patchesTableByHeader) {
+                // take values
+                const width_units = Number(row.width_units);
+                const height_units = Number(row.height_units);
+
+                if (!Array.isArray(state.request.patches)){
+                    throw new Error(
+                        "state.request.patches expected to be Array but is not. type " +
+                        `${typeof state.request.patches}`);
+                }
+                const patches = state.request.patches as [[unknown]];
+
+                // append new array to existing array
+                /*
+                * if the strings converted to numbers dont match when returned to strings,
+                * fallback to original value
+                */
+                state.request.patches = patches.concat([[
+                    row.width_units == `${width_units}` ? width_units : row.width_units,
+                    row.height_units == `${height_units}` ? height_units : row.height_units,
+                ]]);
+            }
+        });
+    }
+);
 
 When("I give cleaning instructions to move {word}", async (instructions: string) => { // eslint-disable-line
     state.request.instructions = instructions;
