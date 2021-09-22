@@ -19,10 +19,10 @@ export = class SimpleHelper extends Helper {
     }
 
     /**
-     * @property {()=>void} afterSuiteAction Value of the user-defined action to be executed after
-     *                                       the end of the test suite.
+     * @property {()=>void} _afterSuiteAction Value of the user-defined action to be executed after
+     *                                        the end of the test suite.
      */
-    protected afterSuiteAction:()=>void|undefined;
+    protected _afterSuiteAction:()=>void|undefined;
     
     /**
      * Method to set the value of the user-defined action to be executed after the end of the test
@@ -32,7 +32,7 @@ export = class SimpleHelper extends Helper {
      * @param  {()=>void} action
      */
     setAfterSuite(action:()=>void): void {
-        this.afterSuiteAction = action;
+        this._afterSuiteAction = action;
     }
 
     /**
@@ -42,8 +42,8 @@ export = class SimpleHelper extends Helper {
      */
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     _afterSuite(suite: Mocha.Suite): void {
-        if (undefined !== this.afterSuiteAction){
-            this.afterSuiteAction();
+        if (undefined !== this._afterSuiteAction){
+            this._afterSuiteAction();
         }
     }
 
@@ -52,7 +52,7 @@ export = class SimpleHelper extends Helper {
      *                                     test by the current thread when the server process is
      *                                     being managed by the tests
      */
-    protected server_port: number|null = null;
+    protected _server_port: number|null = null;
 
     /**
      * Method to get the currently selected server port for the server under tests during test
@@ -61,7 +61,7 @@ export = class SimpleHelper extends Helper {
      * @returns number
      */
     simpleActionGetServerPort(): number|null {
-        return this.server_port;
+        return this._server_port;
     }
     /**
      * Method to get the actual currently configured endpoint uri from the REST helper during test
@@ -78,10 +78,10 @@ export = class SimpleHelper extends Helper {
      *                                     under test by the current thread when the server process
      *                                     is being managed by the tests
      */
-    protected server_debug_port: number|null = null;
+    protected _server_debug_port: number|null = null;
 
     simpleActionGetServerDebugPort(): number|null {
-        return this.server_debug_port;
+        return this._server_debug_port;
     }
 
     /**
@@ -94,14 +94,14 @@ export = class SimpleHelper extends Helper {
     protected _beforeSuite(suite: Mocha.Suite): void {
 
         // Select a server port for the server under test in this test runner
-        this.server_port = 8080 + threadId;
+        this._server_port = 8080 + threadId;
         // Select a server debug port for the server under test in this test runner
-        this.server_debug_port = 4000 + threadId;
+        this._server_debug_port = 4000 + threadId;
 
         // Set the endpoint for the REST helper to the uri for the server in this thread
         this.helpers.REST.options.endpoint =
             stringFormat(
                 process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:%s",
-                `${this.server_port}`);
+                `${this._server_port}`);
     }
 }

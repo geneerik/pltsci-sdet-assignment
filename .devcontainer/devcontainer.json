@@ -2,16 +2,16 @@
 	"name": "SDET Assignment Service CodeceptJS",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 16, 14, 12.
-		// Append -bullseye or -buster to pin to an OS version.
-		// Use the -bullseye variants if you are on a M1 mac.
 		"args": {
-			"VARIANT": "16-bullseye",
+			// Update the VARIANT arg to pick a Java version: 8, 11, 14
+			// Use the -bullseye variants if you are on a M1 mac.
+			"VARIANT": "8-jdk-bullseye",
 			// Options
 			"INSTALL_MAVEN": "true",
 			"MAVEN_VERSION": "3.5.3",
 			"INSTALL_GRADLE": "false",
-			"USERNAME": "node"
+			"NODE_VERSION": "16",
+			"USERNAME": "vscode"
 		}
 	},
 
@@ -96,7 +96,7 @@
 	"postCreateCommand": "pwd && ((.devcontainer/post-install.sh) 2>&1)",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "node",
+	"remoteUser": "vscode",
 
 	"runArgs": ["--init"],
 	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],

@@ -25,15 +25,28 @@ function countGithub(repo) {
       });
       res.on("end",()=>{
           if(!res.complete){
-              throw Error("darn thing interupted");
+              throw Error("interupted");
           }
           //console.log(buffer);
           const rawContributors = JSON.parse(buffer); // this is how you parse a string into JSON
           const contributors = Array.isArray(rawContributors)?rawContributors:[rawContributors];
 
-          const lineCounts = contributors.map(contributor => (
-          contributor.weeks.reduce((lineCount, week) => lineCount + week.a - week.d, 0)
-        ));
+          let lineCounts = null;
+          try{
+            lineCounts = contributors.map(
+              (contributor) => {
+                return contributor.weeks.reduce(
+                  (lineCount, week) => {
+                    return lineCount + week.a - week.d
+                  }, 0
+                )
+              }
+            );
+          } catch(err){
+            console.error(contributors);
+            throw err;
+          }
+
         const lines = lineCounts.reduce((lineTotal, lineCount) => lineTotal + lineCount);
         console.log(lines);
       });
