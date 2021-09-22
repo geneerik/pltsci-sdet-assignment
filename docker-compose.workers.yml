@@ -49,7 +49,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #user: root
     user: pwuser
     container_name: pltsci-sdet-assignment-tests
     depends_on:
@@ -60,14 +59,12 @@ services:
       - pltsci-sdet-assignment-8085
       - autoheal
       - startup
-    #entrypoint: ["/test_compose_entrypoint.sh"]
     entrypoint: ["/usr/bin/node", "/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/bin/codecept.js"]
-    command: ["run-workers", "5", "--debug", "--verbose", "--plugins", "allure"]
+    command: ["run-workers", "5", "--plugins", "allure"]
     volumes:
       - application_home:/usr/local/demo-app
       - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
     environment:
-      #INIT_NO_EXEC: "true"
       SERVER_IS_EXTERNAL: "true"
       TARGET_BASE_URI: http://pltsci-sdet-assignment-%s:8080
 
@@ -157,7 +154,7 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
     depends_on:
-      - codeceptjs
+      - startup
     environment:
       AUTOHEAL_CONTAINER_LABEL: autoheal
       AUTOHEAL_INTERVAL: "1"   # check every 5 seconds
