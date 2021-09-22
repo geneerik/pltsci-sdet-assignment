@@ -42,6 +42,3 @@ interface CodeceptJSAllurePlugin{
     addLabel(name: string, value: string): void;
     addParameter(kind: any, name: string, value: string): void;
 }
-
-type CodeceptJSWithTranslation<T> = T &
-    import("codeceptjs/typings/utils").Translate<T, any>;
