@@ -1,0 +1,3 @@
+services:
+  codeceptjs:
+    command: ["run-workers", "5", "--debug", "--verbose","--plugins", "allure"]

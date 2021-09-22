@@ -276,7 +276,7 @@ jobs:
       - name: Start server and tests
         run: |
           export IMAGE_VERSION=:sha-${{ steps.shortsha.outputs.sha_short }}
-          SKIP_SERVE_REPORT=true ./run_tests.sh
+          SKIP_SERVE_REPORT=true USE_WORKERS=true DEBUG=true ./run_tests.sh
           find test_output
           # allow test_output/report directory to be committed; gitignore normally wont let you
           rm .gitignore

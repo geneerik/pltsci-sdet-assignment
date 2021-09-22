@@ -51,6 +51,11 @@ else
   COMPOSE_FILE_PATH="${SCRIPT_DIR}"/docker-compose.yml
 fi
 
+if [[ 'true' == "${DEBUG:-}" && -e "${COMPOSE_FILE_PATH}".debug ]]; then
+  COMPOSE_DEBUG_FLAGS="-f ${COMPOSE_FILE_PATH}.debug"
+fi
+echo "COMPOSE_DEBUG_FLAGS: ${COMPOSE_DEBUG_FLAGS}"
+
 # build the .env file
 if [[ 'true' != "${SKIP_ENV_FILE:-}" ]]; then
   echo "REGISTRY_URI=ghcr.io/
@@ -72,7 +77,7 @@ chmod 777 "${SCRIPT_DIR}/test_output/report"
 # try to pull the associated docker images from the remote repo; will build otherwise
 if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** trying to pull"
-  docker-compose -f "${COMPOSE_FILE_PATH}" pull || true
+  docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} pull || true
   echo "** done trying to pull"
 fi
 
@@ -81,20 +86,20 @@ fi
 mkdir -p service
 
 echo "docker-compose rendered from vars >>>"
-docker-compose -f "${COMPOSE_FILE_PATH}" config && echo "<<<"
+docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} config && echo "<<<"
 
 echo "Taking down any existing containers and volumes for this project"
-docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
+docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} down -v || true
 
 if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
   # docker-compose up will build any needed images
-  docker-compose -f "${COMPOSE_FILE_PATH}" up || true
+  docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} up || true
 
   # Capture the eixt code of the test container
   TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests || true)
 
   # Shut down and remove the remaing containers and any volumes not marked external
-  docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true
+  docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} down -v || true
 
   # Exit with the same exit code as the test container; this allows
   # success or failure of test execution to be tracked by the caller
@@ -110,11 +115,11 @@ if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
 fi
 
 # docker-compose up will build any needed images
-docker-compose -f "${COMPOSE_FILE_PATH}" up &
+docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} up &
 DOCKER_COMPOSE_PID=$!
 
 # If this script is killed, down the containers and kill docker-compose if needed
-trap 'catch $? $LINENO && ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" down -v || true)' ERR
+trap 'catch $? $LINENO && ( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} down -v || true)' ERR
 
 # While docker-compose is running...
 DOCKER_COMPOSE_PID_ALIVE=$( (kill -0 "${DOCKER_COMPOSE_PID}" && echo "true") || echo "false" )
@@ -138,7 +143,7 @@ done
 TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests)
 
 # Shut down and remove the remaing containers and any volumes not marked external
-( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" down -v)
+( (kill -s SIGTERM '"${DOCKER_COMPOSE_PID}"' 2> /dev/null) && sleep 5 || true) && (docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} down -v)
 
 # Exit with the same exit code as the test container; this allows
 # success or failure of test execution to be tracked by the caller
@@ -152,7 +157,9 @@ fi
 # Serve the generate html reports using a basic server unless otherwise specified
 if [[ "true" != "${SKIP_SERVE_REPORT:-}" ]]; then
   REPORT_HTTP_PORT=${REPORT_HTTP_PORT:-8000}
+  echo -ne "\n"
   echo "** Starting a simple server to host the generate test report at http://localhost:${REPORT_HTTP_PORT}"
+  echo -ne "\n"
   # we could also do this with the allure serve command
   exec docker run --rm -v "${SCRIPT_DIR}"/test_output/report:/usr/share/nginx/html:ro -p "${REPORT_HTTP_PORT}":80 nginx:alpine
 fi
