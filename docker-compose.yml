@@ -1,21 +1,37 @@
 # version: '3.9' # This now uses Compose Spec (https://github.com/compose-spec/compose-spec/blob/master/spec.md)
 services:
-  codeceptjs:
+  # This container just fixes some permissions then shuts down (init container)
+  startup:
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment-tests${IMAGE_VERSION:-:latest}
     build:
       context: .
       dockerfile: Dockerfile
     user: root
+    entrypoint: [ "/bin/bash", "/test_compose_init_entrypoint.sh" ]
+    command: []
+    volumes:
+      - application_home:/usr/local/demo-app
+    depends_on:
+      - pltsci-sdet-assignment
+
+  codeceptjs:
+    image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment-tests${IMAGE_VERSION:-:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: pwuser
     container_name: pltsci-sdet-assignment-tests
     depends_on:
       - pltsci-sdet-assignment
-    entrypoint: ["/test_compose_entrypoint.sh"]
+      - autoheal
+      - startup
+    entrypoint: ["/usr/bin/node", "/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/bin/codecept.js"]
     command: ["run", "--plugins", "allure"]
     volumes:
       - application_home:/usr/local/demo-app
       - test_output:/src/test/javascript/sdet-assignment-service-codeceptsjs/test_output
     environment:
-      SERVER_RESTART_TRIGGER_FILE: /usr/local/demo-app/logs/application.log
+      SERVER_IS_EXTERNAL: "true"
       TARGET_BASE_URI: http://pltsci-sdet-assignment:8080
 
   pltsci-sdet-assignment:
@@ -32,7 +48,7 @@ services:
     # to restart the server when paired with a health monitor
     healthcheck:
       # If the log file exists, we will assume the application has started successfully
-      test: ["CMD-SHELL", "[ -f /usr/local/demo-app/logs/application.log ]"]
+      test: ["CMD-SHELL", "[ -f /usr/local/demo-app/logs/application-0.log ]"]
       interval: 1s
       timeout: 1s
       retries: 0

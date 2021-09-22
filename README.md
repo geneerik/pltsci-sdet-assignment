@@ -115,7 +115,7 @@ You will first need to satisfy the prerequisites for the [Pre-created Docker Ima
 ### Steps to Run Tests
 
 ```shell
-(export USE_WORKERS=10; (curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash))
+(export USE_WORKERS=true; (curl -sL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/run_tests.sh' | bash))
 ```
 
 &nbsp;

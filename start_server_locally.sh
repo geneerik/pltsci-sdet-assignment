@@ -17,8 +17,8 @@ SCRIPT_DIR=$(dirname ${REAL_SCRIPT_PATH}})
 JAR_ROOT="${SCRIPT_DIR}"/service
 
 export APPLICATION_HOME=/usr/local/demo-app
-if [[ ! -e "${SCRIPT_DIR}"/application-logging.properties ]]; then
-  cp -a "${SCRIPT_DIR}"/application-logging.properties "${APPLICATION_HOME}"/
+if [[ ! -e "${APPLICATION_HOME}"/application.properties ]]; then
+  cp -a "${SCRIPT_DIR}"/application-logging.properties "${APPLICATION_HOME}"/application.properties
 fi
 export APPLICATION_FILE="${APPLICATION_HOME}"/sdet-assignment-service-0.0.1-SNAPSHOT.jar
 cd ${APPLICATION_HOME}

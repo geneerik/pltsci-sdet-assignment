@@ -1,4 +1,5 @@
 import { threadId } from "worker_threads";
+import { format as stringFormat } from "util";
 
 /** 
  * Helper class to empower step discovery where is might be missing and add access to some of the
@@ -98,6 +99,9 @@ export = class SimpleHelper extends Helper {
         this.server_debug_port = 4000 + threadId;
 
         // Set the endpoint for the REST helper to the uri for the server in this thread
-        this.helpers.REST.options.endpoint = `http://localhost:${this.server_port}`;
+        this.helpers.REST.options.endpoint =
+            stringFormat(
+                process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:%s",
+                `${this.server_port}`);
     }
 }

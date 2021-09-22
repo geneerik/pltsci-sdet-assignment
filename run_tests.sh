@@ -39,6 +39,11 @@ if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
     curl -fL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/docker-compose.ui.yml' -O
   fi
   COMPOSE_FILE_PATH="${SCRIPT_DIR}"/docker-compose.ui.yml
+elif [[ 'true' == "${USE_WORKERS:-}" ]]; then
+  if [[ ! -e 'docker-compose.workers.yml' ]]; then
+    curl -fL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/docker-compose.workers.yml' -O
+  fi
+  COMPOSE_FILE_PATH="${SCRIPT_DIR}"/docker-compose.workers.yml
 else
   if [[ ! -e 'docker-compose.yml' ]]; then
     curl -fL 'https://raw.githubusercontent.com/geneerik/pltsci-sdet-assignment/main/docker-compose.yml' -O

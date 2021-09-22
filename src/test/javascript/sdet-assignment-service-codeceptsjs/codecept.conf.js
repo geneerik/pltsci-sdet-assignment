@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("ts-node/register");
+const { format: stringFormat } = require("util");
 const { setHeadlessWhen } = require("@codeceptjs/configure");
 const { bootstrap, bootstrapAll, teardown, teardownAll } = require("./presettings");
-const target_base_uri =
-    process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:8080";
+const target_base_uri = stringFormat(
+    process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:%s","8080");
 
 // turn on headless mode when running with HEADLESS=true environment variable
 // HEADLESS=true npx codecept run

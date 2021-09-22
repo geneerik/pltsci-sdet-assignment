@@ -54,7 +54,8 @@ function checkExistsWithTimeout(filePath: string, timeout:number | undefined) {
             }
             reject(
                 new TimeoutError(
-                    `File "${filePath}" did not exists and was not created during the timeout.`));
+                    `(${threadId}) File "${filePath}" ` +
+                    "did not exists and was not created during the timeout."));
         }, timeout);
 
         access(filePath, fs_constants.R_OK, function (err) {
@@ -63,17 +64,17 @@ function checkExistsWithTimeout(filePath: string, timeout:number | undefined) {
                 if (watcher){
                     watcher.close();
                 }
-                console.warn(`File "${filePath}" already exists`);
+                console.warn(`(${threadId}) File "${filePath}" already exists`);
                 resolve();
             }
         });
 
         const dir = path.dirname(filePath);
         const basename = path.basename(filePath);
-        console.debug(`** watching for file "${basename}" in dir ${dir}`);
+        console.debug(`(${threadId}) watching for file "${basename}" in dir ${dir}`);
         watcher = watch(dir, function (eventType, filename) {
             if (eventType === "rename" && filename === basename) {
-                console.debug(`** Detected file "${basename}" in dir ${dir}!`);
+                console.debug(`(${threadId}) Detected file "${basename}" in dir ${dir}!`);
                 clearTimeout(timer);
                 if (watcher){
                     watcher.close();
@@ -99,11 +100,13 @@ Given("I have freshly started hoover web server instance", async () => { // esli
     // console.debug(">>> Start in given");
 
     const restEndpoint = await I.simpleActionGetRESTEndpoint();
-    console.debug(`** Endpoint before startup: ${restEndpoint}`);
+    console.debug(`(${threadId}) Endpoint before startup: ${restEndpoint}`);
 
     let server_process_object:ProcessInfoHolderObject|null = null;
     if(!process.env.NO_SERVER_MANAGEMENT===undefined || process.env.NO_SERVER_MANAGEMENT!="true") {
-        if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
+        if((!process.env.SERVER_IS_EXTERNAL===undefined ||
+                    process.env.SERVER_IS_EXTERNAL!="true") &&
+                state.server_process) {
             const process_object = state.server_process.process_object;
             const pid = process_object.pid;
 
@@ -112,14 +115,14 @@ Given("I have freshly started hoover web server instance", async () => { // esli
              * object has server_process object
              */
             if (process_object.kill()){
-                console.debug(`** Server process with PID ${pid} was killed`);
+                console.debug(`(${threadId}) Server process with PID ${pid} was killed`);
             }
             else{
-                console.warn(`** Server process with PID ${pid} was not killed`);
+                console.warn(`(${threadId}) Server process with PID ${pid} was not killed`);
             }
             // Now wait for it to really be gone
             const killWaiter = new Promise<void>(function (resolve, reject) {
-                console.debug(`Waiting for pid ${pid} to finish`);
+                console.debug(`(${threadId}) Waiting for pid ${pid} to finish`);
                 // Set max timeout
                 let pollingTimer:NodeJS.Timeout|undefined = undefined;
                 const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
@@ -129,18 +132,19 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                         }
                         reject(
                             new TimeoutError(
-                                `Timeout shutting down server process with pid ${pid}`));
+                                `(${threadId}) Timeout shutting down server process with pid ` +
+                                `${pid}`));
                     }, 10000);
                 const pollingFunction = ()=>{
                     if(null!==process_object.exitCode){
                         console.debug(
-                            `Server process with pid ${pid} exitted with code` +
+                            `(${threadId}) Server process with pid ${pid} exitted with code` +
                             `${process_object.exitCode}`);
                         clearTimeout(maxTimeoutTimer);
                         resolve();
                     }
                     else{
-                        console.debug(`Still waiting for pid ${pid} to finish`);
+                        console.debug(`(${threadId}) Still waiting for pid ${pid} to finish`);
                         pollingTimer = setTimeout(pollingFunction, 100);
                     }
                 };
@@ -164,7 +168,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
 
         // delete the file if it existed
         if(fileDidExist){
-            console.debug(`** Deleting ready file ${serverReadyFile}`);
+            console.debug(`(${threadId}) Deleting ready file ${serverReadyFile}`);
             const rmWaiter = new Promise<void>((resolve, reject) => {
                 rm(
                     serverReadyFile,
@@ -177,10 +181,11 @@ Given("I have freshly started hoover web server instance", async () => { // esli
             });
             await rmWaiter;
         } else {
-            console.debug(`** Ready file ${serverReadyFile} did not exist`);
+            console.debug(`(${threadId}) Ready file ${serverReadyFile} did not exist`);
         }
 
-        if(!process.env.SERVER_RESTART_TRIGGER_FILE) {
+        if((!process.env.SERVER_IS_EXTERNAL===undefined ||
+                process.env.SERVER_IS_EXTERNAL!="true")) {
             /*
              * start the service in the background if not in docker compose mode and update the
              * state.server_process object
@@ -192,44 +197,44 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                 const envVal = process.env[e];
                 envCopy[e] = envVal?envVal:undefined;
             }
-            // TODO: make this variable during parallel runs
+            //  make this variable during parallel runs
             const server_port:number|null = await I.simpleActionGetServerPort();
 
             if (null === server_port) {
-                throw new Error();
+                throw new Error(`(${threadId}) Cannot start server process: server_port is null!`);
             }
 
             const server_debug_port:number|null = await I.simpleActionGetServerDebugPort();
 
             const restEndpoint = await I.simpleActionGetRESTEndpoint();
-            console.debug(`** Endpoint: ${restEndpoint}`);
+            console.debug(`(${threadId}) Endpoint: ${restEndpoint}`);
 
-            //codeceptjs_REST_helper_config["endpoint"] = `http://localhost:${server_port}`;
             // Override with requested env settings
             envCopy["SERVER_FLAGS"] =
                 `-Dserver.port=${server_port} -Dlogging.file=${serverReadyFile}`;
             envCopy["DEBUG_PORT"] = `${server_debug_port}`;
 
-            const start_script_path = path.join(__dirname, "..", "start_server_no_container.sh");
-            console.debug(`** Starting server process (port ${server_port})`);
+            const start_script_path = path.join(__dirname, "..", "start_server_locally.sh");
+            console.debug(`(${threadId}) Starting server process (port ${server_port})`);
             const process_object = spawn(
                 start_script_path, [], {
                     env: envCopy,
                     //stdio: ["inherit", "inherit", "inherit"]
                 });
             process_object.stdout.on("data", (data) => {
-                console.log(`service stdout: ${data}`);
+                console.log(`(${threadId}) service stdout: ${data}`);
             });
 
             process_object.stderr.on("data", (data) => {
-                console.error(`service stdout: ${data}`);
+                console.error(`(${threadId}) service stderr: ${data}`);
             });
 
             process_object.on(
                 "close", 
                 (code, signal) => {
                     console.log(
-                        `** Server process terminated due to receipt of signal ${signal}`);
+                        `(${threadId}) Server process terminated due to receipt of signal ` +
+                        `${signal}`);
                 }
             );
 
@@ -243,7 +248,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
 
         // wait for message that the app has started
         const stringWaiter = new Promise<void>(function (resolve, reject) {
-            console.debug("Waiting for logfile to contain string");
+            console.debug(`(${threadId}) Waiting for logfile to contain string`);
             // Set max timeout
             let pollingTimer:NodeJS.Timeout|undefined = undefined;
             const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
@@ -254,8 +259,10 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                     if (server_process_object) {
                         server_process_object.process_object.kill();
                     }
-                    reject(new TimeoutError("Timeout waiting for logfile to contain string"));
-                }, 20000);
+                    reject(
+                        new TimeoutError(
+                            `(${threadId}) Timeout waiting for logfile to contain string`));
+                }, 30000);
             const pollingFunction = ()=>{
                 let logContents: Buffer|undefined;
                 try{
@@ -270,12 +277,12 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                 }
                 
                 if(logContents!==undefined && logContents.includes("Started AppRunner in ")){
-                    console.debug("String found in logfile!");
+                    console.debug(`(${threadId}) String found in logfile!`);
                     clearTimeout(maxTimeoutTimer);
                     resolve();
                 }
                 else{
-                    console.debug("Still waiting for logfile to contain string");
+                    console.debug(`(${threadId}) Still waiting for logfile to contain string`);
                     pollingTimer = setTimeout(pollingFunction, 100);
                 }
             };
@@ -292,11 +299,12 @@ Given("I have freshly started hoover web server instance", async () => { // esli
 
     I.setAfterSuite(async () => {
         // This will throw an exception if the service is not running
-        console.debug(">>> Start in afterSuite");
+        console.debug(`(${threadId}) Start in afterSuite`);
     
         if(!process.env.NO_SERVER_MANAGEMENT===undefined ||
                 process.env.NO_SERVER_MANAGEMENT!="true") {
-            if(!process.env.SERVER_RESTART_TRIGGER_FILE && state.server_process) {
+            if((!process.env.SERVER_IS_EXTERNAL===undefined ||
+                    process.env.SERVER_IS_EXTERNAL!="true") && state.server_process) {
                 const pid = state.server_process.process_object.pid;
                 const process_object = state.server_process.process_object;
     
@@ -305,14 +313,14 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                  * object has server_process object 
                  */
                 if (state.server_process.process_object.kill()){
-                    console.debug(`** Server process with PID ${pid} was killed`);
+                    console.debug(`(${threadId}) Server process with PID ${pid} was killed`);
                 }
                 else{
-                    console.warn(`** Server process with PID ${pid} was not killed`);
+                    console.warn(`(${threadId}) Server process with PID ${pid} was not killed`);
                 }
                 // Now wait for it to really be gone
                 const killWaiter = new Promise<void>(function (resolve, reject) {
-                    console.debug(`Waiting for pid ${pid} to finish`);
+                    console.debug(`(${threadId}) Waiting for pid ${pid} to finish`);
                     // Set max timeout
                     let pollingTimer:NodeJS.Timeout|undefined = undefined;
                     const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
@@ -322,19 +330,20 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                             }
                             reject(
                                 new TimeoutError(
-                                    `Timeout shutting down server process with pid ${pid}`));
+                                    `(${threadId}) Timeout shutting down server process with pid ` +
+                                    `${pid}`));
                         }, 10000);
                     const pollingFunction =
                     ()=>{
                         if(null!==process_object.exitCode){
                             console.debug(
-                                `Server process with pid ${pid} exitted with code ` +
+                                `(${threadId}) Server process with pid ${pid} exitted with code ` +
                                 `${process_object.exitCode}`);
                             clearTimeout(maxTimeoutTimer);
                             resolve();
                         }
                         else{
-                            console.debug(`Still waiting for pid ${pid} to finish`);
+                            console.debug(`(${threadId}) Still waiting for pid ${pid} to finish`);
                             pollingTimer = setTimeout(pollingFunction, 100);
                         }
                     };
@@ -344,7 +353,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
                     await killWaiter;
                 } catch(err){
                     if (err instanceof TimeoutError){
-                        console.error(err);
+                        console.error(`(${threadId}) ${err}`);
                     }
                     else{
                         throw err;
@@ -353,7 +362,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
             }
         }
 
-        // console.debug("<<< End afterSuite");
+        console.debug(`(${threadId}) End afterSuite`);
     });
 
     // console.debug("<<< End in given");
@@ -426,7 +435,7 @@ Given("I have dirt to clean at some coordinates", async (patchesTable: DataTable
 
 When("I give cleaning instructions to move {word}", async (instructions: string) => { // eslint-disable-line
     state.request.instructions = instructions;
-    console.debug("Payload to send: >>>\n" + JSON.stringify(state.request) + "<<<");
+    console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
     // execute REST call
     const res:AxiosResponse = await I.cleaningSessionsPost(state.request);
@@ -436,7 +445,7 @@ When("I give cleaning instructions to move {word}", async (instructions: string)
 
 When("I give cleaning instructions to move {string}", async (instructions: string) => { // eslint-disable-line
     state.request.instructions = instructions;
-    console.debug("Payload to send: >>>\n" + JSON.stringify(state.request) + "<<<");
+    console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
     // execute REST call
     const res:AxiosResponse = await I.cleaningSessionsPost(state.request);

@@ -205,7 +205,9 @@ RUN cd /src/test/javascript/sdet-assignment-service-codeceptsjs && \
     npm --version
 
 COPY application-logging.properties /src/test/javascript/sdet-assignment-service-codeceptsjs/
-COPY test_compose_entrypoint.sh start_codeceptjs_ui_server.sh test_npx.sh /
+
+# entrypoint script to setup server logging stuff
+COPY test_compose_init_entrypoint.sh /
 
 WORKDIR /src/test/javascript/sdet-assignment-service-codeceptsjs
 
@@ -219,8 +221,22 @@ RUN which -a npm && \
     #npx codeceptjs def
     echo "build success"
 
+# codeceptjs-ui needs a special patch to be served within docker; applying the patch here
+###
+#  io.listen(webSocketsPort);
+#  app.listen(applicationPort);
+###
+### needs to be changed to
+#  const iohttp = require('http').createServer().listen(webSocketsPort, '0.0.0.0');
+#  io.listen(iohttp);
+#  app.listen(applicationPort, '0.0.0.0');
+# There is presently no way to do this using normal config or parameters
+
+RUN sed -i "s/^\\( *io.listen(\\)\\(webSocketsPort\\)\\();\\.*\\)\$/  const iohttp = require('http').createServer().listen(\\2, '0.0.0.0');\\n\\1iohttp\\3/" '/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js' && \
+	sed -i "s/^\\( *app.listen(applicationPort\\)\\();\\.*\\)\$/\\1, '0.0.0.0'\\2/" '/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js'
+
 # Update the entrypoint. Note: CODECEPT_ARGS is no longer used
-ENTRYPOINT [ "/usr/bin/npx", "codeceptjs" ]
+ENTRYPOINT [ "/usr/bin/node", "/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/bin/codecept.js" ]
 CMD [ "run" ]
 
 # Versioning and docker metadata stuff

@@ -25,25 +25,4 @@ cp /src/test/javascript/sdet-assignment-service-codeceptsjs/application-logging.
 # and set the permissions on the demo-app directory so the e2e tests can access it
 chown -R www-data:www-data /usr/local/demo-app
 chmod 775 /usr/local/demo-app
-chmod 775 /usr/local/demo-app/logs
-
-# then become the pwuser and transfer (optionally) exec control to npx as this user
-### Under some conditions (like in run-worker mode with more than 1 worker),
-### we cannot transfer init to npx
-if [[ 'true' == "${CODECEPT_UI:-}" ]]; then
-  if [[ 'true' == "${INIT_NO_EXEC:-}" ]]; then
-    su -s /bin/bash pwuser -c 'exec /start_codeceptjs_ui_server.sh '"$*"
-  else
-    exec su -s /bin/bash pwuser -c 'exec /start_codeceptjs_ui_server.sh '"$*"
-  fi
-else
-  if [[ 'true' == "${INIT_NO_EXEC:-}" ]]; then
-    #su -s /bin/bash pwuser -c 'exec /usr/bin/npx codeceptjs '"$*"
-    su -s /usr/bin/node pwuser -- "${TEST_DIR}/node_modules/codeceptjs/bin/codecept.js" "$@"
-  else
-    #exec su -s /bin/bash pwuser -c 'exec /usr/bin/npx codeceptjs '"$*"
-    #cd "${TEST_DIR}"
-    # Try really hard to have fewer parent processes ...
-    exec su -s /usr/bin/node pwuser -- "${TEST_DIR}/node_modules/codeceptjs/bin/codecept.js" "$@"
-  fi
-fi
+exec chmod 775 /usr/local/demo-app/logs
