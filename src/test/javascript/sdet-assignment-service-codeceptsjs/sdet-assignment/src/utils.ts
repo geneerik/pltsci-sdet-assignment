@@ -6,9 +6,21 @@ import {
     accessSync, PathOrFileDescriptor, readFileSync } from "fs-extra";
 import { rm } from "fs";
 import { spawnSync, SpawnOptions, StdioOptions, ChildProcess } from "child_process";
+import { AxiosResponse } from "axios";
 
+/**
+ * @property {string} moduleConsolePrefix Variable to hold the prefix for all message sent from this
+ *                                        module
+ */
 let moduleConsolePrefix = "";
 
+/**
+ * Setter to the set a prefix for all messages sent from this module.  Useful when running in
+ * multiple threads or processes
+ * 
+ * @param  {string} newPrefixValue String to prefix the message with
+ * @returns {void}
+ */
 function setModuleConsolePrefix(newPrefixValue: string): void {
     moduleConsolePrefix = newPrefixValue;
 }
@@ -20,10 +32,12 @@ function setModuleConsolePrefix(newPrefixValue: string): void {
  * @param  {NullableLooseObject} appendEnv?
  * @param  {string} cwd?
  * @param  {number} timeout?
-  */
+ * @returns {void}
+ */
 function allureCli(
     args:string[], appendEnv?:NullableLooseObject, cwd?:string, timeout?:number): void {
         
+    // Get the full path to the allure binary
     const allure_commandline_module_path = require.resolve("allure-commandline");
     const allure_commandline_module_dirname = path.dirname(allure_commandline_module_path);
     const isWindows = path.sep === "\\";
@@ -37,12 +51,14 @@ function allureCli(
     const envCopy: NullableLooseObject =
         Object.assign({}, process.env, appendEnv ?? {});
 
+    // allow all input and output to go to the caller's input and output devices
     const allureSpawnStioOpts: StdioOptions = [
         "inherit",
         "inherit",
         "inherit"
     ];
 
+    // set the process options
     const allureSpawnOpts: SpawnOptions = {
         cwd: cwd,    
         env: envCopy,
@@ -50,52 +66,67 @@ function allureCli(
         timeout: timeout
     };
 
+    // Start and wait for completion of execution of the binary
     spawnSync(allure_binary_path, args, allureSpawnOpts);
 }
 
 /**
- * Generate Allure Report
+ * Generate Allure Report in the `reportOutputDir` from the test results in the `testOutputDir`
+ * directory
  * 
- * @param  {string} testOutputDir?
- * @param  {string} reportOutputDir?
- * @param  {string} issueTrackerPattern?
- * @param  {boolean} shouldGenerateReport?
- * @returns void
+ * @param  {string} testOutputDir? The directory holding the test results to generate the report
+ *                                 from
+ * @param  {string} reportOutputDir? The directory into which the generate report will be placed
+ * @param  {string} issueTrackerPattern? The pattern used to generate issue URIs for tests tagged
+ *                                       with issues
+ * @param  {boolean} shouldGenerateReport? Whether or not tp actually generate the report
+ * @param  {boolean} verboseInput? Whether or not to run the report generate with verbose output
+ * @param  {number} timeoutInput? The maximum time to allow report generation to run before
+ *                                stopping and raising an exception
+ * @returns {void}
  */
 function generateAllureReport(
     testOutputDir?:string, reportOutputDir?:string, issueTrackerPattern?:string,
-    shouldGenerateReport?:boolean): void {
+    shouldGenerateReport?:boolean, verboseInput?:boolean, timeoutInput?:number): void {
 
+    // Set defaults if values not provided
     const resolvedTestOutputDir = testOutputDir ?? "./output";
     const resolvedReportOutputDir = reportOutputDir ?? "./report";
     const resolvedShouldGenerateReport = shouldGenerateReport ?? true;
+    const verbose = verboseInput ?? false;
+    const timeout = timeoutInput ?? 30000;
 
     const destinationDir = 
         path.isAbsolute(resolvedReportOutputDir) ?
             resolvedReportOutputDir :
-            path.join(process.cwd(), resolvedReportOutputDir);
+            path.resolve(resolvedReportOutputDir);
 
     const xunitOutputDir = 
         path.isAbsolute(resolvedTestOutputDir) ?
             resolvedTestOutputDir :
-            path.join(process.cwd(), resolvedTestOutputDir);
+            path.resolve(resolvedTestOutputDir);
 
     // generate launcher
     if (resolvedShouldGenerateReport) {
         console.info(`${moduleConsolePrefix}Making report now`);
         
         allureCli(
-            [
-                // "-v",
-                "generate", "--report-dir", destinationDir, xunitOutputDir],
+            // call allure binary to generate report.  optionally inject the verbose flag
+            (verbose?["-v"]:[]).concat([
+                "generate", "--report-dir", destinationDir, xunitOutputDir]),
             {
+                /**
+                 *  Set the issue tracker uri pattern if one was provided.  This allows a link to
+                 * an issue tracking system (like github issues)
+                 */
                 ALLURE_OPTS: 
                     issueTrackerPattern ?
                         `-Dallure.issues.tracker.pattern=${issueTrackerPattern}` :
                         ""
             },                             
             undefined,
-            30000);
+            // Make sure we have a timeout so the binary doesnt get "stuck"
+            timeout);
 
         console.info(`${moduleConsolePrefix}Allure reports generated in "${destinationDir}" ...`);
     }
@@ -104,19 +135,22 @@ function generateAllureReport(
 /**
  * Empty out an existing directory if it has contents
  *
- * @param  {string} dirPath
+ * @param  {string} dirPath The directory whose contents will be removed
+ * @returns {void}
  */
 function cleanDir (dirPath:string): void {
     if (!dirPath) {
         throw Error("Dir path to clean is not defined");
     }
 
+    // Get the absolute path to the directory
     const targetDir = path.isAbsolute(dirPath) ?
         dirPath :
-        path.join(process.cwd(), dirPath);
+        path.resolve(dirPath);
 
     console.info(`${moduleConsolePrefix}cleaning dir "${targetDir}" ...`);
 
+    // empty the directory
     emptyDirSync(targetDir);
 }
 
@@ -125,7 +159,7 @@ function cleanDir (dirPath:string): void {
  * 
  * @param  {string} filePath The path to the file to be waited for
  * @param  {number|undefined} timeout Time to wait for file to exist in milliseconds
- * @returns Promise
+ * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
  */
 function checkExistsWithTimeout(filePath: string, timeout:number | undefined): Promise<void> {
     return new Promise<void>(function (resolve, reject) {
@@ -176,7 +210,7 @@ function checkExistsWithTimeout(filePath: string, timeout:number | undefined): P
  *                                               exception
  * @param  {number|null|undefined} pollingIntervalInput? The interval in milliseconds after which
  *                                                       to poll to check if the process has ended
- * @returns Promise to ensure process is killed or throw a timeout exception
+ * @returns {Promise} Promise to ensure process is killed or throw a timeout exception
  */
 function waitForProcessToBeKilled(
     processObject: ChildProcess, timeoutInput?: number|null|undefined,
@@ -207,11 +241,12 @@ function waitForProcessToBeKilled(
         // Start the timer
         const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
             ()=>{
+                // unset the interval time if running
                 if (pollingTimer) {
-                    // Shut down the interval timer
                     clearTimeout(pollingTimer);
                 }
 
+                // reject with timeout exception
                 reject(
                     new TimeoutError(
                         `${moduleConsolePrefix}Timeout shutting down server process with pid ` +
@@ -230,9 +265,11 @@ function waitForProcessToBeKilled(
             }
             else{
                 console.debug(`${moduleConsolePrefix}Still waiting for pid ${pid} to finish`);
+                // restart the interval polling timer
                 pollingTimer = setTimeout(pollingFunction, pollingInterval);
             }
         };
+        // start the interval polling timer
         pollingTimer = setTimeout(pollingFunction, pollingInterval);
     });
 }
@@ -242,11 +279,16 @@ function waitForProcessToBeKilled(
  * reject with an error if it fails
  * 
  * @param  {string} targetFile The file to delete
- * @returns Promise to be resolved if the operation succeeds or reject with an error if it fails
+ * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
+ *          it fails; promise holds the boolean as to whether or not a file was deleted
  */
 function deleteFileIfExisted(targetFile: string): Promise<boolean> {
     let fileDidExist = false;
 
+    /**
+     * Check if we can see the file; throw an exception on some problem checking or the file doesnt
+     * exist
+     */
     try {
         accessSync(targetFile, fs_constants.F_OK);
         fileDidExist = true;
@@ -258,6 +300,10 @@ function deleteFileIfExisted(targetFile: string): Promise<boolean> {
     if(fileDidExist){
         console.debug(`${moduleConsolePrefix}Deleting ready file ${targetFile}`);
 
+        /**
+         * resolve with true value if the file is successfully deleted or reject with the exception
+         * if there was an error
+         */
         return new Promise<boolean>((resolve, reject) => {
             rm(
                 targetFile,
@@ -289,7 +335,7 @@ function deleteFileIfExisted(targetFile: string): Promise<boolean> {
  *                                                       the specified string
  * @param  {ChildProcess|null|undefined} process_object? The process to shut down if the timeout is
  *                                                       hit
- * @returns Promise to ensure the string exists in the file or throw a timeout exception
+ * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
  */
 function waitForLogFileToContainString(
     logFile: PathOrFileDescriptor, stringToFind: string, timeoutInput?: number|null|undefined,
@@ -307,12 +353,15 @@ function waitForLogFileToContainString(
         // Start the timer
         const maxTimeoutTimer:NodeJS.Timeout = setTimeout(
             ()=>{
+                // unset the interval time if running
                 if (pollingTimer) {
                     clearTimeout(pollingTimer);
                 }
+                // kill the process if provided
                 if (process_object) {
                     process_object.kill();
                 }
+                // reject with timeout exception
                 reject(
                     new TimeoutError(
                         `${moduleConsolePrefix}Timeout waiting for logfile to contain string`));
@@ -320,29 +369,57 @@ function waitForLogFileToContainString(
         const pollingFunction = ()=>{
             let logContents: Buffer|undefined;
             try{
+                // read the contents of the file
                 logContents = readFileSync(logFile);
             } catch(err){
+                // on error
+                // kill the process if provided
                 if (process_object) {
                     process_object.kill();
                 }
+                // reject with timeout exception
                 reject(err);
             }
             
+            // scan the contents of the file for the provided string
             if(logContents!==undefined && logContents.includes(stringToFind)){
                 console.debug(`${moduleConsolePrefix}String found in logfile!`);
+                // Disable the timeout timer and return positive
                 clearTimeout(maxTimeoutTimer);
                 resolve();
             }
             else{
                 console.debug(`${moduleConsolePrefix}Still waiting for logfile to contain string`);
+                // restart the interval polling timer
                 pollingTimer = setTimeout(pollingFunction, pollingInterval);
             }
         };
+        // start the interval polling timer
         pollingTimer = setTimeout(pollingFunction, pollingInterval);
     });
 }
 
+/**
+ * Check if an object appears to implement the AxiosResponse interface
+ * 
+ * @param  {unknown} maybeAxiosResponse The variable to evaluate as to whether or not implements
+ *                                      the `AxiosResponse` interface
+ * @returns {boolean} Whether of not the given variable represents and implememntation of the
+ *                    `AxiosResponse` interface
+ */
+function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosResponse is AxiosResponse {
+    // check if unknown is an object
+    if (!(maybeAxiosResponse instanceof Object)) {
+        return false;
+    }
+
+    // Check if object has all the require properties/methods
+    return "data" in maybeAxiosResponse && "status" in maybeAxiosResponse &&
+        "statusText" in maybeAxiosResponse && "headers" in maybeAxiosResponse &&
+        "config" in maybeAxiosResponse && "request" in maybeAxiosResponse;
+}
+
 export {
     allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout,
-    waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString
+    waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse
 };

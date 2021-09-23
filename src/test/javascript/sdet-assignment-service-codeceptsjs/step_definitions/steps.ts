@@ -6,14 +6,14 @@ import {
     TestState, ProcessInfoHolderObject, CodeceptJSAllurePlugin,
     CleaningResponseObject, CodeceptJSDataTable, checkExistsWithTimeout,
     NullableLooseObject, waitForProcessToBeKilled, deleteFileIfExisted,
-    waitForLogFileToContainString } from "sdet-assignment";
+    waitForLogFileToContainString, isAxiosResponse } from "sdet-assignment";
 
 /**
  * @property {CodeceptJSAllurePlugin} allurePlugin Plugin object instance used to set allure
  *                                                 specific labels on the currently running test
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const allurePlugin:CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
+const allurePlugin: CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
 
 // Make the I actor instance available in BDD calls
 const { I } = inject();
@@ -33,7 +33,7 @@ Before(() => {
     // console.debug("BEFORE");
 });
 
-/*
+/**
  * Things to do before each test starts; when used with Background, the bdd callback chain is set
  * as mocha beforeeach method
  */
@@ -67,7 +67,7 @@ Given("I have freshly started hoover web server instance", async () => { // esli
         // Start a new instance of the server process if we are managing it
         if((!process.env.SERVER_IS_EXTERNAL===undefined ||
                 process.env.SERVER_IS_EXTERNAL!="true")) {
-            /*
+            /**
              * start the service in the background if not in docker compose mode and update the
              * state.server_process object
              */
@@ -227,10 +227,10 @@ Given(
                 const patches = state.request.patches as [[unknown]];
 
                 // append new array to existing array
-                /*
-                * if the strings converted to numbers dont match when returned to strings,
-                * fallback to original value
-                */
+                /**
+                 * if the strings converted to numbers dont match when returned to strings,
+                 * fallback to original value
+                 */
                 state.request.patches = patches.concat([[
                     row.width_units == `${width_units}` ? width_units : row.width_units,
                     row.height_units == `${height_units}` ? height_units : row.height_units,
@@ -263,14 +263,13 @@ When("I give cleaning instructions to move {string}", async (instructions: strin
 Then("I should see that total number of clean spots is {int}", async (patches: number) => { // eslint-disable-line
     const expectedPatches = patches;
     I.performSimpleAction(async ()=>{
-        // TODO: fix this
-        /*if (!(state.response.actualResponse instanceof AxiosResponse)) {
+        if (!isAxiosResponse(state.response.actualResponse)) {
             throw new Error();
-        }*/
+        }
 
         const res = state.response.actualResponse as AxiosResponse;
         I.assertEqual(res.status, 200);
-        const data:CleaningResponseObject = res.data;
+        const data: CleaningResponseObject = res.data;
         
         I.assertToBeTrue(Object.prototype.hasOwnProperty.call(data, "patches"));
         I.assertEqual(data.patches, expectedPatches);
@@ -280,14 +279,13 @@ Then("I should see that total number of clean spots is {int}", async (patches: n
 Then("I should see a hoover at coordinates {int} width units and {int} height units", async (x: number, y: number) => { // eslint-disable-line
     const coords = [x, y];
     I.performSimpleAction(async ()=>{
-        // TODO: fix this
-        /*if (!(state.response.actualResponse instanceof AxiosResponse)) {
+        if (!isAxiosResponse(state.response.actualResponse)) {
             throw new Error();
-        }*/
+        }
 
         const res = state.response.actualResponse as AxiosResponse;
         I.assertEqual(res.status, 200);
-        const data:CleaningResponseObject = res.data;
+        const data: CleaningResponseObject = res.data;
         
         I.assertToBeTrue(Object.prototype.hasOwnProperty.call(data, "coords"));
         I.assertEqual(data.coords, coords);

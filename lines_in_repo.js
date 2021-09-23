@@ -15,37 +15,37 @@ function countGithub(repo) {
     var buffer=null;
 
 	const req = https.request(options, (res) => {
-	  res.on('data', d => {
-        //console.log(d);
+	    res.on('data', d => {
+        // console.log(d);
         if(null===buffer){
             buffer=d;
         } else {
             buffer+=d;
         }
       });
-      res.on("end",()=>{
-          if(!res.complete){
-              throw Error("interupted");
-          }
-          //console.log(buffer);
-          const rawContributors = JSON.parse(buffer); // this is how you parse a string into JSON
-          const contributors = Array.isArray(rawContributors)?rawContributors:[rawContributors];
+      res.on("end", ()=>{
+        if(!res.complete){
+            throw Error("interupted");
+        }
+        // console.log(buffer);
+        const rawContributors = JSON.parse(buffer); // this is how you parse a string into JSON
+        const contributors = Array.isArray(rawContributors)?rawContributors:[rawContributors];
 
-          let lineCounts = null;
-          try{
-            lineCounts = contributors.map(
-              (contributor) => {
-                return contributor.weeks.reduce(
-                  (lineCount, week) => {
-                    return lineCount + week.a - week.d
-                  }, 0
-                )
-              }
-            );
-          } catch(err){
-            console.error(contributors);
-            throw err;
-          }
+        let lineCounts = null;
+        try{
+          lineCounts = contributors.map(
+            (contributor) => {
+              return contributor.weeks.reduce(
+                (lineCount, week) => {
+                  return lineCount + week.a - week.d
+                }, 0
+              )
+            }
+          );
+        } catch(err) {
+          console.error(contributors);
+          throw err;
+        }
 
         const lines = lineCounts.reduce((lineTotal, lineCount) => lineTotal + lineCount);
         console.log(lines);

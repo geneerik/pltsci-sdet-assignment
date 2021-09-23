@@ -1,3 +1,8 @@
+/**
+ * Module to hold the custom Interfaces to be used by the library.
+ *
+ * @module sdet-assignment
+ */
 /// <reference types="node" />
 import { ChildProcess } from "child_process";
 import { TYPE as AllureTYPE } from "allure-js-commons";

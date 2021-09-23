@@ -2,6 +2,14 @@
 import { NullableLooseObject } from "./interfaces";
 import { PathOrFileDescriptor } from "fs-extra";
 import { ChildProcess } from "child_process";
+import { AxiosResponse } from "axios";
+/**
+ * Setter to the set a prefix for all messages sent from this module.  Useful when running in
+ * multiple threads or processes
+ *
+ * @param  {string} newPrefixValue String to prefix the message with
+ * @returns {void}
+ */
 declare function setModuleConsolePrefix(newPrefixValue: string): void;
 /**
  * Spawn and instance of the allure cli program for gnerating reports
@@ -10,22 +18,30 @@ declare function setModuleConsolePrefix(newPrefixValue: string): void;
  * @param  {NullableLooseObject} appendEnv?
  * @param  {string} cwd?
  * @param  {number} timeout?
-  */
+ * @returns {void}
+ */
 declare function allureCli(args: string[], appendEnv?: NullableLooseObject, cwd?: string, timeout?: number): void;
 /**
- * Generate Allure Report
+ * Generate Allure Report in the `reportOutputDir` from the test results in the `testOutputDir`
+ * directory
  *
- * @param  {string} testOutputDir?
- * @param  {string} reportOutputDir?
- * @param  {string} issueTrackerPattern?
- * @param  {boolean} shouldGenerateReport?
- * @returns void
+ * @param  {string} testOutputDir? The directory holding the test results to generate the report
+ *                                 from
+ * @param  {string} reportOutputDir? The directory into which the generate report will be placed
+ * @param  {string} issueTrackerPattern? The pattern used to generate issue URIs for tests tagged
+ *                                       with issues
+ * @param  {boolean} shouldGenerateReport? Whether or not tp actually generate the report
+ * @param  {boolean} verboseInput? Whether or not to run the report generate with verbose output
+ * @param  {number} timeoutInput? The maximum time to allow report generation to run before
+ *                                stopping and raising an exception
+ * @returns {void}
  */
-declare function generateAllureReport(testOutputDir?: string, reportOutputDir?: string, issueTrackerPattern?: string, shouldGenerateReport?: boolean): void;
+declare function generateAllureReport(testOutputDir?: string, reportOutputDir?: string, issueTrackerPattern?: string, shouldGenerateReport?: boolean, verboseInput?: boolean, timeoutInput?: number): void;
 /**
  * Empty out an existing directory if it has contents
  *
- * @param  {string} dirPath
+ * @param  {string} dirPath The directory whose contents will be removed
+ * @returns {void}
  */
 declare function cleanDir(dirPath: string): void;
 /**
@@ -33,7 +49,7 @@ declare function cleanDir(dirPath: string): void;
  *
  * @param  {string} filePath The path to the file to be waited for
  * @param  {number|undefined} timeout Time to wait for file to exist in milliseconds
- * @returns Promise
+ * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
  */
 declare function checkExistsWithTimeout(filePath: string, timeout: number | undefined): Promise<void>;
 /**
@@ -45,7 +61,7 @@ declare function checkExistsWithTimeout(filePath: string, timeout: number | unde
  *                                               exception
  * @param  {number|null|undefined} pollingIntervalInput? The interval in milliseconds after which
  *                                                       to poll to check if the process has ended
- * @returns Promise to ensure process is killed or throw a timeout exception
+ * @returns {Promise} Promise to ensure process is killed or throw a timeout exception
  */
 declare function waitForProcessToBeKilled(processObject: ChildProcess, timeoutInput?: number | null | undefined, pollingIntervalInput?: number | null | undefined): Promise<void>;
 /**
@@ -53,7 +69,8 @@ declare function waitForProcessToBeKilled(processObject: ChildProcess, timeoutIn
  * reject with an error if it fails
  *
  * @param  {string} targetFile The file to delete
- * @returns Promise to be resolved if the operation succeeds or reject with an error if it fails
+ * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
+ *          it fails; promise holds the boolean as to whether or not a file was deleted
  */
 declare function deleteFileIfExisted(targetFile: string): Promise<boolean>;
 /**
@@ -70,7 +87,16 @@ declare function deleteFileIfExisted(targetFile: string): Promise<boolean>;
  *                                                       the specified string
  * @param  {ChildProcess|null|undefined} process_object? The process to shut down if the timeout is
  *                                                       hit
- * @returns Promise to ensure the string exists in the file or throw a timeout exception
+ * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
  */
 declare function waitForLogFileToContainString(logFile: PathOrFileDescriptor, stringToFind: string, timeoutInput?: number | null | undefined, pollingIntervalInput?: number | null | undefined, process_object?: ChildProcess | null | undefined): Promise<void>;
-export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString };
+/**
+ * Check if an object appears to implement the AxiosResponse interface
+ *
+ * @param  {unknown} maybeAxiosResponse The variable to evaluate as to whether or not implements
+ *                                      the `AxiosResponse` interface
+ * @returns {boolean} Whether of not the given variable represents and implememntation of the
+ *                    `AxiosResponse` interface
+ */
+declare function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosResponse is AxiosResponse;
+export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse };
