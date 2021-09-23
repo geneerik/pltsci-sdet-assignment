@@ -1,6 +1,6 @@
 import { config as codeceptjs_config } from "codeceptjs";
 import { threadId } from "worker_threads";
-import { cleanDir, generateAllureReport } from "sdet-assignment";
+import { cleanDir, generateAllureReport, setModuleConsolePrefix } from "sdet-assignment";
 
 /**
  * Function to hold the actions to perform on first start
@@ -34,6 +34,7 @@ module.exports = {
         if(!threadId){
             bootStrapStuff();
         }
+        setModuleConsolePrefix(`(${threadId}) `);
     },
     teardown: () => {
         console.debug(`(${threadId}) imported teardown is called`);

@@ -45,7 +45,7 @@ interface CodeceptJSAllurePlugin{
 }
 
 interface NullableLooseObject {
-    [key: string]: string | null
+    [key: string]: string | undefined
 }
 
 interface LooseObject {

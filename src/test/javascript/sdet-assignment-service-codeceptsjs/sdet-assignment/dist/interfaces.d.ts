@@ -48,7 +48,7 @@ interface CodeceptJSAllurePlugin {
     addParameter(kind: any, name: string, value: string): void;
 }
 interface NullableLooseObject {
-    [key: string]: string | null;
+    [key: string]: string | undefined;
 }
 interface LooseObject {
     [key: string]: unknown;

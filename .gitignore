@@ -5,7 +5,7 @@
 
 # Node artifact files
 node_modules/
-#dist/
+dist/
 
 # Compiled Java class files
 *.class
@@ -21,7 +21,7 @@ node_modules/
 
 # Maven
 target/
-#dist/
+dist/
 
 # JetBrains IDE
 .idea/
@@ -48,6 +48,10 @@ Thumbs.db
 *.mov
 *.wmv
 
+# ignore stuff generate by tests and scripts
 /src/test/javascript/sdet-assignment-service-codeceptsjs/test_output/
 /test_output/
 /.env
+
+# Make sure changes to sub module are tracked
+!/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/
