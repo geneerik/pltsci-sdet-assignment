@@ -37,7 +37,7 @@ Before(() => {
  * Things to do before each test starts; when used with Background, the bdd callback chain is set
  * as mocha beforeeach method
  */
-Given("I have freshly started hoover web server instance", async () => { // eslint-disable-line
+Given("I have freshly started hoover web server instance", async () => {
     // This will throw an exception if the service is not running
     // console.debug(">>> Start in given");
 
@@ -172,27 +172,35 @@ Given("I have freshly started hoover web server instance", async () => { // esli
     // console.debug("<<< End in given");
 });
 
-Given("the hoover web service running", async () => { // eslint-disable-line
+Given("the hoover web service running", async () => {
     // This will throw an exception if the service is not running
     await I.sendGetRequest("/v1/cleaning-sessions");
 });
 
-Given("I have a room with {int} width units and {int} height units", async (x: number, y: number) => { // eslint-disable-line
-    // console.debug("** CONTROL!");
-    const coords = [x, y];
-    await I.performSimpleAction(()=>{
-        state.request.roomSize = coords;
-    });
-});
+Given(
+    "I have a room with {int} width units and {int} height units",
+    async (x: number, y: number) => {
 
-Given("I have a hoover at coordinates {int} width units and {int} height units", async (x: number, y: number) => { // eslint-disable-line
-    const coords = [x, y];
-    await I.performSimpleAction(()=>{
-        state.request.coords = coords;
-    });
-});
+        // console.debug("** CONTROL!");
+        const coords = [x, y];
+        await I.performSimpleAction(()=>{
+            state.request.roomSize = coords;
+        });
+    }
+);
 
-Given("I have no dirt to clean", async () => { // eslint-disable-line
+Given(
+    "I have a hoover at coordinates {int} width units and {int} height units",
+    async (x: number, y: number) => {
+
+        const coords = [x, y];
+        await I.performSimpleAction(()=>{
+            state.request.coords = coords;
+        });
+    }
+);
+
+Given("I have no dirt to clean", async () => {
     await I.performSimpleAction(()=>{
         state.request.patches = [];
     });
@@ -200,7 +208,7 @@ Given("I have no dirt to clean", async () => { // eslint-disable-line
 
 Given(
     "I have dirt to clean at some coordinates",
-    async (patchesTable: CodeceptJSDataTable) => { // eslint-disable-line
+    async (patchesTable: CodeceptJSDataTable) => {
     
         if (!Object.prototype.hasOwnProperty.call(state.request, "patches") || 
                 !Array.isArray(state.request.patches)){
@@ -240,7 +248,7 @@ Given(
     }
 );
 
-When("I give cleaning instructions to move {word}", async (instructions: string) => { // eslint-disable-line
+When("I give cleaning instructions to move {word}", async (instructions: string) => {
     state.request.instructions = instructions;
     console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
@@ -250,7 +258,7 @@ When("I give cleaning instructions to move {word}", async (instructions: string)
     state.response.actualResponse = res;
 });
 
-When("I give cleaning instructions to move {string}", async (instructions: string) => { // eslint-disable-line
+When("I give cleaning instructions to move {string}", async (instructions: string) => {
     state.request.instructions = instructions;
     console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
@@ -260,7 +268,7 @@ When("I give cleaning instructions to move {string}", async (instructions: strin
     state.response.actualResponse = res;
 });
 
-Then("I should see that total number of clean spots is {int}", async (patches: number) => { // eslint-disable-line
+Then("I should see that total number of clean spots is {int}", async (patches: number) => {
     const expectedPatches = patches;
     I.performSimpleAction(async ()=>{
         if (!isAxiosResponse(state.response.actualResponse)) {
@@ -276,18 +284,22 @@ Then("I should see that total number of clean spots is {int}", async (patches: n
     });
 });
 
-Then("I should see a hoover at coordinates {int} width units and {int} height units", async (x: number, y: number) => { // eslint-disable-line
-    const coords = [x, y];
-    I.performSimpleAction(async ()=>{
-        if (!isAxiosResponse(state.response.actualResponse)) {
-            throw new Error();
-        }
+Then(
+    "I should see a hoover at coordinates {int} width units and {int} height units",
+    async (x: number, y: number) => {
 
-        const res = state.response.actualResponse as AxiosResponse;
-        I.assertEqual(res.status, 200);
-        const data: CleaningResponseObject = res.data;
-        
-        I.assertToBeTrue(Object.prototype.hasOwnProperty.call(data, "coords"));
-        I.assertEqual(data.coords, coords);
-    });
-});
+        const coords = [x, y];
+        I.performSimpleAction(async ()=>{
+            if (!isAxiosResponse(state.response.actualResponse)) {
+                throw new Error();
+            }
+
+            const res = state.response.actualResponse as AxiosResponse;
+            I.assertEqual(res.status, 200);
+            const data: CleaningResponseObject = res.data;
+            
+            I.assertToBeTrue(Object.prototype.hasOwnProperty.call(data, "coords"));
+            I.assertEqual(data.coords, coords);
+        });
+    }
+);

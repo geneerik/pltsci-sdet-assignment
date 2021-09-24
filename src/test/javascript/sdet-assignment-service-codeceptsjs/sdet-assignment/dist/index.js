@@ -2,7 +2,7 @@
 /**
  * Module to hold utility function, types, and exceptions for the SDET assignment.
  *
- * @module sdet-assignment xxxxx
+ * @module sdet-assignment
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;

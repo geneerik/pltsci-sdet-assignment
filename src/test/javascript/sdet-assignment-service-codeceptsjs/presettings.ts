@@ -4,16 +4,20 @@ import { cleanDir, generateAllureReport, setModuleConsolePrefix } from "sdet-ass
 
 /**
  * Function to hold the actions to perform on first start
+ * 
+ * @returns {void}
  */
-function bootStrapStuff() {
+function bootStrapStuff(): void {
     cleanDir(codeceptjs_config.get("output") ?? "./output");
     cleanDir(codeceptjs_config.get("report_output") ?? "./report");
 }
 
 /**
  * Wrapper for the generateAllureReport method populationg values from the config file
+ * 
+ * @returns {void}
  */
-function generateAllureReportUsingConfig() {
+function generateAllureReportUsingConfig(): void {
     const TEST_OUTPUT_DIR = codeceptjs_config.get("output") ?? "./output";
     const REPORT_OUTPUT_DIR = codeceptjs_config.get("report_output") ?? "./report";
     const ISSUE_TRACKER_PATTERN = codeceptjs_config.get("allure_issue_tracker_pattern") ?? "";
@@ -23,8 +27,10 @@ function generateAllureReportUsingConfig() {
 
 /**
  * Function to hold the actions to perform on final shutdown
+ * 
+ * @returns {void}
  */
-function tearDownStuff() {
+function tearDownStuff(): void {
     generateAllureReportUsingConfig();
 }
 
@@ -44,7 +50,7 @@ module.exports = {
         // console.debug(`(${threadId})  imported teardown is done`);
     },
     bootstrapAll: () => {
-        console.debug(`(${threadId})  imported bootstrapAll is called`);
+        console.debug(`(${threadId}) imported bootstrapAll is called`);
         bootStrapStuff();
     },
     teardownAll: () => {
