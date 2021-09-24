@@ -1,6 +1,6 @@
 /**
  * Module to hold the custom exceptions for the SDET assignment.
- * 
+ *
  * @module sdet-assignment
  */
 

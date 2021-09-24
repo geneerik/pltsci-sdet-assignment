@@ -17,7 +17,7 @@ let moduleConsolePrefix = "";
 /**
  * Setter to the set a prefix for all messages sent from this module.  Useful when running in
  * multiple threads or processes
- * 
+ *
  * @param  {string} newPrefixValue String to prefix the message with
  * @returns {void}
  */
@@ -27,7 +27,7 @@ function setModuleConsolePrefix(newPrefixValue: string): void {
 
 /**
  * Spawn and instance of the allure cli program for gnerating reports
- * 
+ *
  * @param  {string[]} args
  * @param  {NullableLooseObject} appendEnv?
  * @param  {string} cwd?
@@ -73,7 +73,7 @@ function allureCli(
 /**
  * Generate Allure Report in the `reportOutputDir` from the test results in the `testOutputDir`
  * directory
- * 
+ *
  * @param  {string} testOutputDir? The directory holding the test results to generate the report
  *                                 from
  * @param  {string} reportOutputDir? The directory into which the generate report will be placed
@@ -156,7 +156,7 @@ function cleanDir (dirPath:string): void {
 
 /**
  * Wait for a file to exist
- * 
+ *
  * @param  {string} filePath The path to the file to be waited for
  * @param  {number|undefined} timeout Time to wait for file to exist in milliseconds
  * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
@@ -203,7 +203,7 @@ function checkExistsWithTimeout(filePath: string, timeout:number | undefined): P
 
 /**
  * Produce a promise to wait for the `process_object` to be killed or timeout with an exception
- * 
+ *
  * @param  {ChildProcess} processObject The process to kill
  * @param  {number|null|undefined} timeoutInput? The maximum amount of time in milliseconds to
  *                                               wait for the process to end before throwing an
@@ -277,7 +277,7 @@ function waitForProcessToBeKilled(
 /**
  * Delete a file if it exists, returning a promise to be resolved if the operation succeeds or
  * reject with an error if it fails
- * 
+ *
  * @param  {string} targetFile The file to delete
  * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
  *          it fails; promise holds the boolean as to whether or not a file was deleted
@@ -324,7 +324,7 @@ function deleteFileIfExisted(targetFile: string): Promise<boolean> {
 /**
  * Monitor a file for a give string until a timeout is hit.  Optionally kill the given process if
  * the timeout is hit.
- * 
+ *
  * @param  {PathOrFileDescriptor} logFile The log file to monitor
  * @param  {string} stringToFind The string to search for in the log file
  * @param  {number|null|undefined} timeoutInput? The maximum amount of time in milliseconds to
@@ -401,7 +401,7 @@ function waitForLogFileToContainString(
 
 /**
  * Check if an object appears to implement the AxiosResponse interface
- * 
+ *
  * @param  {unknown} maybeAxiosResponse The variable to evaluate as to whether or not implements
  *                                      the `AxiosResponse` interface
  * @returns {boolean} Whether of not the given variable represents and implememntation of the

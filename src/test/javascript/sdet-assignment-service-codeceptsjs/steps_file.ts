@@ -1,4 +1,3 @@
-import ex from "codeceptjs-expectwrapper";
 import { AxiosResponse } from "axios";
 
 // To keep type-hinting working well, this function need to remain un-typed
@@ -10,6 +9,6 @@ export = function () {
             const payload = cleaningData;
 
             return this.sendPostRequest("/v1/cleaning-sessions", payload);
-        },
-        ...ex});
+        }
+    });
 }

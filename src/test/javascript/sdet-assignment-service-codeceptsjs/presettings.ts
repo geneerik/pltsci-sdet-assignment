@@ -4,7 +4,7 @@ import { cleanDir, generateAllureReport, setModuleConsolePrefix } from "sdet-ass
 
 /**
  * Function to hold the actions to perform on first start
- * 
+ *
  * @returns {void}
  */
 function bootStrapStuff(): void {
@@ -14,7 +14,7 @@ function bootStrapStuff(): void {
 
 /**
  * Wrapper for the generateAllureReport method populationg values from the config file
- * 
+ *
  * @returns {void}
  */
 function generateAllureReportUsingConfig(): void {
@@ -27,7 +27,7 @@ function generateAllureReportUsingConfig(): void {
 
 /**
  * Function to hold the actions to perform on final shutdown
- * 
+ *
  * @returns {void}
  */
 function tearDownStuff(): void {

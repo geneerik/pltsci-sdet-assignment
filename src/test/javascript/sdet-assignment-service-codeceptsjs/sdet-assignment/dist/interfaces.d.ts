@@ -90,7 +90,7 @@ interface GherkinAstTableCell extends GherkinAstRule {
 interface GherkinAstTableRow extends GherkinAstRule {
     type: "TableRow";
     /**
-     *
+     * @property {GherkinAstTableCell[]} cells The array of `GherkinAstTableCell` object in the row
      */
     cells: GherkinAstTableCell[];
 }

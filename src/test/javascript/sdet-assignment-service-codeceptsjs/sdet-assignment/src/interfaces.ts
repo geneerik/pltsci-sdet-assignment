@@ -1,6 +1,6 @@
 /**
  * Module to hold the custom Interfaces to be used by the library.
- * 
+ *
  * @module sdet-assignment
  */
 
@@ -10,7 +10,7 @@ import { TYPE as AllureTYPE } from "allure-js-commons";
 
 /**
  * Object representing a line in a Gherkin document
- * 
+ *
  * @class GherkinLine
  */
 interface GherkinLine {
@@ -70,7 +70,7 @@ interface GherkinAstObject {
 
 /**
  * Object representing data parsed from a Gherkin document that qualifies as a rule
- * 
+ *
  * @extends GherkinAstObject
  */
 interface GherkinAstRule extends GherkinAstObject {
@@ -83,7 +83,7 @@ interface GherkinAstRule extends GherkinAstObject {
 
 /**
  * Object resenting a data cell in a `GherkinAstTableRow`
- * 
+ *
  * @extends GherkinAstRule
  * @see {@link GherkinAstTableRow}
  */
@@ -98,7 +98,7 @@ interface GherkinAstTableCell extends GherkinAstRule {
 
 /**
  * Object resenting a data row in a `GherkinAstDataTable`
- * 
+ *
  * @extends GherkinAstRule
  * @see {@link GherkinAstDataTable}
  */
@@ -107,14 +107,14 @@ interface GherkinAstTableRow extends GherkinAstRule
     type: "TableRow",
 
     /**
-     * 
+     * @property {GherkinAstTableCell[]} cells The array of `GherkinAstTableCell` object in the row
      */
     cells: GherkinAstTableCell[]
 }
 
 /**
  * Object representing a table of data observed in a Gherkin document
- * 
+ *
  * @extends GherkinAstRule
  */
 interface GherkinAstDataTable extends GherkinAstRule {
@@ -129,7 +129,7 @@ interface GherkinAstDataTable extends GherkinAstRule {
 /**
  * Object representing the contents of a `GherkinAstDataTable` after being parsed into just its
  * data with further methods to iterate through the data
- * 
+ *
  * @class DataTableArgument
  * @see {@link GherkinAstDataTable}
  */
@@ -143,7 +143,7 @@ interface CodeceptJSDataTableArgument {
     /**
      * Method to return the data as an array of arrays representing the value of the data in each
      * cell in the table
-     * 
+     *
      * @returns {string[][]} Returns the table as a 2-D array
      */
     raw(): string[][],
@@ -151,7 +151,7 @@ interface CodeceptJSDataTableArgument {
     /**
      * Method to return the data as an array of arrays representing the value of the data in each
      * cell in the table, not including the table header row
-     * 
+     *
      * @returns {string[][]} Returns the table as a 2-D array, without the first row
      */
     rows(): string[][],
@@ -159,7 +159,7 @@ interface CodeceptJSDataTableArgument {
     /**
      * Method to return the data in the table as an array of objects with the column header as the
      * key 
-     * 
+     *
      * @returns {{ [colName: string]: string }[]} Retruns an array of objects where each row is
      *                                            converted to an object (column header is the key)
      */
@@ -173,7 +173,7 @@ interface CodeceptJSDataTable extends GherkinAstDataTable {
 
     /**
      * obtain an object that allows you to get a simple version of the table parsed by column or row
-     * 
+     *
      * @returns {CodeceptJSDataTableArgument} Returns a `DataTableArgument` object linking to
      *                                        further methods to iterate through the data
      */
