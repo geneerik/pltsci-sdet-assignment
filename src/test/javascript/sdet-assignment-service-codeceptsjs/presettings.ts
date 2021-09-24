@@ -1,6 +1,12 @@
 import { config as codeceptjs_config } from "codeceptjs";
 import { threadId } from "worker_threads";
+import { Debugger, debug as debugLoggerFactory } from "debug";
 import { cleanDir, generateAllureReport, setModuleConsolePrefix } from "sdet-assignment";
+
+/**
+ * @property {Debugger} debug Debug logger method
+ */
+const debug: Debugger = debugLoggerFactory("com.geneerik.sdet-assignment.presettings");
 
 /**
  * Function to hold the actions to perform on first start
@@ -36,25 +42,25 @@ function tearDownStuff(): void {
 
 module.exports = {
     bootstrap: () => {
-        // console.debug(`(${threadId}) imported bootstrap is called`);
+        // debug(`(${threadId}) imported bootstrap is called`);
         if(!threadId){
             bootStrapStuff();
         }
         setModuleConsolePrefix(`(${threadId}) `);
     },
     teardown: () => {
-        console.debug(`(${threadId}) imported teardown is called`);
+        debug(`(${threadId}) imported teardown is called`);
         if(!threadId){
             tearDownStuff();
         }
-        // console.debug(`(${threadId})  imported teardown is done`);
+        // debug(`(${threadId})  imported teardown is done`);
     },
     bootstrapAll: () => {
-        console.debug(`(${threadId}) imported bootstrapAll is called`);
+        debug(`(${threadId}) imported bootstrapAll is called`);
         bootStrapStuff();
     },
     teardownAll: () => {
-        // console.debug(`(${threadId})  imported teardownAll is called`);
+        // debug(`(${threadId})  imported teardownAll is called`);
         tearDownStuff();
     }
 };

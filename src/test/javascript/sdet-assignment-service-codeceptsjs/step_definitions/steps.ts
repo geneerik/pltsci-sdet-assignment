@@ -2,12 +2,18 @@ import { AxiosResponse } from "axios";
 import path from "path";
 import { SpawnOptionsWithoutStdio } from "child_process";
 import { threadId } from "worker_threads";
+import { Debugger, debug as debugLoggerFactory } from "debug";
 import {
     TestState, ProcessInfoHolderObject, CodeceptJSAllurePlugin,
     CleaningResponseObject, CodeceptJSDataTable, checkExistsWithTimeout,
     NullableLooseObject, waitForProcessToBeKilled, deleteFileIfExisted,
     waitForLogFileToContainString, isAxiosResponse, ServerProcessSettings,
     CodeceptJSDataTableArgument, spawnWithConsoleIo } from "sdet-assignment";
+
+/**
+ * @property {Debugger} debug Debug logger method
+ */
+const debug: Debugger = debugLoggerFactory("com.geneerik.sdet-assignment.steps-definitions.steps");
 
 /**
  * @property {CodeceptJSAllurePlugin} allurePlugin Plugin object instance used to set allure
@@ -88,7 +94,7 @@ async function conditionallyStartServerProcess(
     // Get the settings for the server process
     const serverProcessSettings = await getServerProcessSettings(serverReadyFile);
 
-    console.debug(`(${threadId}) Starting server process`);
+    debug(`(${threadId}) Starting server process`);
 
     // Save the process object for future management operations
     return {
@@ -218,12 +224,12 @@ function appendDirtPatchesToRequest(patchesTable: CodeceptJSDataTable): void {
  */
 async function performAfterSuiteActions(): Promise<void> {
     // This will throw an exception if the service is not running
-    console.debug(`(${threadId}) Start in afterSuite`);
+    debug(`(${threadId}) Start in afterSuite`);
     
     // Ensure the server process is shut down if we are managing it
     await ensureServerIsShutDown();
 
-    console.debug(`(${threadId}) End afterSuite`);
+    debug(`(${threadId}) End afterSuite`);
 }
 
 Before(() => {
@@ -231,7 +237,7 @@ Before(() => {
      * Don"t use this; it is limited due to the inability to execute async code.
      * Use Given in a Background block instead
      */
-    // console.debug("BEFORE");
+    // debug("BEFORE");
 });
 
 /**
@@ -239,10 +245,10 @@ Before(() => {
  * as mocha beforeeach method
  */
 Given("I have freshly started hoover web server instance", async () => {
-    // console.debug(">>> Start in given");
+    // debug(">>> Start in given");
 
     const restEndpoint = await I.performSimpleActionGetRestEndpoint();
-    console.debug(`(${threadId}) Endpoint: ${restEndpoint}`);
+    debug(`(${threadId}) Endpoint: ${restEndpoint}`);
 
     /**
      * ensure the server is freshly started if we can and track the server process if we are
@@ -262,7 +268,7 @@ Given("I have freshly started hoover web server instance", async () => {
         await performAfterSuiteActions();
     });
 
-    // console.debug("<<< End in given");
+    // debug("<<< End in given");
 });
 
 Given("the hoover web service running", async () => {
@@ -274,7 +280,7 @@ Given(
     "I have a room with {int} width units and {int} height units",
     async (x: number, y: number) => {
 
-        // console.debug("** CONTROL!");
+        // debug("** CONTROL!");
         const coords = [x, y];
         await I.performSimpleAction(()=>{
             state.request.roomSize = coords;
@@ -311,7 +317,7 @@ Given(
 
 When("I give cleaning instructions to move {word}", async (instructions: string) => {
     state.request.instructions = instructions;
-    console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
+    debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
     // execute REST call
     const res:AxiosResponse = await I.cleaningSessionsPost(state.request);
@@ -321,7 +327,7 @@ When("I give cleaning instructions to move {word}", async (instructions: string)
 
 When("I give cleaning instructions to move {string}", async (instructions: string) => {
     state.request.instructions = instructions;
-    console.debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
+    debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
     
     // execute REST call
     const res:AxiosResponse = await I.cleaningSessionsPost(state.request);

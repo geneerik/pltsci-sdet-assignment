@@ -19,8 +19,7 @@
     "type": "git",
     "url": "git://github.com/geneerik/pltsci-sdet-assignment.git"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Gene Erik <support@fossdevops.com> (https://fossdevops.com/)",
   "license": "MIT",
   "bugs": {
@@ -31,5 +30,8 @@
   },
   "dependencies": {
     "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.7"
   }
 }

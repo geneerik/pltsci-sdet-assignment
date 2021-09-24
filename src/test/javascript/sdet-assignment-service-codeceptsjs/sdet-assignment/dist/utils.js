@@ -6,6 +6,11 @@ const path = require("path");
 const fs_extra_1 = require("fs-extra");
 const fs_1 = require("fs");
 const child_process_1 = require("child_process");
+const debug_1 = require("debug");
+/**
+ * @property {Debugger} debug Debug logger method
+ */
+const debug = (0, debug_1.debug)("com.geneerik.sdet-assignment.utils");
 /**
  * @property {string} moduleConsolePrefix Variable to hold the prefix for all message sent from this
  *                                        module
@@ -38,7 +43,7 @@ function allureCli(args, appendEnv, cwd, timeout) {
     const isWindows = path.sep === "\\";
     const allureCommand = "allure" + (isWindows ? ".bat" : "");
     const allure_binary_path = path.join(allure_commandline_module_dirname, "dist/bin", allureCommand);
-    console.debug(`${moduleConsolePrefix}Allure commandline binary path: ${allure_binary_path}`);
+    debug(`${moduleConsolePrefix}Allure commandline binary path: ${allure_binary_path}`);
     // Copy the process env so we can append to the child process env
     const envCopy = Object.assign({}, process.env, appendEnv !== null && appendEnv !== void 0 ? appendEnv : {});
     // allow all input and output to go to the caller's input and output devices
@@ -156,10 +161,10 @@ function checkExistsWithTimeout(filePath, timeout) {
         });
         const dir = path.dirname(filePath);
         const basename = path.basename(filePath);
-        console.debug(`${moduleConsolePrefix}watching for file "${basename}" in dir ${dir}`);
+        debug(`${moduleConsolePrefix}watching for file "${basename}" in dir ${dir}`);
         watcher = (0, fs_extra_1.watch)(dir, function (eventType, filename) {
             if (eventType === "rename" && filename === basename) {
-                console.debug(`${moduleConsolePrefix}Detected file "${basename}" in dir ${dir}!`);
+                debug(`${moduleConsolePrefix}Detected file "${basename}" in dir ${dir}!`);
                 clearTimeout(timer);
                 if (watcher) {
                     watcher.close();
@@ -191,14 +196,14 @@ function waitForProcessToBeKilled(processObject, timeoutInput, pollingIntervalIn
      * object has server_process object
      */
     if (processObject.kill()) {
-        console.debug(`${moduleConsolePrefix}Server process with PID ${pid} was killed`);
+        debug(`${moduleConsolePrefix}Server process with PID ${pid} was killed`);
     }
     else {
         console.warn(`${moduleConsolePrefix}Server process with PID ${pid} was not killed`);
     }
     // Now wait for it to really be gone
     return new Promise(function (resolve, reject) {
-        console.debug(`${moduleConsolePrefix}Waiting for pid ${pid} to finish`);
+        debug(`${moduleConsolePrefix}Waiting for pid ${pid} to finish`);
         // Set max timeout
         let pollingTimer = undefined;
         // Start the timer
@@ -214,14 +219,14 @@ function waitForProcessToBeKilled(processObject, timeoutInput, pollingIntervalIn
         const pollingFunction = () => {
             // check if the exit code is set indicating the process has ended
             if (null !== processObject.exitCode) {
-                console.debug(`${moduleConsolePrefix}Server process with pid ${pid} exitted with code` +
+                debug(`${moduleConsolePrefix}Server process with pid ${pid} exitted with code` +
                     `${processObject.exitCode}`);
                 // Disable the timeout timer and return positive
                 clearTimeout(maxTimeoutTimer);
                 resolve();
             }
             else {
-                console.debug(`${moduleConsolePrefix}Still waiting for pid ${pid} to finish`);
+                debug(`${moduleConsolePrefix}Still waiting for pid ${pid} to finish`);
                 // restart the interval polling timer
                 pollingTimer = setTimeout(pollingFunction, pollingInterval);
             }
@@ -255,7 +260,7 @@ function deleteFileIfExisted(targetFile) {
     }
     // delete the file if it existed
     if (fileDidExist) {
-        console.debug(`${moduleConsolePrefix}Deleting ready file ${targetFile}`);
+        debug(`${moduleConsolePrefix}Deleting ready file ${targetFile}`);
         /**
          * resolve with true value if the file is successfully deleted or reject with the exception
          * if there was an error
@@ -269,7 +274,7 @@ function deleteFileIfExisted(targetFile) {
             });
         });
     }
-    console.debug(`${moduleConsolePrefix}Ready file ${targetFile} did not exist`);
+    debug(`${moduleConsolePrefix}Ready file ${targetFile} did not exist`);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return new Promise((resolve, reject) => { resolve(false); });
 }
@@ -295,7 +300,7 @@ function waitForLogFileToContainString(logFile, stringToFind, timeoutInput, poll
     const timeout = timeoutInput !== null && timeoutInput !== void 0 ? timeoutInput : 30000;
     const pollingInterval = pollingIntervalInput !== null && pollingIntervalInput !== void 0 ? pollingIntervalInput : 100;
     return new Promise(function (resolve, reject) {
-        console.debug(`${moduleConsolePrefix}Waiting for logfile to contain string`);
+        debug(`${moduleConsolePrefix}Waiting for logfile to contain string`);
         // Set max timeout
         let pollingTimer = undefined;
         // Start the timer
@@ -328,13 +333,13 @@ function waitForLogFileToContainString(logFile, stringToFind, timeoutInput, poll
             }
             // scan the contents of the file for the provided string
             if (logContents !== undefined && logContents.includes(stringToFind)) {
-                console.debug(`${moduleConsolePrefix}String found in logfile!`);
+                debug(`${moduleConsolePrefix}String found in logfile!`);
                 // Disable the timeout timer and return positive
                 clearTimeout(maxTimeoutTimer);
                 resolve();
             }
             else {
-                console.debug(`${moduleConsolePrefix}Still waiting for logfile to contain string`);
+                debug(`${moduleConsolePrefix}Still waiting for logfile to contain string`);
                 // restart the interval polling timer
                 pollingTimer = setTimeout(pollingFunction, pollingInterval);
             }
@@ -387,7 +392,7 @@ function spawnWithConsoleIo(command, args, options) {
     }
     // Send a message when the server process terminates
     process_object.on("close", (code, signal) => {
-        console.debug(`${moduleConsolePrefix}Server process terminated due to receipt of signal ` +
+        debug(`${moduleConsolePrefix}Server process terminated due to receipt of signal ` +
             `${signal}`);
     });
     return process_object;
