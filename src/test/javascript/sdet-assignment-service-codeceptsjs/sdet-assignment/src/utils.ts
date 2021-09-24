@@ -33,12 +33,14 @@ function setModuleConsolePrefix(newPrefixValue: string): void {
 }
 
 /**
- * Spawn and instance of the allure cli program for gnerating reports
+ * Spawn and instance of the allure cli program for generating reports
  *
- * @param  {string[]} args
- * @param  {NullableLooseObject} appendEnv?
- * @param  {string} cwd?
- * @param  {number} timeout?
+ * @param  {string[]} args The arguements to pass to the allure binary
+ * @param  {NullableLooseObject} appendEnv The environmental variables to inject/override for the
+ *                                         process envrionment
+ * @param  {string} cwd The path to set as the current working directory for the process
+ * @param  {number} timeout The amount of time in milliseconds to allow the process to execute
+ *                          before timing out and throwing an exception
  * @returns {void}
  */
 function allureCli(
@@ -81,15 +83,15 @@ function allureCli(
  * Generate Allure Report in the `reportOutputDir` from the test results in the `testOutputDir`
  * directory
  *
- * @param  {string} testOutputDir? The directory holding the test results to generate the report
- *                                 from
- * @param  {string} reportOutputDir? The directory into which the generate report will be placed
- * @param  {string} issueTrackerPattern? The pattern used to generate issue URIs for tests tagged
- *                                       with issues
- * @param  {boolean} shouldGenerateReport? Whether or not tp actually generate the report
- * @param  {boolean} verboseInput? Whether or not to run the report generate with verbose output
- * @param  {number} timeoutInput? The maximum time to allow report generation to run before
- *                                stopping and raising an exception
+ * @param {string} testOutputDir The directory holding the test results to generate the report
+ *                               from
+ * @param  {string} reportOutputDir The directory into which the generate report will be placed
+ * @param  {string} issueTrackerPattern The pattern used to generate issue URIs for tests tagged
+ *                                      with issues
+ * @param  {boolean} shouldGenerateReport Whether or not tp actually generate the report
+ * @param  {boolean} verboseInput Whether or not to run the report generate with verbose output
+ * @param  {number} timeoutInput The maximum time to allow report generation to run before
+ *                               stopping and raising an exception
  * @returns {void}
  */
 function generateAllureReport(
@@ -212,11 +214,11 @@ function checkExistsWithTimeout(filePath: string, timeout:number | undefined): P
  * Produce a promise to wait for the `process_object` to be killed or timeout with an exception
  *
  * @param  {ChildProcess} processObject The process to kill
- * @param  {number|null|undefined} timeoutInput? The maximum amount of time in milliseconds to
- *                                               wait for the process to end before throwing an
- *                                               exception
- * @param  {number|null|undefined} pollingIntervalInput? The interval in milliseconds after which
- *                                                       to poll to check if the process has ended
+ * @param  {number|null|undefined} timeoutInput The maximum amount of time in milliseconds to
+ *                                              wait for the process to end before throwing an
+ *                                              exception
+ * @param  {number|null|undefined} pollingIntervalInput The interval in milliseconds after which
+ *                                                      to poll to check if the process has ended
  * @returns {Promise} Promise to ensure process is killed or throw a timeout exception
  */
 function waitForProcessToBeKilled(
@@ -335,14 +337,14 @@ function deleteFileIfExisted(targetFile: string): Promise<boolean> {
  *
  * @param  {PathOrFileDescriptor} logFile The log file to monitor
  * @param  {string} stringToFind The string to search for in the log file
- * @param  {number|null|undefined} timeoutInput? The maximum amount of time in milliseconds to
- *                                               wait for the string to be found before throwing an
- *                                               exception and shutting down the process if given
- * @param  {number|null|undefined} pollingIntervalInput? The interval in milliseconds after which
- *                                                       to poll to check if the log file contains
- *                                                       the specified string
- * @param  {ChildProcess|null|undefined} process_object? The process to shut down if the timeout is
- *                                                       hit
+ * @param  {number|null|undefined} timeoutInput The maximum amount of time in milliseconds to
+ *                                              wait for the string to be found before throwing an
+ *                                              exception and shutting down the process if given
+ * @param  {number|null|undefined} pollingIntervalInput The interval in milliseconds after which
+ *                                                      to poll to check if the log file contains
+ *                                                      the specified string
+ * @param  {ChildProcess|null|undefined} process_object The process to shut down if the timeout is
+ *                                                      hit
  * @returns {Promise} Promise to ensure the string exists in the file or throw a timeout exception
  */
 function waitForLogFileToContainString(
@@ -431,8 +433,8 @@ function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosResponse is Axi
  * Spawn a process in the background with its I/O tied to the console
  *
  * @param  {string} command The command to execute
- * @param  {string[]} args (Optional) Arguments to pass to the command
- * @param  {SpawnOptionsWithoutStdio|undefined} (Optional) Options to define process settings
+ * @param  {string[]} args Arguments to pass to the command
+ * @param  {SpawnOptionsWithoutStdio|undefined} options Options to define process settings
  * @returns {ChildProcess} Object representing the newly spawned process
  */
 function spawnWithConsoleIo(

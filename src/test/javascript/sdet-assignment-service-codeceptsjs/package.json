@@ -27,6 +27,8 @@
         "playwright": "^1.14.1",
         "sdet-assignment": "file:sdet-assignment",
         "ts-node": "^10.2.1",
-        "typescript": "^4.4.3"
+        "typedoc": "^0.22.4",
+        "typescript": "^4.4.3",
+        "webdriverio": "^7.13.1"
     }
 }

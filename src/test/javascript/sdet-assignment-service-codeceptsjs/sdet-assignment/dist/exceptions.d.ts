@@ -5,6 +5,7 @@
  */
 /**
  * Exception class indicating that an (asynchronous) operation has timed out
+ *
  * @extends Error
  */
 declare class TimeoutError extends Error {

@@ -417,4 +417,21 @@ interface CodeceptJSAllurePlugin {
      */
     addParameter(kind: any, name: string, value: string): void;
 }
-export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings, GherkinTextSpan };
+export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings, GherkinTextSpan, GherkinLocation, GherkinLine };
+/**
+ * This is a work-around for codeceptjs using this type, but it no longer being defined by
+ * webdriverio.  It gets patched in here when this module is included so the transpiler
+ * will work.
+ */
+declare global {
+    namespace WebdriverIO {
+        /**
+         * Defines w3c timeout data
+         */
+        interface Timeouts {
+            implicit?: number;
+            pageLoad?: number;
+            script?: number;
+        }
+    }
+}

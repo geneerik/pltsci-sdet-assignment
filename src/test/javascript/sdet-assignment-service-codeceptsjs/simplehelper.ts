@@ -5,6 +5,9 @@ import expect from "expect";
 /**
  * Helper class to empower step discovery where is might be missing and add access to some of the
  * runner features not directly exposed by CodeceptJS
+ *
+ * @class SimpleHelper
+ * @extends Helper
  */
 export = class SimpleHelper extends Helper {
     
