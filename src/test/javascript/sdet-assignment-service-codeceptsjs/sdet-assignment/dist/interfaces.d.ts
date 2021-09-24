@@ -4,8 +4,21 @@
  * @module sdet-assignment
  */
 /// <reference types="node" />
-import { ChildProcess } from "child_process";
+import { ChildProcess, SpawnOptionsWithoutStdio } from "child_process";
 import { TYPE as AllureTYPE } from "allure-js-commons";
+/**
+ * Object representing a span of text in a line and the column at which it was observed
+ */
+interface GherkinTextSpan {
+    /**
+     * @property {number} column The column number at which the text was observed
+     */
+    column: number;
+    /**
+     * @property {string} text The string comprising the text span
+     */
+    text: string;
+}
 /**
  * Object representing a line in a Gherkin document
  *
@@ -33,6 +46,53 @@ interface GherkinLine {
      *                           `trimmedLineText`
      */
     indent: number;
+    /**
+     * Get the list of tags for the line including information on where they were observed
+     *
+     * @returns {GherkinTextSpan} The array of tags found in the line
+     */
+    getTags(): GherkinTextSpan[];
+    /**
+     * Get any table cells defined in the line including information on where they were observed
+     *
+     * @returns {GherkinCellSpan} The array of table cells in the line
+     */
+    getTableCells(): GherkinTextSpan[];
+    /**
+     * Get the remaining text of the line after removing `length` characters from the beginning of
+     * the line and trimming white space from the end
+     *
+     * @param  {number} length The number of characters to remove from the beginning for the line
+     * @returns {string} The remaining text of the line after removing `length` characters from the
+     *                   beginning of the line and trimming white space from the end
+     */
+    getRestTrimmed(length: number): string;
+    /**
+     * Get the remaining text of the line after removing `indentToRemove` characters from the
+     * beginning of the line.  Will not remove more that `indent` characters.  If `indentToRemove`
+     * is negative or more than `indent`, return `trimmedLineText`
+     *
+     * @param  {number} indentToRemove The number of characters requested to be removed from the
+     *                                 beginning of the line text
+     * @returns {string} the remaining text of the line after removing `indentToRemove` characters
+     *                   from the beginning of the line, or,  if `indentToRemove` is negative or
+     *                   more than `indent`, `trimmedLineText`
+     */
+    getLineText(indentToRemove: number): string;
+    /**
+     * Get whether of not `trimmedLineText` begins with the specified text and `:`
+     *
+     * @param  {string} keyword The text to check for.  This will have `:` appended to it
+     * @returns {boolean} Whether of not `trimmedLineText` begins with the specified text and `:`
+     */
+    startsWithTitleKeyword(keyword: string): boolean;
+    /**
+     * Get whether of not `trimmedLineText` begins with the specified text
+     *
+     * @param  {string} prefix The text to check for
+     * @returns {boolean} Whether of not `trimmedLineText` begins with the specified text
+     */
+    startsWith(prefix: string): boolean;
 }
 /**
  * Object representing the location in a Gherkin document in which a `GherkinAstObject` was observed
@@ -251,20 +311,110 @@ interface TestState {
     [key: string]: LooseObject | null;
 }
 /**
+ * Object holding the settings needed to start the server process
+ */
+interface ServerProcessSettings {
+    /**
+     * @property {string} execPath The path to the executable file
+     */
+    execPath: string;
+    /**
+     * @property {SpawnOptionsWithoutStdio} spawnOpts The options passed to spawn to configure the
+     *                                                server process environment
+     */
+    spawnOpts: SpawnOptionsWithoutStdio;
+}
+/**
  * Object exposing method with which to interact with data for the test object applying to the
  * `allure` plugin
  */
 interface CodeceptJSAllurePlugin {
+    /**
+     * Add an attachment to current test / suite.  This is meant for general user supplied
+     * attachments
+     *
+     * @param  {string} name The name of the attachment (file name)
+     * @param  {any} buffer The content comprising the attachment
+     * @param  {string} type The type of the attachment
+     * @returns void
+     */
     addAttachment(name: string, buffer: any, type: string): void;
+    /**
+     * Sets a description
+     *
+     * @param  {string} description The description content
+     * @param  {AllureTYPE} type The type of data used for the descript (markdown, html, text)
+     * @returns void
+     */
     setDescription(description: string, type: AllureTYPE): void;
+    /**
+     * Add a new step
+     *
+     * @param  {string} name
+     * @param  {()=>void} stepFunc
+     * @returns void
+     */
     createStep(name: string, stepFunc: () => void): void;
+    /**
+     * Create an attachment.  This is meant for things like a screen shot on a failure
+     *
+     * @param  {string} name The name of the attachment (file name)
+     * @param  {any} content The content comprising the attachment
+     * @param  {string} type The type of the attachment
+     * @returns void
+     */
     createAttachment(name: string, content: any, type: string): void;
+    /**
+     * Adds severity label
+     *
+     * @param  {string} severity The severity level
+     * @returns void
+     */
     severity(severity: string): void;
+    /**
+     * Adds epic label
+     *
+     * @param  {string} epic The ID of the epic being referenced
+     * @returns void
+     */
     epic(epic: string): void;
+    /**
+     * Adds feature label
+     *
+     * @param  {string} feature The ID of the feature
+     * @returns void
+     */
     feature(feature: string): void;
+    /**
+     * Adds story label
+     *
+     * @param  {string} story The ID of the story
+     * @returns void
+     */
     story(story: string): void;
+    /**
+     * Adds issue label
+     *
+     * @param  {string} issue The ID of the issue
+     * @returns void
+     */
     issue(issue: string): void;
+    /**
+     * Adds a label to current test
+     *
+     * @param  {string} name The label name (or type)
+     * @param  {string} value Teh value for the label
+     * @returns void
+     */
     addLabel(name: string, value: string): void;
+    /**
+     * Adds a parameter to current test
+     *
+     * @param  {any} kind Type of the parameter
+     * @param  {string} name Name of the parameter
+     * @param  {string} value Value of the parameter
+     * @returns void
+     */
     addParameter(kind: any, name: string, value: string): void;
 }
-export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject };
+export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings, GherkinTextSpan };

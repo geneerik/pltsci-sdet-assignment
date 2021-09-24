@@ -5,7 +5,8 @@ import {
     access, watch, FSWatcher, constants as fs_constants, emptyDirSync,
     accessSync, PathOrFileDescriptor, readFileSync } from "fs-extra";
 import { rm } from "fs";
-import { spawnSync, SpawnOptions, StdioOptions, ChildProcess } from "child_process";
+import { spawnSync, SpawnOptions, StdioOptions, ChildProcess, spawn,
+    SpawnOptionsWithoutStdio } from "child_process";
 import { AxiosResponse } from "axios";
 
 /**
@@ -279,8 +280,9 @@ function waitForProcessToBeKilled(
  * reject with an error if it fails
  *
  * @param  {string} targetFile The file to delete
- * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
- *          it fails; promise holds the boolean as to whether or not a file was deleted
+ * @returns {Promise<boolean>} Promise to be resolved if the operation succeeds or reject with an
+ *                             error if it fails; promise holds the boolean as to whether or not a
+ *                             file was deleted
  */
 function deleteFileIfExisted(targetFile: string): Promise<boolean> {
     let fileDidExist = false;
@@ -419,7 +421,49 @@ function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosResponse is Axi
         "config" in maybeAxiosResponse && "request" in maybeAxiosResponse;
 }
 
+/**
+ * Spawn a process in the background with its I/O tied to the console
+ *
+ * @param  {string} command The command to execute
+ * @param  {string[]} args (Optional) Arguments to pass to the command
+ * @param  {SpawnOptionsWithoutStdio|undefined} (Optional) Options to define process settings
+ * @returns {ChildProcess} Object representing the newly spawned process
+ */
+function spawnWithConsoleIo(
+    command: string, args?: string[],
+    options?: SpawnOptionsWithoutStdio | undefined): ChildProcess {
+
+    const process_object: ChildProcess = spawn(command, args, options);
+
+    // set stdout of the process to go to the console
+    if (process_object.stdout) {
+        process_object.stdout.on("data", (data) => {
+            console.info(`${moduleConsolePrefix}service stdout: ${data}`);
+        });
+    }
+
+    // set stderr of the process to go to the console
+    if (process_object.stderr) {
+        process_object.stderr.on("data", (data) => {
+            console.error(`${moduleConsolePrefix}service stderr: ${data}`);
+        });
+    }
+
+    // Send a message when the server process terminates
+    process_object.on(
+        "close", 
+        (code, signal) => {
+            console.debug(
+                `${moduleConsolePrefix}Server process terminated due to receipt of signal ` +
+                `${signal}`);
+        }
+    );
+
+    return process_object;
+}
+
 export {
     allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout,
-    waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse
+    waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse,
+    spawnWithConsoleIo
 };

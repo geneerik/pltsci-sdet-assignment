@@ -122,3 +122,13 @@ You will first need to satisfy the prerequisites for the [Pre-created Docker Ima
 ## Run within VSCode
 
 TODO
+
+&nbsp;
+# Open "ToDo" items for the project
+- build the sub module in instead of committing compiled version
+- generate Documentation website from jsdoc in ci and push to github packages alongside test results
+- repo tags for test coverage and software quality
+- github "project"
+- SAST
+- integrate the Jar compile and unit tests
+- Test case management interconnection

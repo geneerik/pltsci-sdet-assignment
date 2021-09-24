@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
+exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
 const exceptions_1 = require("./exceptions");
 const path = require("path");
 const fs_extra_1 = require("fs-extra");
@@ -236,8 +236,9 @@ exports.waitForProcessToBeKilled = waitForProcessToBeKilled;
  * reject with an error if it fails
  *
  * @param  {string} targetFile The file to delete
- * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
- *          it fails; promise holds the boolean as to whether or not a file was deleted
+ * @returns {Promise<boolean>} Promise to be resolved if the operation succeeds or reject with an
+ *                             error if it fails; promise holds the boolean as to whether or not a
+ *                             file was deleted
  */
 function deleteFileIfExisted(targetFile) {
     let fileDidExist = false;
@@ -362,3 +363,33 @@ function isAxiosResponse(maybeAxiosResponse) {
         "config" in maybeAxiosResponse && "request" in maybeAxiosResponse;
 }
 exports.isAxiosResponse = isAxiosResponse;
+/**
+ * Spawn a process in the background with its I/O tied to the console
+ *
+ * @param  {string} command The command to execute
+ * @param  {string[]} args (Optional) Arguments to pass to the command
+ * @param  {SpawnOptionsWithoutStdio|undefined} (Optional) Options to define process settings
+ * @returns {ChildProcess} Object representing the newly spawned process
+ */
+function spawnWithConsoleIo(command, args, options) {
+    const process_object = (0, child_process_1.spawn)(command, args, options);
+    // set stdout of the process to go to the console
+    if (process_object.stdout) {
+        process_object.stdout.on("data", (data) => {
+            console.info(`${moduleConsolePrefix}service stdout: ${data}`);
+        });
+    }
+    // set stderr of the process to go to the console
+    if (process_object.stderr) {
+        process_object.stderr.on("data", (data) => {
+            console.error(`${moduleConsolePrefix}service stderr: ${data}`);
+        });
+    }
+    // Send a message when the server process terminates
+    process_object.on("close", (code, signal) => {
+        console.debug(`${moduleConsolePrefix}Server process terminated due to receipt of signal ` +
+            `${signal}`);
+    });
+    return process_object;
+}
+exports.spawnWithConsoleIo = spawnWithConsoleIo;

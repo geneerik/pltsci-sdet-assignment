@@ -124,7 +124,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that two objects have the same value. This matcher recursively
      * checks the equality of all fields, rather than checking for object identity.
-     * 
+     *
      * @param  {any} actual
      * @param  {any} expected
      * @returns {Promise<any>} The results of the expect operation
@@ -138,7 +138,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that two objects do not have the same value. This matcher
      * recursively checks the equality of all fields, rather than checking for object identity.
-     * 
+     *
      * @param  {any} actual
      * @param  {any} expected
      * @returns {Promise<any>} The results of the expect operation
@@ -152,7 +152,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that an item is in a list. For testing the items in the list,
      * this uses `===`, a strict equality check.
-     * 
+     *
      * @param  {any} actual
      * @param  {any} expected
      * @returns {Promise<any>} The results of the expect operation
@@ -165,7 +165,7 @@ export = class SimpleHelper extends Helper {
     
     /**
      * For comparing floating point numbers.
-     * 
+     *
      * @param  {any} actual
      * @param  {number | bigint} expected
      * @returns {Promise<any>} The results of the expect operation
@@ -179,7 +179,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that a string value is empty. This matcher recursively
      * checks the equality of all fields, rather than checking for object identity.
-     * 
+     *
      * @param  {any} actual
      * @returns {Promise<any>} The results of the expect operation
      */
@@ -192,7 +192,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that a string value is not empty. This matcher recursively
      * checks the equality of all fields, rather than checking for object identity.
-     * 
+     *
      * @param  {any} actual
      * @returns {Promise<any>} The results of the expect operation
      */
@@ -206,7 +206,7 @@ export = class SimpleHelper extends Helper {
      * Use when you don't care what a value is, you just want to ensure a value is true in a
      * boolean context. In JavaScript, there are six falsy values: `false`, `0`, `''`, `null`,
      * `undefined`, and `NaN`. Everything else is truthy.
-     * 
+     *
      * @param  {any} actual
      * @returns {Promise<any>} The results of the expect operation
      */
@@ -219,7 +219,7 @@ export = class SimpleHelper extends Helper {
     /**
      * When you don't care what a value is, you just want to ensure a value is false in a boolean
      * context.
-     * 
+     *
      * @param  {any} actual
      * @returns {Promise<any>} The results of the expect operation
      */
@@ -232,7 +232,7 @@ export = class SimpleHelper extends Helper {
     /**
      * Used when you want to check that an item is not in a list. For testing the items in the
      * list, this uses `!==`, a strict equality check.
-     * 
+     *
      * @param  {any} actual
      * @param  {any} expected
      * @returns {Promise<any>} The results of the expect operation
@@ -247,11 +247,11 @@ export = class SimpleHelper extends Helper {
      * Use to check if property at provided reference keyPath exists for an object. For checking
      * deeply nested properties in an object you may use dot notation or an array containing the
      * keyPath for deep references.
-     * 
+     *
      * Optionally, you can provide a value to check if it's equal to the value present at keyPath
      * on the target object. This matcher uses 'deep equality' (like `toEqual()`) and recursively
      * checks the equality of all fields.
-     * 
+     *
      * @param  {any} actual The value to assert property existence upon
      * @param  {string | string[]} keyPath Property name or array of names to descend for deeply
      *                                     nested properties
@@ -268,7 +268,7 @@ export = class SimpleHelper extends Helper {
 
     /**
      * Use to check if property `propertyName` exists for an object.
-     * 
+     *
      * @param  {any} actual
      * @param  {string} propertyName
      * @returns {Promise<any>} The results of the expect operation

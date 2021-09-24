@@ -1,13 +1,13 @@
 import { AxiosResponse } from "axios";
 import path from "path";
-import { ChildProcess, spawn, SpawnOptionsWithoutStdio } from "child_process";
+import { SpawnOptionsWithoutStdio } from "child_process";
 import { threadId } from "worker_threads";
 import {
     TestState, ProcessInfoHolderObject, CodeceptJSAllurePlugin,
     CleaningResponseObject, CodeceptJSDataTable, checkExistsWithTimeout,
     NullableLooseObject, waitForProcessToBeKilled, deleteFileIfExisted,
-    waitForLogFileToContainString, isAxiosResponse,
-    CodeceptJSDataTableArgument } from "sdet-assignment";
+    waitForLogFileToContainString, isAxiosResponse, ServerProcessSettings,
+    CodeceptJSDataTableArgument, spawnWithConsoleIo } from "sdet-assignment";
 
 /**
  * @property {CodeceptJSAllurePlugin} allurePlugin Plugin object instance used to set allure
@@ -28,11 +28,13 @@ let state: TestState = {
     server_process: null
 };
 
-interface ServerProcessSettings {
-    execPath: string,
-    spawnOpts: SpawnOptionsWithoutStdio
-}
-
+/**
+ * Function to get the settings for spawning the server process
+ *
+ * @param  {string} serverReadyFile The path to the file to set the server to log to
+ * @returns {Promise<ServerProcessSettings>} Promise providing the settings object for spawning a
+ *                                           server process
+ */
 async function getServerProcessSettings(serverReadyFile: string): Promise<ServerProcessSettings> {
     // Get the "server_port" for the server under test
     const server_port: number|null = await I.performSimpleActionGetServerPort();
@@ -67,51 +69,11 @@ async function getServerProcessSettings(serverReadyFile: string): Promise<Server
 }
 
 /**
- * Spawn a process in the background with its I/O tied to the console
- * 
- * @param  {string} command The command to execute
- * @param  {string[]} args (Optional) Arguments to pass to the command
- * @param  {SpawnOptionsWithoutStdio|undefined} (Optional) Options to define process settings
- * @returns {ChildProcess} Object representing the newly spawned process
- */
-function spawnWithConsoleIo(
-    command: string, args?: string[],
-    options?: SpawnOptionsWithoutStdio | undefined): ChildProcess {
-
-    const process_object: ChildProcess = spawn(command, args, options);
-
-    // set stdout of the process to go to the console
-    if (process_object.stdout) {
-        process_object.stdout.on("data", (data) => {
-            console.info(`(${threadId}) service stdout: ${data}`);
-        });
-    }
-
-    // set stderr of the process to go to the console
-    if (process_object.stderr) {
-        process_object.stderr.on("data", (data) => {
-            console.error(`(${threadId}) service stderr: ${data}`);
-        });
-    }
-
-    // Send a message when the server process terminates
-    process_object.on(
-        "close", 
-        (code, signal) => {
-            console.debug(
-                `(${threadId}) Server process terminated due to receipt of signal ` +
-                `${signal}`);
-        }
-    );
-
-    return process_object;
-}
-
-/**
  * Start the server to test if it is not managed externally
- * 
+ *
  * @param  {string} serverReadyFile The path to the file to set the server to log to
- * @returns Promise<ProcessInfoHolderObject|null>
+ * @returns {Promise<ProcessInfoHolderObject|null>} Promise to hold the process object for the
+ *                                                  server under test if we are managing it
  */
 async function conditionallyStartServerProcess(
     serverReadyFile: string): Promise<ProcessInfoHolderObject|null> {

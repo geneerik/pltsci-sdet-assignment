@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { NullableLooseObject } from "./interfaces";
 import { PathOrFileDescriptor } from "fs-extra";
-import { ChildProcess } from "child_process";
+import { ChildProcess, SpawnOptionsWithoutStdio } from "child_process";
 import { AxiosResponse } from "axios";
 /**
  * Setter to the set a prefix for all messages sent from this module.  Useful when running in
@@ -69,8 +69,9 @@ declare function waitForProcessToBeKilled(processObject: ChildProcess, timeoutIn
  * reject with an error if it fails
  *
  * @param  {string} targetFile The file to delete
- * @returns {Promise} Promise to be resolved if the operation succeeds or reject with an error if
- *          it fails; promise holds the boolean as to whether or not a file was deleted
+ * @returns {Promise<boolean>} Promise to be resolved if the operation succeeds or reject with an
+ *                             error if it fails; promise holds the boolean as to whether or not a
+ *                             file was deleted
  */
 declare function deleteFileIfExisted(targetFile: string): Promise<boolean>;
 /**
@@ -99,4 +100,13 @@ declare function waitForLogFileToContainString(logFile: PathOrFileDescriptor, st
  *                    `AxiosResponse` interface
  */
 declare function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosResponse is AxiosResponse;
-export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse };
+/**
+ * Spawn a process in the background with its I/O tied to the console
+ *
+ * @param  {string} command The command to execute
+ * @param  {string[]} args (Optional) Arguments to pass to the command
+ * @param  {SpawnOptionsWithoutStdio|undefined} (Optional) Options to define process settings
+ * @returns {ChildProcess} Object representing the newly spawned process
+ */
+declare function spawnWithConsoleIo(command: string, args?: string[], options?: SpawnOptionsWithoutStdio | undefined): ChildProcess;
+export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo };
