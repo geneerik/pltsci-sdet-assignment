@@ -8,7 +8,7 @@ import {
     CleaningResponseObject, CodeceptJSDataTable, checkExistsWithTimeout,
     NullableLooseObject, waitForProcessToBeKilled, deleteFileIfExisted,
     waitForLogFileToContainString, isAxiosResponse, ServerProcessSettings,
-    CodeceptJSDataTableArgument, spawnWithConsoleIo } from "sdet-assignment";
+    CodeceptJSDataTableArgument, spawnWithConsoleIo, isDryRun } from "sdet-assignment";
 
 /**
  * @property {Debugger} debug Debug logger method
@@ -247,6 +247,17 @@ Before(() => {
 Given("I have freshly started hoover web server instance", async () => {
     // debug(">>> Start in given");
 
+    // Bail out if this is a dry run
+    if (isDryRun()){
+        // Need this for the step to show up
+        I.performSimpleAction(
+            ()=>{
+                debug(`(${threadId}) Dry run place holder`);
+            }
+        );
+        return;
+    }
+
     const restEndpoint = await I.performSimpleActionGetRestEndpoint();
     debug(`(${threadId}) Endpoint: ${restEndpoint}`);
 
@@ -338,6 +349,17 @@ When("I give cleaning instructions to move {string}", async (instructions: strin
 Then("I should see that total number of clean spots is {int}", async (patches: number) => {
     const expectedPatches = patches;
 
+    // Bail out if this is a dry run
+    if (isDryRun()){
+        // Need this for the step to show up
+        I.performSimpleAction(
+            ()=>{
+                debug(`(${threadId}) Dry run place holder`);
+            }
+        );
+        return;
+    }
+
     if (!isAxiosResponse(state.response.actualResponse)) {
         throw new Error();
     }
@@ -355,6 +377,17 @@ Then(
     async (x: number, y: number) => {
 
         const coords = [x, y];
+
+        // Bail out if this is a dry run
+        if (isDryRun()){
+            // Need this for the step to show up
+            I.performSimpleAction(
+                ()=>{
+                    debug(`(${threadId}) Dry run place holder`);
+                }
+            );
+            return;
+        }
 
         if (!isAxiosResponse(state.response.actualResponse)) {
             throw new Error(

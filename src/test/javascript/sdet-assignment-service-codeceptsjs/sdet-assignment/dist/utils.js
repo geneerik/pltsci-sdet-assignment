@@ -1,11 +1,31 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
+exports.isDryRun = exports.escapeStringRegexp = exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
 const exceptions_1 = require("./exceptions");
-const path = require("path");
+const path = __importStar(require("path"));
 const fs_extra_1 = require("fs-extra");
 const fs_1 = require("fs");
 const child_process_1 = require("child_process");
+const codeceptjs_1 = require("codeceptjs");
 const debug_1 = require("debug");
 /**
  * @property {Debugger} debug Debug logger method
@@ -400,3 +420,64 @@ function spawnWithConsoleIo(command, args, options) {
     return process_object;
 }
 exports.spawnWithConsoleIo = spawnWithConsoleIo;
+/**
+ * Escape the given string so that it can be used safely within a regular expression
+ *
+ * @param  {string} stringToEscape The string to be modified so that it can be used safely within a
+ *                                 regular expression
+ * @returns {string} The `stringToEscape` modified to escape control characters for the regular
+ *                   expression engine
+ */
+function escapeStringRegexp(stringToEscape) {
+    // adapted from https://github.com/sindresorhus/escape-string-regexp/blob/v5.0.0/index.js
+    /**
+     * MIT License
+     *
+     * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+     * software and associated documentation files (the "Software"), to deal in the Software
+     * without restriction, including without limitation the rights to use, copy, modify, merge,
+     * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+     * to whom the Software is furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all copies or
+     * substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+     * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+     * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+     * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+     * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+     * DEALINGS IN THE SOFTWARE.
+     */
+    /**
+     * The package is not included becuase it is 1 small function which has trouble loading.
+     * The function has been included with its license instead to meet MIT liscence criteria.
+     */
+    if (typeof stringToEscape !== "string") {
+        throw new TypeError("Expected a string");
+    }
+    /**
+     * Escape characters with special meaning either inside or outside character sets.
+     * Use a simple backslash escape when it’s always valid, and a `\xnn` escape when the simpler
+     * form would be disallowed by Unicode patterns’ stricter grammar.
+     */
+    return stringToEscape
+        .replace(/[|\\{}()[\]^$+*?.]/g, "\\$&")
+        .replace(/-/g, "\\x2d");
+}
+exports.escapeStringRegexp = escapeStringRegexp;
+/**
+ * Determine whether or not "dry-run" mode is enabled for the current codeceptj execution context
+ *
+ * @returns {boolean} Whether or not the dryrun property is set to true in the codeceptjs store
+ */
+function isDryRun() {
+    // Bail out if this is a dry
+    const store = codeceptjs_1.store;
+    if (store["dryRun"])
+        return true;
+    return false;
+}
+exports.isDryRun = isDryRun;

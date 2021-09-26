@@ -62,5 +62,8 @@ module.exports = {
     teardownAll: () => {
         // debug(`(${threadId})  imported teardownAll is called`);
         tearDownStuff();
+    },
+    customHook: () => {
+        debug(`(${threadId}) imported customHook is called`);
     }
 };

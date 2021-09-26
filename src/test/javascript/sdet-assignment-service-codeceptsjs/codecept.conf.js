@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 require("ts-node/register");
 const { format: stringFormat } = require("util");
 const { setHeadlessWhen } = require("@codeceptjs/configure");
-const { bootstrap, bootstrapAll, teardown, teardownAll } = require("./presettings");
+const { bootstrap, bootstrapAll, teardown, teardownAll, customHook } = require("./presettings");
 const target_base_uri = stringFormat(
     process.env.TARGET_BASE_URI?process.env.TARGET_BASE_URI:"http://localhost:%s","8080");
 
@@ -36,7 +35,9 @@ exports.config = {
     bootstrapAll: bootstrapAll,
     teardown: teardown,
     teardownAll: teardownAll,
-    hooks: [],
+    hooks: [
+        customHook
+    ],
     gherkin: {
         features: "./features/*.feature",
         steps: ["./step_definitions/steps.ts"]
@@ -52,7 +53,12 @@ exports.config = {
         tryTo: {
             enabled: true
         },
-        allure: {}
+        allure: {
+        },
+        simplePlugin: {
+            require: "./simpleplugin",
+            enabled: true
+        }
     },
     tests: "./*_test.ts",
     name: "codeceptjs"

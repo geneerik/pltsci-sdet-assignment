@@ -7,6 +7,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChildProcess, SpawnOptionsWithoutStdio } from "child_process";
 import { TYPE as AllureTYPE } from "allure-js-commons";
+import { store as codeceptjs_store } from "codeceptjs";
+
+type codeceptjs_store = typeof codeceptjs_store;
 
 /**
  * Object representing a span of text in a line and the column at which it was observed
@@ -475,12 +478,30 @@ interface ServerProcessSettings {
     addParameter(kind: any, name: string, value: string): void;
 }
 
+/**
+ * Object representing the static store variable used by the codecept module to store values during
+ * run time, such as whether debug mode is enabled or this is a dry-run
+ */
+interface CodeceptJSStore extends codeceptjs_store {
+    /**
+     * @property {CodeceptJS.ActorStatic} actor The actor instance through which all step actions
+     *                                          should occur
+     */
+    actor: CodeceptJS.ActorStatic
+
+    /**
+     * @property {boolean} dryRun Indicates whther of not "dry-run" mode is enabled for the given
+     *                            context
+     */
+    dryRun?: boolean
+}
+
 export {
     NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState,
     CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject,
     CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell,
     GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings,
-    GherkinTextSpan, GherkinLocation, GherkinLine
+    GherkinTextSpan, GherkinLocation, GherkinLine, CodeceptJSStore
 };
 
 /**

@@ -111,4 +111,19 @@ declare function isAxiosResponse(maybeAxiosResponse: unknown): maybeAxiosRespons
  * @returns {ChildProcess} Object representing the newly spawned process
  */
 declare function spawnWithConsoleIo(command: string, args?: string[], options?: SpawnOptionsWithoutStdio | undefined): ChildProcess;
-export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo };
+/**
+ * Escape the given string so that it can be used safely within a regular expression
+ *
+ * @param  {string} stringToEscape The string to be modified so that it can be used safely within a
+ *                                 regular expression
+ * @returns {string} The `stringToEscape` modified to escape control characters for the regular
+ *                   expression engine
+ */
+declare function escapeStringRegexp(stringToEscape: string): string;
+/**
+ * Determine whether or not "dry-run" mode is enabled for the current codeceptj execution context
+ *
+ * @returns {boolean} Whether or not the dryrun property is set to true in the codeceptjs store
+ */
+declare function isDryRun(): boolean;
+export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo, escapeStringRegexp, isDryRun };

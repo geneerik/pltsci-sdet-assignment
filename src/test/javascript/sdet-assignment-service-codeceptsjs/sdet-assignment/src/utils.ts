@@ -1,4 +1,4 @@
-import { NullableLooseObject } from "./interfaces";
+import { NullableLooseObject, CodeceptJSStore } from "./interfaces";
 import { TimeoutError } from "./exceptions";
 import * as path from "path";
 import {
@@ -8,6 +8,7 @@ import { rm } from "fs";
 import { spawnSync, SpawnOptions, StdioOptions, ChildProcess, spawn,
     SpawnOptionsWithoutStdio } from "child_process";
 import { AxiosResponse } from "axios";
+import { store as codeceptjs_store } from "codeceptjs";
 import { Debugger, debug as debugLoggerFactory } from "debug";
 
 /**
@@ -470,8 +471,73 @@ function spawnWithConsoleIo(
     return process_object;
 }
 
+/**
+ * Escape the given string so that it can be used safely within a regular expression
+ * 
+ * @param  {string} stringToEscape The string to be modified so that it can be used safely within a
+ *                                 regular expression
+ * @returns {string} The `stringToEscape` modified to escape control characters for the regular
+ *                   expression engine
+ */
+function escapeStringRegexp(stringToEscape: string): string {
+    // adapted from https://github.com/sindresorhus/escape-string-regexp/blob/v5.0.0/index.js
+
+    /**
+     * MIT License
+     * 
+     * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+     * 
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+     * software and associated documentation files (the "Software"), to deal in the Software
+     * without restriction, including without limitation the rights to use, copy, modify, merge,
+     * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+     * to whom the Software is furnished to do so, subject to the following conditions:
+     * 
+     * The above copyright notice and this permission notice shall be included in all copies or
+     * substantial portions of the Software.
+     * 
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+     * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+     * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+     * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+     * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+     * DEALINGS IN THE SOFTWARE.
+     */
+
+    /**
+     * The package is not included becuase it is 1 small function which has trouble loading.
+     * The function has been included with its license instead to meet MIT liscence criteria.
+     */
+
+    if (typeof stringToEscape !== "string") {
+        throw new TypeError("Expected a string");
+    }
+
+    /**
+     * Escape characters with special meaning either inside or outside character sets.
+     * Use a simple backslash escape when it’s always valid, and a `\xnn` escape when the simpler
+     * form would be disallowed by Unicode patterns’ stricter grammar.
+     */
+    return stringToEscape
+        .replace(/[|\\{}()[\]^$+*?.]/g, "\\$&")
+        .replace(/-/g, "\\x2d");
+}
+
+/**
+ * Determine whether or not "dry-run" mode is enabled for the current codeceptj execution context
+ * 
+ * @returns {boolean} Whether or not the dryrun property is set to true in the codeceptjs store
+ */
+function isDryRun(): boolean {
+    // Bail out if this is a dry
+    const store = codeceptjs_store as CodeceptJSStore;
+    if (store["dryRun"]) return true;
+
+    return false;
+}
+
 export {
     allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout,
     waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse,
-    spawnWithConsoleIo
+    spawnWithConsoleIo, escapeStringRegexp, isDryRun
 };

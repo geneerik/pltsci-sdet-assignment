@@ -6,6 +6,8 @@
 /// <reference types="node" />
 import { ChildProcess, SpawnOptionsWithoutStdio } from "child_process";
 import { TYPE as AllureTYPE } from "allure-js-commons";
+import { store as codeceptjs_store } from "codeceptjs";
+declare type codeceptjs_store = typeof codeceptjs_store;
 /**
  * Object representing a span of text in a line and the column at which it was observed
  */
@@ -417,7 +419,23 @@ interface CodeceptJSAllurePlugin {
      */
     addParameter(kind: any, name: string, value: string): void;
 }
-export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings, GherkinTextSpan, GherkinLocation, GherkinLine };
+/**
+ * Object representing the static store variable used by the codecept module to store values during
+ * run time, such as whether debug mode is enabled or this is a dry-run
+ */
+interface CodeceptJSStore extends codeceptjs_store {
+    /**
+     * @property {CodeceptJS.ActorStatic} actor The actor instance through which all step actions
+     *                                          should occur
+     */
+    actor: CodeceptJS.ActorStatic;
+    /**
+     * @property {boolean} dryRun Indicates whther of not "dry-run" mode is enabled for the given
+     *                            context
+     */
+    dryRun?: boolean;
+}
+export { NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState, CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject, CodeceptJSAllurePlugin, GherkinAstObject, GherkinAstRule, GherkinAstTableCell, GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings, GherkinTextSpan, GherkinLocation, GherkinLine, CodeceptJSStore };
 /**
  * This is a work-around for codeceptjs using this type, but it no longer being defined by
  * webdriverio.  It gets patched in here when this module is included so the transpiler
