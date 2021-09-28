@@ -208,6 +208,7 @@ jobs:
           mkdir -p test_output/report/docs
           chmod -R 777 test_output
           docker run --rm -v "$(pwd)"/test_output/report:/report --entrypoint /usr/bin/node "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-tests:sha-${{ steps.shortsha.outputs.sha_short }}" /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/typedoc/bin/typedoc --out /report/docs cleaning-sessions-rest_RESTtest.ts cleaning-sessions_UItest.ts presettings.ts simplehelper.ts simpleplugin.ts steps.d.ts steps_file.ts step_definitions/steps.ts sdet-assignment/src/index.ts
+          docker run --rm -v "$(pwd)"/test_output/report:/report --entrypoint /bin/bash "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-tests:sha-${{ steps.shortsha.outputs.sha_short }}" -c 'chmod -R 777 /report/docs'
           chmod -R 777 test_output
 
       - name: Cache documentation for next stage
