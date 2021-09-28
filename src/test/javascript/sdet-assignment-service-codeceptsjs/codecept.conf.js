@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require("ts-node/register");
 const { format: stringFormat } = require("util");
 const { setHeadlessWhen } = require("@codeceptjs/configure");
@@ -11,7 +12,9 @@ setHeadlessWhen(process.env.HEADLESS);
 
 exports.config = {
     output: "./test_output/output",
+    // TODO: this should be the allure outputHtmlDir variable instead?
     report_output: "./test_output/report",
+    // TODO: make this part of the allure plugin settings (if it makes a html report)
     allure_issue_tracker_pattern:
         "https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s",
     helpers: {
@@ -54,6 +57,7 @@ exports.config = {
             enabled: true
         },
         allure: {
+            targetDir: "./test_output/report"
         },
         simplePlugin: {
             require: "./simpleplugin",

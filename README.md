@@ -13,6 +13,8 @@ Response to initial inquiry [here](README-Request.md).
 
 [BDD Tests](src/test/javascript/sdet-assignment-service-codeceptsjs/features/)
 
+[Documentation](https://geneerik.github.io/pltsci-sdet-assignment/docs/)
+
 &nbsp;
 # How to Run the Tests
 
@@ -126,7 +128,6 @@ TODO
 &nbsp;
 # Open "ToDo" items for the project
 - build the sub module in instead of committing compiled version
-- generate Documentation website from jsdoc in ci and push to github packages alongside test results
 - repo tags for test coverage and software quality
 - github "project"
 - SAST

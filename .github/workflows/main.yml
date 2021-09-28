@@ -202,6 +202,19 @@ jobs:
           rm -rf /tmp/.buildx-test-cache
           mv /tmp/.buildx-test-cache-new /tmp/.buildx-test-cache
 
+      # generate and cache the documentation
+      - name: Generate documentation
+        run: |
+          mkdir -p test_output/report/docs
+          chmod 777 docs
+          docker run --rm -v "$(pwd)"/test_output/report/docs:/docs --entrypoint /usr/bin/node "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-tests:sha-${{ steps.shortsha.outputs.sha_short }}" /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/typedoc/bin/typedoc --out /docs *.ts step_definitions/steps.ts sdet-assignment/src/index.ts
+
+      - name: Cache documentation for next stage
+        uses: actions/cache@v2
+        with:
+          path: test_output/report/docs
+          key: ${{ runner.os }}-documentation-${{ github.sha }}
+
   execute-codeceptjs-tests-on-server:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -280,6 +293,13 @@ jobs:
           find test_output
           # allow test_output/report directory to be committed; gitignore normally wont let you
           rm .gitignore
+
+      # TODO: de-cache documentation
+      - name: De-cache documentation from previous stage
+        uses: actions/cache@v2
+        with:
+          path: test_output/report/docs
+          key: ${{ runner.os }}-documentation-${{ github.sha }}
 
       # artifact report to github pages
       - name: Publish Github pages

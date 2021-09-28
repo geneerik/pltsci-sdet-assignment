@@ -38,6 +38,44 @@ module.exports = (config: Record<string, unknown>): Record<string, unknown> => {
 
         debug(`(${threadId}) Plugin before test event trigger for '${testTitle}'`);
 
+        // todo: deal with suite level tags
+
+        // todo: implement this for other allure tag types:
+        /**
+         * @Link("https://example.org")
+         * @Link(name = "allure", type = "mylink")
+         * @flaky
+         * - <label name="status_details" value="flaky"/>
+         * @package:
+         * @epic:
+         * @story:
+         * DEFAULT_TMS_PREFIX      = '@TMS:'
+         * - testId
+         * DEFAULT_ISSUE_PREFIX    = '@ISSUE:'
+         * DEFAULT_SEVERITY_PREFIX = '@SEVERITY:'
+         * 
+         * Add functions:
+         *       <label name="host" value="my.cool.host.com"/>
+         *       <label name="thread" value="pool-1-thread-4"/>
+         *       <label name="framework" value="JUnit"/>
+         *       <label name="language" value="JAVA"/>
+         *       <label name="historyId" value="something"/>
+         * 
+         * OWNER("owner"),
+         * @screenshotDiff
+         *  <label name="testType" value="screenshotDiff"/>
+            TEST_TYPE("testType"),
+    PACKAGE("package"),
+    TEST_CLASS("testClass"),
+    TEST_METHOD("testMethod"),
+
+    // Set by automation
+    HOST("host"),
+    THREAD("thread"),
+    LANGUAGE("language"),
+    FRAMEWORK("framework"),
+         */
+
         const testTags: string[] = test.tags;
         const nonIssueTags: string[] = [];
         const issueTags: string[] = [];
@@ -96,6 +134,8 @@ module.exports = (config: Record<string, unknown>): Record<string, unknown> => {
             }
         );
 
+        // This code is presently useless as it doesnt effect the report
+        /*
         // remove the matching tags from the end of the test name
         let updatedTestName = test.title;
 
@@ -120,6 +160,7 @@ module.exports = (config: Record<string, unknown>): Record<string, unknown> => {
 
 
         test.title = updatedTestName;
+        */
     });
  
     /**
