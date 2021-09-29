@@ -46,7 +46,7 @@ This repository is a response to demonstrate how to use Gherkin BDD via [Codecep
 * A short report of the bugs that were detected (if any) posted using a public Github (or similar) Repository.
   
   Response:
-  * All discovered or perceived defects or queries have been logged against this application as `Github` [issues](/../../issues).  This gives anyone examining the 
+  * All discovered or perceived defects or queries have been logged against this application as `Github` [issues](/../../issues).  This gives anyone examining the repository the ability to see what was discovered and how the issue can be reproduced.  This should demonstrate a good pattern for clear and concise defect reporting style.
   * This automation produces an [Allure](https://docs.qameta.io/allure/) report.  This is provided by a plugin which is part of the main CodeceptJS code base.  This report links test failures to the filed [issues](/../../issues) on this `Github` repository.
 
   Extra focus to be place upon the following:
