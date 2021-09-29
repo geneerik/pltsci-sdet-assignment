@@ -158,7 +158,7 @@ fi
 if [[ "true" != "${SKIP_SERVE_REPORT:-}" ]]; then
   REPORT_HTTP_PORT=${REPORT_HTTP_PORT:-8000}
   echo -ne "\n"
-  echo "** Starting a simple server to host the generate test report at http://localhost:${REPORT_HTTP_PORT}"
+  echo "** Starting a simple server to host the generate test report at http://localhost:${REPORT_HTTP_PORT}  .  Press CTRL+C to terminate the server when done."
   echo -ne "\n"
   # we could also do this with the allure serve command
   exec docker run --rm -v "${SCRIPT_DIR}"/test_output/report:/usr/share/nginx/html:ro -p "${REPORT_HTTP_PORT}":80 nginx:alpine
