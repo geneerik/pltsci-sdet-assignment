@@ -1,4 +1,10 @@
+/**
+ * Module to hold the custom Interfaces to be used by the library.
+ *
+ * @module sdet-assignment.utils
+ */
 /// <reference types="node" />
+/// <reference types="codeceptjs" />
 import { NullableLooseObject } from "./interfaces";
 import { PathOrFileDescriptor } from "fs-extra";
 import { ChildProcess, SpawnOptionsWithoutStdio } from "child_process";
@@ -126,4 +132,17 @@ declare function escapeStringRegexp(stringToEscape: string): string;
  * @returns {boolean} Whether or not the dryrun property is set to true in the codeceptjs store
  */
 declare function isDryRun(): boolean;
-export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo, escapeStringRegexp, isDryRun };
+/**
+ * @property Regular expression object which will match issue tags
+ */
+declare const issueTagRegex: RegExp;
+/**
+ * Remove existing tags that match the give tag patterns and replace them with allure tags so that
+ * the allure report can accurately reflect the information they convey, such as issues associated
+ * with a given feature or scenario
+ *
+ * @memberof SimplePlugin
+ * @param  {Mocha.Test} test The test to be modified
+ */
+declare function traslateAllureTagsForTest(test: Mocha.Test): void;
+export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo, escapeStringRegexp, isDryRun, issueTagRegex, traslateAllureTagsForTest };

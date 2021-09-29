@@ -52,6 +52,7 @@ Thumbs.db
 /src/test/javascript/sdet-assignment-service-codeceptsjs/test_output/
 /test_output/
 /.env
+/docs
 
 # Make sure changes to sub module are tracked
 !/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/

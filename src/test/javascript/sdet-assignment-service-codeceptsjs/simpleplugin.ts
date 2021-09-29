@@ -1,7 +1,9 @@
-//import { Test } from "allure-js-commons";
+/**
+ * @module SimplePlugin
+ */
+
 import { event } from "codeceptjs";
-//import { Test } from "mocha";
-import { escapeStringRegexp, CodeceptJSAllurePlugin } from "sdet-assignment";
+import { traslateAllureTagsForTest } from "sdet-assignment";
 import { threadId } from "worker_threads";
 import { Debugger, debug as debugLoggerFactory } from "debug";
 
@@ -10,158 +12,40 @@ import { Debugger, debug as debugLoggerFactory } from "debug";
  */
 const debug: Debugger = debugLoggerFactory("com.geneerik.sdet-assignment.simpleplugin");
 
-const issueTagRegex = new RegExp(
-    process.env.DEFAULT_ISSUE_REGEX ?? (
-        process.env.DEFAULT_ISSUE_PREFIX ?
-            "^" + escapeStringRegexp(process.env.DEFAULT_ISSUE_PREFIX) + "(.+)$" :
-            "^@ISSUE:(.+)$"), "i");
+/**
+ * Stuff for the plugin to do just before a suite is started
+ * 
+ * @param  {Mocha.Suite} suite The suite that si about to eb started
+ */
+function beforeSuite(suite: Mocha.Suite) {
+    const suiteTitle = suite.fullTitle();
 
-debug(`(${threadId}) Issue regex pattern: ${issueTagRegex.source}`);
+    debug(`(${threadId}) Plugin before suite event trigger for '${suiteTitle}'`);
+}
 
+/**
+ * Stuff for the plugin to do just before a test is started
+ * 
+ * @param  {Mocha.Test} test The test to be performed
+ */
+function beforeTest(test: Mocha.Test) {
+    traslateAllureTagsForTest(test);
+}
+
+/**
+ * Plugin demonstrating how plugins work and providing the "@issue" tag feature for allure reports
+ * on BDD sections
+ * 
+ * @param  {Record<string} config
+ * @returns The plugin
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-module.exports = (config: Record<string, unknown>): Record<string, unknown> => {
+function simplePlugin (config: Record<string, unknown>): Record<string, unknown> {
     debug(`(${threadId}) Loaded plugin`);
     
-    event.dispatcher.on(event.suite.before, (suite: Mocha.Suite) => {
-        const suiteTitle = suite.fullTitle();
-
-        debug(`(${threadId}) Plugin before suite event trigger for '${suiteTitle}'`);
-    });
-
-    event.dispatcher.on(event.test.before, (test: Mocha.Test) => {
-        const allurePlugin: CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
-        if (!allurePlugin){
-            return;
-        }
-
-        const testTitle = test.fullTitle();
-
-        debug(`(${threadId}) Plugin before test event trigger for '${testTitle}'`);
-
-        // todo: deal with suite level tags
-
-        // todo: implement this for other allure tag types:
-        /**
-         * @Link("https://example.org")
-         * @Link(name = "allure", type = "mylink")
-         * @flaky
-         * - <label name="status_details" value="flaky"/>
-         * @package:
-         * @epic:
-         * @story:
-         * DEFAULT_TMS_PREFIX      = '@TMS:'
-         * - testId
-         * DEFAULT_ISSUE_PREFIX    = '@ISSUE:'
-         * DEFAULT_SEVERITY_PREFIX = '@SEVERITY:'
-         * 
-         * Add functions:
-         *       <label name="host" value="my.cool.host.com"/>
-         *       <label name="thread" value="pool-1-thread-4"/>
-         *       <label name="framework" value="JUnit"/>
-         *       <label name="language" value="JAVA"/>
-         *       <label name="historyId" value="something"/>
-         * 
-         * OWNER("owner"),
-         * @screenshotDiff
-         *  <label name="testType" value="screenshotDiff"/>
-            TEST_TYPE("testType"),
-    PACKAGE("package"),
-    TEST_CLASS("testClass"),
-    TEST_METHOD("testMethod"),
-
-    // Set by automation
-    HOST("host"),
-    THREAD("thread"),
-    LANGUAGE("language"),
-    FRAMEWORK("framework"),
-         */
-
-        const testTags: string[] = test.tags;
-        const nonIssueTags: string[] = [];
-        const issueTags: string[] = [];
-        const issueValues: string[] = [];
-        testTags.forEach (
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            (value: string, index: number, array: string[]) => {
-                debug(
-                    `(${threadId}) Plugin cycling tags '${value}' on '${testTitle}'`);
-
-                const matches = issueTagRegex.exec(value);
-                if(null === matches || undefined === matches) {
-                    debug(
-                        `(${threadId}) !! Plugin tag '${value}' didnt match on '${testTitle}'`);
-                    nonIssueTags.push(value);
-                    return;
-                }
-                debug(
-                    `(${threadId}) Plugin tag '${value}' has matches on '${testTitle}'`);
-                /*const groups = matches.groups;
-                if(null === groups || undefined === groups) {*/
-                if(matches.length < 2) {
-                    debug(
-                        `(${threadId}) !! Plugin tag '${value}' match has no groups on ` +
-                        `'${testTitle}'`);
-                    nonIssueTags.push(value);
-                    return;
-                }
-                debug(
-                    `(${threadId}) Plugin tag '${value}' has match groups on '${testTitle}'`);
-                //const issueValue = groups[1];
-                const issueValue = matches[1];
-                if(null === issueValue || undefined === issueValue) {
-                    nonIssueTags.push(value);
-                    return;
-                }
-                debug(
-                    `(${threadId}) Plugin found tag '${value}' value '${issueValue}' on ` +
-                    `'${testTitle}'`);
-                issueTags.push(value);
-                issueValues.push(issueValue);
-            }
-        );
-
-        // Remove any tags matching our pattern from the list of normal tags
-        test.tags = nonIssueTags;
-
-        // convert tags matching the pattern to allure issu tags
-        issueValues.forEach (
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            (value: string, index: number, array: string[]) => {
-                debug(
-                    `(${threadId}) Plugin adding issue '${value}' on '${testTitle}'`);
-
-                allurePlugin.issue(value);
-            }
-        );
-
-        // This code is presently useless as it doesnt effect the report
-        /*
-        // remove the matching tags from the end of the test name
-        let updatedTestName = test.title;
-
-        issueTags.forEach (
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            (value: string, index: number, array: string[]) => {
-                const escapedTagName = escapeStringRegexp(value);
-                const tagRegex = new RegExp(
-                    " " + escapedTagName + "\\b(?! " + escapedTagName + "\\b)");
-                updatedTestName = updatedTestName.replace(tagRegex, "");
-
-                debug(
-                    `(${threadId}) Plugin new test name from '${testTitle}' is now ` +
-                    `'${updatedTestName}' on '${value}' using '${tagRegex.source}'`);
-            }
-        );
-
-        updatedTestName = updatedTestName.trimRight();
-        debug(
-            `(${threadId}) Plugin final test name is now ` +
-            `'${updatedTestName}' on '${testTitle}'`);
-
-
-        test.title = updatedTestName;
-        */
-    });
+    // Configure the event actions hosted by the plugin
+    event.dispatcher.on(event.suite.before, beforeSuite);
+    event.dispatcher.on(event.test.before, beforeTest);
  
     /**
      * Return some kind of object for the plugin to be valid, but we are not using it at the moment
@@ -169,4 +53,6 @@ module.exports = (config: Record<string, unknown>): Record<string, unknown> => {
     const plugin = {};
     
     return plugin;
-};
+}
+
+export = simplePlugin;

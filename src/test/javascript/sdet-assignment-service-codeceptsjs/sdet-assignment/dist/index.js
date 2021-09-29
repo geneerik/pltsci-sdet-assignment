@@ -19,3 +19,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./utils"), exports);
 __exportStar(require("./interfaces"), exports);
 __exportStar(require("./exceptions"), exports);
+__exportStar(require("./classes"), exports);

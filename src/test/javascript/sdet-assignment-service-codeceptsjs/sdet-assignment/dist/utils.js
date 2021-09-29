@@ -1,4 +1,9 @@
 "use strict";
+/**
+ * Module to hold the custom Interfaces to be used by the library.
+ *
+ * @module sdet-assignment.utils
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -18,8 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isDryRun = exports.escapeStringRegexp = exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
+exports.traslateAllureTagsForTest = exports.issueTagRegex = exports.isDryRun = exports.escapeStringRegexp = exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
 const exceptions_1 = require("./exceptions");
 const path = __importStar(require("path"));
 const fs_extra_1 = require("fs-extra");
@@ -481,3 +487,135 @@ function isDryRun() {
     return false;
 }
 exports.isDryRun = isDryRun;
+/**
+ * @property Regular expression object which will match issue tags
+ */
+const issueTagRegex = new RegExp((_a = process.env.DEFAULT_ISSUE_REGEX) !== null && _a !== void 0 ? _a : (process.env.DEFAULT_ISSUE_PREFIX ?
+    "^" + escapeStringRegexp(process.env.DEFAULT_ISSUE_PREFIX) + "(.+)$" :
+    "^@ISSUE:(.+)$"), "i");
+exports.issueTagRegex = issueTagRegex;
+/**
+ * Remove existing tags that match the give tag patterns and replace them with allure tags so that
+ * the allure report can accurately reflect the information they convey, such as issues associated
+ * with a given feature or scenario
+ *
+ * @memberof SimplePlugin
+ * @param  {Mocha.Test} test The test to be modified
+ */
+function traslateAllureTagsForTest(test) {
+    const allurePlugin = codeceptjs.container.plugins("allure");
+    if (!allurePlugin) {
+        return;
+    }
+    const testTitle = test.fullTitle();
+    debug(`(${moduleConsolePrefix}Plugin before test event trigger for '${testTitle}'`);
+    // todo: deal with suite level tags
+    // todo: implement this for other allure tag types:
+    /**
+     * @Link("https://example.org")
+     * @Link(name = "allure", type = "mylink")
+     * @flaky
+     * - <label name="status_details" value="flaky"/>
+     * @package:
+     * @epic:
+     * @story:
+     * DEFAULT_TMS_PREFIX      = '@TMS:'
+     * - testId
+     * DEFAULT_ISSUE_PREFIX    = '@ISSUE:'
+     * DEFAULT_SEVERITY_PREFIX = '@SEVERITY:'
+     *
+     * Add functions:
+     *       <label name="host" value="my.cool.host.com"/>
+     *       <label name="thread" value="pool-1-thread-4"/>
+     *       <label name="framework" value="JUnit"/>
+     *       <label name="language" value="JAVA"/>
+     *       <label name="historyId" value="something"/>
+     *
+     * OWNER("owner"),
+     * @screenshotDiff
+     *  <label name="testType" value="screenshotDiff"/>
+        TEST_TYPE("testType"),
+PACKAGE("package"),
+TEST_CLASS("testClass"),
+TEST_METHOD("testMethod"),
+
+// Set by automation
+HOST("host"),
+THREAD("thread"),
+LANGUAGE("language"),
+FRAMEWORK("framework"),
+     */
+    const testTags = test.tags;
+    const nonIssueTags = [];
+    const issueTags = [];
+    const issueValues = [];
+    testTags.forEach(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (value, index, array) => {
+        debug(`(${moduleConsolePrefix}Plugin cycling tags '${value}' on '${testTitle}'`);
+        const matches = issueTagRegex.exec(value);
+        if (null === matches || undefined === matches) {
+            debug(`(${moduleConsolePrefix}!! Plugin tag '${value}' didnt match on ` +
+                `'${testTitle}'`);
+            nonIssueTags.push(value);
+            return;
+        }
+        debug(`(${moduleConsolePrefix}Plugin tag '${value}' has matches on '${testTitle}'`);
+        /*const groups = matches.groups;
+        if(null === groups || undefined === groups) {*/
+        if (matches.length < 2) {
+            debug(`(${moduleConsolePrefix}!! Plugin tag '${value}' match has no groups on ` +
+                `'${testTitle}'`);
+            nonIssueTags.push(value);
+            return;
+        }
+        debug(`(${moduleConsolePrefix}Plugin tag '${value}' has match groups on '${testTitle}'`);
+        //const issueValue = groups[1];
+        const issueValue = matches[1];
+        if (null === issueValue || undefined === issueValue) {
+            nonIssueTags.push(value);
+            return;
+        }
+        debug(`(${moduleConsolePrefix}Plugin found tag '${value}' value '${issueValue}' on ` +
+            `'${testTitle}'`);
+        issueTags.push(value);
+        issueValues.push(issueValue);
+    });
+    // Remove any tags matching our pattern from the list of normal tags
+    test.tags = nonIssueTags;
+    // convert tags matching the pattern to allure issu tags
+    issueValues.forEach(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (value, index, array) => {
+        debug(`(${moduleConsolePrefix}Plugin adding issue '${value}' on '${testTitle}'`);
+        allurePlugin.issue(value);
+    });
+    // This code is presently useless as it doesnt effect the report
+    /*
+    // remove the matching tags from the end of the test name
+    let updatedTestName = test.title;
+
+    issueTags.forEach (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (value: string, index: number, array: string[]) => {
+            const escapedTagName = escapeStringRegexp(value);
+            const tagRegex = new RegExp(
+                " " + escapedTagName + "\\b(?! " + escapedTagName + "\\b)");
+            updatedTestName = updatedTestName.replace(tagRegex, "");
+
+            debug(
+                `(${moduleConsolePrefix}Plugin new test name from '${testTitle}' is now ` +
+                `'${updatedTestName}' on '${value}' using '${tagRegex.source}'`);
+        }
+    );
+
+    updatedTestName = updatedTestName.trimRight();
+    debug(
+        `(${moduleConsolePrefix}Plugin final test name is now ` +
+        `'${updatedTestName}' on '${testTitle}'`);
+
+
+    test.title = updatedTestName;
+    */
+}
+exports.traslateAllureTagsForTest = traslateAllureTagsForTest;

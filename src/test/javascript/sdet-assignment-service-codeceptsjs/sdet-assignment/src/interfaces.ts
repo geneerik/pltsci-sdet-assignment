@@ -1,7 +1,7 @@
 /**
  * Module to hold the custom Interfaces to be used by the library.
  *
- * @module sdet-assignment
+ * @module sdet-assignment.interfaces
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -496,6 +496,38 @@ interface CodeceptJSStore extends codeceptjs_store {
     dryRun?: boolean
 }
 
+/**
+ * This is a work-around for codeceptjs using this type, but it no longer being defined by
+ * webdriverio.  It gets patched in here when this module is included so the transpiler
+ * will work.
+ */
+ declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace WebdriverIO {
+        /**
+         * Defines w3c timeout data
+         * 
+         * @global WebdriverIO.Timeouts
+         */
+        interface Timeouts {
+            /**
+             * @property
+             */
+            implicit?: number,
+
+            /**
+             * @property
+             */
+            pageLoad?: number,
+
+            /**
+             * @property
+             */
+            script?: number
+        }
+    }
+}
+
 export {
     NullableLooseObject, LooseObject, ProcessInfoHolderObject, TestState,
     CodeceptJSDataTable, CodeceptJSDataTableArgument, CleaningResponseObject,
@@ -503,22 +535,3 @@ export {
     GherkinAstTableRow, GherkinAstDataTable, CleaningRequestObject, ServerProcessSettings,
     GherkinTextSpan, GherkinLocation, GherkinLine, CodeceptJSStore
 };
-
-/**
- * This is a work-around for codeceptjs using this type, but it no longer being defined by
- * webdriverio.  It gets patched in here when this module is included so the transpiler
- * will work.
- */
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace WebdriverIO {
-        /**
-         * Defines w3c timeout data
-         */
-        interface Timeouts {
-            implicit?: number,
-            pageLoad?: number,
-            script?: number
-        }
-    }
-}

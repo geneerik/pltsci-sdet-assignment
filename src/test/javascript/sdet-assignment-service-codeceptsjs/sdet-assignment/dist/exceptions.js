@@ -1,8 +1,8 @@
 "use strict";
 /**
- * Module to hold the custom exceptions for the SDET assignment.
+ * Module to hold the custom classes for the SDET assignment.
  *
- * @module sdet-assignment
+ * @module sdet-assignment.exceptions
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimeoutError = void 0;
