@@ -74,6 +74,13 @@ mkdir -p "${SCRIPT_DIR}/test_output/report"
 chmod 777 "${SCRIPT_DIR}/test_output"
 chmod 777 "${SCRIPT_DIR}/test_output/report"
 
+if [[ 'true' == "${BUILD_FRESH_IMAGES:-}" ]]; then
+  # ensure the images will not be pulled from remote
+  SKIP_PULL=true
+  # Remove any existing images in the local cache so that a build will be triggered
+  (source .env; docker image rm "${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}" "${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment-tests${IMAGE_VERSION:-:latest}" || true)
+fi
+
 # try to pull the associated docker images from the remote repo; will build otherwise
 if [[ 'true' != "${SKIP_PULL:-}" ]]; then
   echo "** trying to pull"
@@ -95,7 +102,7 @@ if [[ 'true' == "${USE_CODECEPTJS_UI:-}" ]]; then
   # docker-compose up will build any needed images
   docker-compose -f "${COMPOSE_FILE_PATH}" ${COMPOSE_DEBUG_FLAGS:-} up || true
 
-  # Capture the eixt code of the test container
+  # Capture the exit code of the test container
   TEST_CONTAINER_EXIT_CODE=$(docker wait pltsci-sdet-assignment-tests || true)
 
   # Shut down and remove the remaing containers and any volumes not marked external
