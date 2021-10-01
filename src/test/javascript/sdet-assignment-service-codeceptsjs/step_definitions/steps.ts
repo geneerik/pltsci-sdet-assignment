@@ -136,7 +136,7 @@ async function ensureServerFreshlyStarted(): Promise<ProcessInfoHolderObject|nul
     const server_process_object = await conditionallyStartServerProcess(serverReadyFile);
 
     // wait for the log file to exist
-    await checkExistsWithTimeout(serverReadyFile, 30000);
+    await checkExistsWithTimeout(serverReadyFile, 60000);
 
     // wait for message that the app has started
     await waitForLogFileToContainString(
