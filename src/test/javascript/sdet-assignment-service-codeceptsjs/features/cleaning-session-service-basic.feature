@@ -57,7 +57,7 @@ Feature: Cleaning Session Service (basic)
       | width_units | height_units |
       |      1      |       2      |
       |      2      |       2      |
-      |      2      |       5      |
+      |      2      |       3      |
     When I give cleaning instructions to move NNESEESWNWW
     Then I should see that total number of clean spots is 1
     And I should see a hoover at coordinates 1 width units and 3 height units
