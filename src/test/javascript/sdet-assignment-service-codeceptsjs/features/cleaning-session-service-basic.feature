@@ -36,6 +36,7 @@ Feature: Cleaning Session Service (basic)
     Then I should see that total number of clean spots is 0
     And I should see a hoover at coordinates 1 width units and 2 height units
 
+  @issue=1
   Scenario: Starts on a patch with no move instructions
     Given I have a room with 5 width units and 5 height units
     And I have a hoover at coordinates 1 width units and 2 height units
@@ -48,6 +49,7 @@ Feature: Cleaning Session Service (basic)
     Then I should see that total number of clean spots is 1
     And I should see a hoover at coordinates 1 width units and 2 height units
 
+  @issue=1
   Scenario: starts on patch
     Given I have a room with 5 width units and 5 height units
     And I have a hoover at coordinates 1 width units and 2 height units
