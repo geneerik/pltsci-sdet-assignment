@@ -23,7 +23,7 @@ REPORT_OUTPUT_DIR=${REPORT_OUTPUT_DIR:-"${TEST_OUTPUT_DIR}/report"}
 rm -rf "${REPORT_OUTPUT_DIR}"/*
 
 # generate report and fix issue links
-ISSUE_TRACKER_PATTERN=${ISSUE_TRACKER_PATTERN:-'https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s'}
+ISSUE_TRACKER_PATTERN=${ISSUE_TRACKER_PATTERN:-'https://github.com/geneerik/pltsci-sdet-assignment/issues/%s'}
 export ALLURE_OPTS=${ALLURE_OPTS:-"-Dallure.link.mylink.pattern=https://example.org/mylink/{} -Dallure.link.issue.pattern=https://example.org/issue/{} -Dallure.link.tms.pattern=https://example.org/tms/{} -Dallure.issues.tracker.pattern=${ISSUE_TRACKER_PATTERN}"}
 
 if [[ 'true' == "${ALLURE_SERVE:-}" ]]; then

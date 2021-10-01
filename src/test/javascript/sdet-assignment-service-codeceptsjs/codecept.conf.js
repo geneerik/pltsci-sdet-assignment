@@ -16,7 +16,7 @@ exports.config = {
     report_output: "./test_output/report",
     // TODO: make this part of the allure plugin settings (if it makes a html report)
     allure_issue_tracker_pattern:
-        "https://github.com/geneerik/pltsci-sdet-assignment-unittests/issue/%s",
+        "https://github.com/geneerik/pltsci-sdet-assignment/issues/%s",
     helpers: {
         Playwright: {
             url: target_base_uri,
