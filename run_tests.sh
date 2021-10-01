@@ -54,7 +54,7 @@ fi
 if [[ 'true' == "${DEBUG:-}" && -e "${COMPOSE_FILE_PATH}".debug ]]; then
   COMPOSE_DEBUG_FLAGS="-f ${COMPOSE_FILE_PATH}.debug"
 fi
-echo "COMPOSE_DEBUG_FLAGS: ${COMPOSE_DEBUG_FLAGS}"
+#echo "COMPOSE_DEBUG_FLAGS: ${COMPOSE_DEBUG_FLAGS:-}"
 
 # build the .env file
 if [[ 'true' != "${SKIP_ENV_FILE:-}" ]]; then

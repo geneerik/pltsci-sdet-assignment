@@ -33,6 +33,7 @@ services:
     environment:
       SERVER_IS_EXTERNAL: "true"
       TARGET_BASE_URI: http://pltsci-sdet-assignment:8080
+      ALLOW_TEST_FAILURES: "true"
 
   pltsci-sdet-assignment:
     image: ${REGISTRY_URI:-}${DOCKER_NAMESPACE:-}pltsci-sdet-assignment${IMAGE_VERSION:-:latest}

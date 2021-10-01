@@ -349,6 +349,7 @@ Note: These issues have not yet been files
 - BDD commands, such as Given, are not recorded if they do not utilize calls through the actor (I)
 - Before and After methods provided for use in step definitions do not support async operations
 - Plugins and helpers may be "required" in if they are not built in, but must be the ONLY export of a module, which doesnt work great with plugins that need to export types and extra functions.
+- Provide a way to allow process success on test failures
 
 &nbsp;
 # Open "ToDo" items for the project

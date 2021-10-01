@@ -67,6 +67,7 @@ services:
     environment:
       SERVER_IS_EXTERNAL: "true"
       TARGET_BASE_URI: http://pltsci-sdet-assignment-%s:8080
+      ALLOW_TEST_FAILURES: "true"
 
   pltsci-sdet-assignment-8081:
     <<: *pltsci-sdet-assignment-template

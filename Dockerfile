@@ -221,6 +221,21 @@ RUN which -a npm && \
     #npx codeceptjs def
     echo "build success"
 
+# codeceptjs needs a special patch to allow a successful exit code when tests fail; applying the patch here
+### in the eixt listener
+#    if (failedTests.length) {
+###
+### needs to be changed to
+#    if ((process.env.ALLOW_TEST_FAILURES ?? "false").toLocaleLowerCase() !== "true"  && failedTests.length) {
+### and in the run-workers command
+#    return (this.stats.failures || this.errors.length) > 0;
+### needs to be changed to
+#    return ((process.env.ALLOW_TEST_FAILURES ?? "false").toLocaleLowerCase() !== "true"  && this.stats.failures > 0) || this.errors.length > 0;
+# This patch allows this to be enable on environmental variable ALLOW_TEST_FAILURES having a value of "true". There is presently no way to do this using normal config or parameters
+
+# TODO
+#RUN sed -i "s/^\\( *io.listen(\\)\\(webSocketsPort\\)\\();\\.*\\)\$/  const iohttp = require('http').createServer().listen(\\2, '0.0.0.0');\\n\\1iohttp\\3/" '/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js' && \
+
 # codeceptjs-ui needs a special patch to be served within docker; applying the patch here
 ###
 #  io.listen(webSocketsPort);
