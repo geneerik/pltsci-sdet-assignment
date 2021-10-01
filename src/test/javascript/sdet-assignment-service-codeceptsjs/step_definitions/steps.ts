@@ -346,6 +346,16 @@ When("I give cleaning instructions to move {string}", async (instructions: strin
     state.response.actualResponse = res;
 });
 
+When("I give no cleaning instructions", async () => {
+    state.request.instructions = "";
+    debug(`(${threadId}) Payload to send: >>>\n` + JSON.stringify(state.request) + "<<<");
+    
+    // execute REST call
+    const res:AxiosResponse = await I.cleaningSessionsPost(state.request);
+
+    state.response.actualResponse = res;
+});
+
 Then("I should see that total number of clean spots is {int}", async (patches: number) => {
     const expectedPatches = patches;
 

@@ -1,0 +1,119 @@
+Normal:
+- known input, known output
+- no dirt
+- no moves
+- boot on dirt
+- room repeat
+- no dirt hit
+- 1x1, bonk
+
+New Room:
+-
+
+Input validation:
+- well formed but nonsense
+  - roomsize
+    - x -1
+    - x -10
+    - y -1
+    - y -10
+    - x 0
+    - y 0
+    - x 9999999999999999999999999999999999999999999999999999999999999999999999999999
+    - y 9999999999999999999999999999999999999999999999999999999999999999999999999999
+    - x a
+    - x aa
+    - x ""
+    - x true
+    - x false
+    - x null
+    - y a
+    - y aa
+    - y ""
+    - y true
+    - y false
+    - y null
+    - x 0.1
+    - y 0.1
+    - x {}
+    - x {a:b}
+    - x []
+    - x [1]
+    - y {}
+    - y [1]
+  - coord X/Y
+    "
+  - patches elements
+    "
+  - instructions
+    - lowercase
+    - wrong chars
+    - unicode
+    - true
+    - false
+    - null
+    - 1
+    - 0.1
+    - 0.1
+    - {}
+    - {a:b}
+    - []
+    - [1]
+- extra params
+- non-object
+- missing params
+- param data wrong
+  - roomsize = null
+  - roomsize = a
+  - roomsize = {}
+  - roomsize = {0:1,2:2}
+  - roomsize = {a:1,b:2}
+  - roomsize = []
+  - roomsize = [1]
+  - roomsize = [1,1,1]
+
+  - coords = null
+  - coords = a
+  - coords = {}
+  - coords = {0:1,2:2}
+  - coords = {a:1,b:2}
+  - coords = []
+  - coords = [1]
+  - coords = [1,1,1]
+
+  - patches = null
+  - patches = a
+  - patches = {}
+  - patches = {0:1,2:2}
+  - patches = {a:1,b:2}
+  - patches = []
+  - patches = [1]
+  - patches = [1,1,1]
+  - patches = [[]]
+  - patches = [[1]]
+
+  - patches = [null]
+  - patches = [a]
+  - patches = [{}]
+  - patches = [{0:1,2:2}]
+  - patches = [{a:1,b:2}]
+  - patches = [[]]
+  - patches = [[1]]
+  - patches = [[1,1,1]]
+  - patches = [[1,1],a]
+
+  - instructions = null
+  - instructions = a
+  - instructions = {}
+  - instructions = {0:1,2:2}
+  - instructions = {a:1,b:2}
+  - instructions = []
+  - instructions = [1]
+  - instructions = [1,1,1]
+Adversareal:
+  - methods
+  - xml
+  - junk
+  - object object
+
+  
