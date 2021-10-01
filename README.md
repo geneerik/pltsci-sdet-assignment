@@ -350,6 +350,7 @@ Note: These issues have not yet been files
 - Before and After methods provided for use in step definitions do not support async operations
 - Plugins and helpers may be "required" in if they are not built in, but must be the ONLY export of a module, which doesnt work great with plugins that need to export types and extra functions.
 - Provide a way to allow process success on test failures
+- UI tries to open code editor vi process call from backend; this is a front end task and should be done with an xdg call in browser
 
 &nbsp;
 # Open "ToDo" items for the project
