@@ -45,8 +45,8 @@ npx codeceptjs def
 #    return ((process.env.ALLOW_TEST_FAILURES ?? "false").toLocaleLowerCase() !== "true"  && this.stats.failures > 0) || this.errors.length > 0;
 # This patch allows this to be enabled on environmental variable ALLOW_TEST_FAILURES having a value of "true". There is presently no way to do this using normal config or parameters
 
-sed -i "s/^\\( *\\)if (failedTests.length) {\$/\\1if ((process.env.ALLOW_TEST_FAILURES ?? \"false\").toLowerCase() !== \"true\" \\&\\& failedTests.length) {/" "${TEST_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/listener/exit.js' && \
-	sed -i "s/\\( *\\)return (this.stats.failures || this.errors.length) > 0;\$/\\1return ((process.env.ALLOW_TEST_FAILURES ?? \"false\").toLowerCase() !== \"true\" \\&\\& this.stats.failures > 0) || this.errors.length > 0;/" "${TEST_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/workers.js'
+sed -i "s/^\\( *\\)if (failedTests.length) {\$/\\1if ((process.env.ALLOW_TEST_FAILURES ?? \"false\").toLowerCase() !== \"true\" \\&\\& failedTests.length) {/" "${WORKSPACE_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/listener/exit.js' && \
+	sed -i "s/\\( *\\)return (this.stats.failures || this.errors.length) > 0;\$/\\1return ((process.env.ALLOW_TEST_FAILURES ?? \"false\").toLowerCase() !== \"true\" \\&\\& this.stats.failures > 0) || this.errors.length > 0;/" "${WORKSPACE_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/workers.js'
 
 # codeceptjs-ui needs a special patch to be served within docker; applying the patch here
 ###
@@ -59,5 +59,5 @@ sed -i "s/^\\( *\\)if (failedTests.length) {\$/\\1if ((process.env.ALLOW_TEST_FA
 #  app.listen(applicationPort, '0.0.0.0');
 # There is presently no way to do this using normal config or parameters
 
-sed -i "s/^\\( *io.listen(\\)\\(webSocketsPort\\)\\();\\.*\\)\$/  const iohttp = require('http').createServer().listen(\\2, '0.0.0.0');\\n\\1iohttp\\3/" '/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js' && \
-	sed -i "s/^\\( *app.listen(applicationPort\\)\\();\\.*\\)\$/\\1, '0.0.0.0'\\2/" '/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js'
+sed -i "s/^\\( *io.listen(\\)\\(webSocketsPort\\)\\();\\.*\\)\$/  const iohttp = require('http').createServer().listen(\\2, '0.0.0.0');\\n\\1iohttp\\3/" "${WORKSPACE_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js' && \
+	sed -i "s/^\\( *app.listen(applicationPort\\)\\();\\.*\\)\$/\\1, '0.0.0.0'\\2/" "${WORKSPACE_DIR}"'/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/@codeceptjs/ui/bin/codecept-ui.js'
