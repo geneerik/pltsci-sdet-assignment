@@ -15,7 +15,7 @@ Feature: Cleaning Session Service (reuse server instance)
     And I should see a hoover at coordinates 1 width units and 3 height units
 
   Scenario: No move instructions after previous pickup
-    Given I have a room with 5 width units and 5 height units
+    Given I have a room with 6 width units and 6 height units
     And I have a hoover at coordinates 1 width units and 2 height units
     And I have no dirt to clean
     When I give no cleaning instructions
@@ -24,7 +24,7 @@ Feature: Cleaning Session Service (reuse server instance)
 
   @issue:2
   Scenario: No patches covered after previous pickup
-    Given I have a room with 5 width units and 5 height units
+    Given I have a room with 6 width units and 6 height units
     And I have a hoover at coordinates 1 width units and 2 height units
     And I have dirt to clean at some coordinates
       | width_units | height_units |
@@ -36,13 +36,13 @@ Feature: Cleaning Session Service (reuse server instance)
     And I should see a hoover at coordinates 0 width units and 0 height units
 
   Scenario: New patches covered after previous pickup
-    Given I have a room with 5 width units and 5 height units
+    Given I have a room with 6 width units and 6 height units
     And I have a hoover at coordinates 2 width units and 4 height units
     And I have dirt to clean at some coordinates
       | width_units | height_units |
       |      4      |       4      |
       |      3      |       4      |
       |      4      |       3      |
-    When I give cleaning instructions to move EEES
+    When I give cleaning instructions to move EES
     Then I should see that total number of clean spots is 3
     And I should see a hoover at coordinates 4 width units and 3 height units
