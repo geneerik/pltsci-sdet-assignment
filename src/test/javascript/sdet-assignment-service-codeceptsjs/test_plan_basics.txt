@@ -44,6 +44,7 @@ Input validation:
   - coord X/Y
     "
   - patches elements
+    - dupes
     "
   - instructions
     - lowercase
@@ -115,5 +116,3 @@ Adversareal:
   - xml
   - junk
   - object object
-
-  

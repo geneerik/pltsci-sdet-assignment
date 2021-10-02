@@ -2,7 +2,7 @@ Solution to Platform Science Software Development Engineer in Test assignment
 ==========================================
 
 ## Introduction
-This repository is a response to demonstrate how to use Gherkin BDD via [CodeceptJS](https://codecept.io/) to perform REST API testing against a Spring based Java web app. It provides a clear set of instructions and supplies the necessary components to provide easily reproducibnle results.  Please find the initial inquiry [here](README-Request.md).  The requests are enumerated and ellaborated upon below, along with information on how this repository answers said inquiry.
+This repository is a response to demonstrate how to use Gherkin BDD via [CodeceptJS](https://codecept.io/) to perform REST API testing against a Spring based Java web app. It provides a clear set of instructions and supplies the necessary components to provide easily reproducible results.  Please find the initial inquiry [here](README-Request.md).  The requests are enumerated and ellaborated upon below, along with information on how this repository answers said inquiry.
 
 ### Requested features
 * Implemented using any BDD framework (e.g. Cucumber or [Codecept.js](https://codecept.io/bdd/#gherkin))
@@ -345,12 +345,13 @@ Note: These issues have not yet been files
 - ui only works on localhost; breaks on docker
 - Add framework specific tag processing to allure plugin (such as for issue tags)
 - Add HTML report output for allure plugin
-- Actor (I) calls that do not belong to a helper (such as with the steps_file) as not recorded as steps
+- Actor (I) calls that do not belong to a helper (such as with the steps_file) are not recorded as steps
 - BDD commands, such as Given, are not recorded if they do not utilize calls through the actor (I)
 - Before and After methods provided for use in step definitions do not support async operations
 - Plugins and helpers may be "required" in if they are not built in, but must be the ONLY export of a module, which doesnt work great with plugins that need to export types and extra functions.
 - Provide a way to allow process success on test failures
-- UI tries to open code editor vi process call from backend; this is a front end task and should be done with an xdg call in browser
+- UI tries to open code editor vi process call from backend (server-side); this is a front end task and should be done with a mime/xdg call in front-end browser (client-side)
+- UI cant hide browser window; helpful in REST tests
 
 &nbsp;
 # Open "ToDo" items for the project
