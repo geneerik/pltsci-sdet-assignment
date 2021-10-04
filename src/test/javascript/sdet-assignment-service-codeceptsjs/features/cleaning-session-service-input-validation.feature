@@ -23,25 +23,25 @@ Feature: Cleaning Session Service (Input validation)
       |     0     |     5     |      6       |
       |    "a"    |     5     |              |
       |   "aa"    |     5     |              |
-      |    ""     |     5     |              |
+      |    ""     |     5     |      6       |
       |   true    |     5     |              |
       |   false   |     5     |              |
-      |   null    |     5     |      11      |
+      |   null    |     5     |      6       |
       |    0.1    |     5     |      6       |
       |    {}     |     5     |              |
       | {"a":"b"} |     5     |              |
       |    []     |     5     |              |
       |    [1]    |     5     |              |
-      |     5     |    -1     |      5       |
+      |     5     |    -1     |      7       |
       |     5     |    -10    |      7       |
-      |     5     |     0     |      7       |
+      |     5     |     0     |      5       |
       |     5     |    "a"    |              |
       |     5     |   "aa"    |              |
-      |     5     |    ""     |              |
+      |     5     |    ""     |      5       |
       |     5     |   true    |              |
       |     5     |   false   |              |
-      |     5     |   null    |              |
-      |     5     |    0.1    |      7       |
+      |     5     |   null    |      5       |
+      |     5     |    0.1    |      5       |
       |     5     |    {}     |              |
       |     5     | {"a":"b"} |              |
       |     5     |    []     |              |
@@ -68,10 +68,10 @@ Feature: Cleaning Session Service (Input validation)
       |     0     |     5     |      9       |
       |    "a"    |     5     |              |
       |   "aa"    |     5     |              |
-      |    ""     |     5     |      12      |
+      |    ""     |     5     |      9       |
       |   true    |     5     |              |
       |   false   |     5     |              |
-      |   null    |     5     |      12      |
+      |   null    |     5     |      9       |
       |    0.1    |     5     |      9       |
       |    {}     |     5     |              |
       | {"a":"b"} |     5     |              |
@@ -82,10 +82,10 @@ Feature: Cleaning Session Service (Input validation)
       |     5     |     0     |      10      |
       |     5     |    "a"    |              |
       |     5     |   "aa"    |              |
-      |     5     |    ""     |      13      |
+      |     5     |    ""     |      10      |
       |     5     |   true    |              |
       |     5     |   false   |              |
-      |     5     |   null    |      13      |
+      |     5     |   null    |      10      |
       |     5     |    0.1    |      10      |
       |     5     |    {}     |              |
       |     5     | {"a":"b"} |              |
