@@ -60,9 +60,9 @@ declare class SimpleHelper extends Helper {
      */
     performSimpleActionGetRestEndpoint(): string;
     /**
-     * @property {number|null} server_port Value of the server debug port to use for the server
-     *                                     under test by the current thread when the server process
-     *                                     is being managed by the tests
+     * @property {number|null} _server_debug_port Value of the server debug port to use for the
+     *                                            server under test by the current thread when the
+     *                                            server process is being managed by the tests
      */
     protected _server_debug_port: number | null;
     /**
@@ -187,6 +187,24 @@ declare class SimpleHelper extends Helper {
      * @returns {Promise<any>} The results of the expect operation
      */
     assertObjectToHaveProperty(actual: any, propertyName: string): Promise<any>;
+    /**
+     * @property {this|null} _server_log_file The path to the log file, if any, for the current
+     *                                        server instance being tested
+     */
+    protected _server_log_file: string | null;
+    /**
+     * Set the path to the log file so it can be used by other things
+     *
+     * @param  {string} logFilePath The path to the log file being monitored
+     * @return void
+     */
+    performSimpleActionSetLogFile(logFilePath: string): void;
+    /**
+     * Get the path to the log file being monitored
+     *
+     * @returns {string} The path to the log file being monitored
+     */
+    performSimpleActionGetLogFile(): string | null;
     /**
      * Sends a post request to the cleaning-sessions API endpoint
      *

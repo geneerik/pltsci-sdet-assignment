@@ -556,7 +556,6 @@ const issueTagRegex = new RegExp(
  * the allure report can accurately reflect the information they convey, such as issues associated
  * with a given feature or scenario
  * 
- * @memberof SimplePlugin
  * @param  {Mocha.Test} test The test to be modified
  */
 function traslateAllureTagsForTest(test: Mocha.Test): void {
@@ -567,7 +566,7 @@ function traslateAllureTagsForTest(test: Mocha.Test): void {
 
     const testTitle = test.fullTitle();
 
-    debug(`(${moduleConsolePrefix}Plugin before test event trigger for '${testTitle}'`);
+    debug(`(${moduleConsolePrefix}traslateAllureTagsForTest for '${testTitle}'`);
 
     // todo: deal with suite level tags
 
@@ -695,8 +694,54 @@ FRAMEWORK("framework"),
     */
 }
 
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ * 
+ * @param  {string} path The name of the file
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @returns void
+ */
+function addAllureFileAttachmentToTest(
+    filePath: string, mimeType: string, desiredFileName?: string): void {
+
+    const targetFileName:string = desiredFileName ?? path.basename(filePath);
+    const fileContents:Buffer = readFileSync(filePath);
+
+    addAllureAttachmentToTest(
+        targetFileName, fileContents, mimeType);
+}
+
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ * 
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @param  {Buffer} fileContents The content comprising the attachment (binary bytes)
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @returns void
+ */
+function addAllureAttachmentToTest(
+    desiredFileName: string, fileContents:Buffer, mimeType: string): void {
+
+    const allurePlugin: CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
+    if (!allurePlugin){
+        return;
+    }
+
+    debug(
+        `(${moduleConsolePrefix}Adding attchment '${desiredFileName}' of type '${mimeType}' to ` +
+        "current test");
+
+    allurePlugin.addAttachment(desiredFileName, fileContents, mimeType);
+}
+
 export {
     allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout,
     waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse,
-    spawnWithConsoleIo, escapeStringRegexp, isDryRun, issueTagRegex, traslateAllureTagsForTest
+    spawnWithConsoleIo, escapeStringRegexp, isDryRun, issueTagRegex, traslateAllureTagsForTest,
+    addAllureAttachmentToTest, addAllureFileAttachmentToTest
 };

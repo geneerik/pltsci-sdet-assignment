@@ -9,6 +9,7 @@ import { format as stringFormat } from "util";
 import { threadId } from "worker_threads";
 import { Helper } from "codeceptjs";
 import { AxiosResponse } from "axios";
+import { addAllureFileAttachmentToTest } from "./utils";
 
 /**
  * Helper class to empower step discovery where it might be missing and add access to some of the
@@ -85,9 +86,9 @@ class SimpleHelper extends Helper {
     }
  
     /**
-     * @property {number|null} server_port Value of the server debug port to use for the server
-     *                                     under test by the current thread when the server process
-     *                                     is being managed by the tests
+     * @property {number|null} _server_debug_port Value of the server debug port to use for the
+     *                                            server under test by the current thread when the
+     *                                            server process is being managed by the tests
      */
     protected _server_debug_port: number|null = null;
 
@@ -289,6 +290,31 @@ class SimpleHelper extends Helper {
     }
 
     /**
+     * @property {this|null} _server_log_file The path to the log file, if any, for the current
+     *                                        server instance being tested
+     */
+    protected _server_log_file: string|null = null;
+
+    /**
+     * Set the path to the log file so it can be used by other things
+     * 
+     * @param  {string} logFilePath The path to the log file being monitored
+     * @return void
+     */
+    performSimpleActionSetLogFile(logFilePath: string): void {
+        this._server_log_file = logFilePath;
+    }
+
+    /**
+     * Get the path to the log file being monitored
+     * 
+     * @returns {string} The path to the log file being monitored
+     */
+    performSimpleActionGetLogFile(): string|null {
+        return this._server_log_file;
+    }
+
+    /**
      * Sends a post request to the cleaning-sessions API endpoint
      * 
      * @param  {unknown} cleaningData The data payload to paste to the endpoint
@@ -297,7 +323,43 @@ class SimpleHelper extends Helper {
      */
     async cleaningSessionsPost(cleaningData:unknown) : Promise<AxiosResponse> {
         const restPlugin: CodeceptJS.REST = codeceptjs.container.helpers("REST");
-        return restPlugin.sendPostRequest("/v1/cleaning-sessions", cleaningData);
+
+        let response:AxiosResponse|null = null;
+        let err:Error|null = null;
+
+        try {
+            response = 
+                await restPlugin.sendPostRequest("/v1/cleaning-sessions", cleaningData);
+        } catch(err1) {
+            err = err1;
+        }
+
+        // only do this if we had success
+        if(null!==response){
+            /**
+             * If this was a 5xx error, we will attach a log file if this the allure plugin is
+             * enabled
+             */
+            const curLogFile: string|null = this.performSimpleActionGetLogFile();
+            if(curLogFile && response.status >= 500 && response.status < 600) {
+                addAllureFileAttachmentToTest(
+                    curLogFile, "text/plain", "application.log");
+            }
+        }
+        
+        return new Promise<AxiosResponse>(
+            (resolve, reject)=>{
+                if(err){
+                    reject(err);
+                }
+                if(null === response) {
+                    const newErr = new Error("Response was null but there was no exception set");
+                    reject(newErr);
+                    throw newErr;
+                }
+                resolve(response);
+            }
+        );
     }
 }
 

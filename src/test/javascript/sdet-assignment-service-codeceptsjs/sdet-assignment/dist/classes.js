@@ -13,6 +13,7 @@ const expect_1 = __importDefault(require("expect"));
 const util_1 = require("util");
 const worker_threads_1 = require("worker_threads");
 const codeceptjs_1 = require("codeceptjs");
+const utils_1 = require("./utils");
 /**
  * Helper class to empower step discovery where it might be missing and add access to some of the
  * runner features not directly exposed by CodeceptJS
@@ -29,11 +30,16 @@ class SimpleHelper extends codeceptjs_1.Helper {
          */
         this._server_port = null;
         /**
-         * @property {number|null} server_port Value of the server debug port to use for the server
-         *                                     under test by the current thread when the server process
-         *                                     is being managed by the tests
+         * @property {number|null} _server_debug_port Value of the server debug port to use for the
+         *                                            server under test by the current thread when the
+         *                                            server process is being managed by the tests
          */
         this._server_debug_port = null;
+        /**
+         * @property {this|null} _server_log_file The path to the log file, if any, for the current
+         *                                        server instance being tested
+         */
+        this._server_log_file = null;
     }
     /**
      * Method to allow a call chain via the I mechanism which would not otheriwse be recognized as
@@ -264,6 +270,23 @@ class SimpleHelper extends codeceptjs_1.Helper {
         return (0, expect_1.default)(Object.prototype.hasOwnProperty.call(actual, propertyName)).toBeTruthy();
     }
     /**
+     * Set the path to the log file so it can be used by other things
+     *
+     * @param  {string} logFilePath The path to the log file being monitored
+     * @return void
+     */
+    performSimpleActionSetLogFile(logFilePath) {
+        this._server_log_file = logFilePath;
+    }
+    /**
+     * Get the path to the log file being monitored
+     *
+     * @returns {string} The path to the log file being monitored
+     */
+    performSimpleActionGetLogFile() {
+        return this._server_log_file;
+    }
+    /**
      * Sends a post request to the cleaning-sessions API endpoint
      *
      * @param  {unknown} cleaningData The data payload to paste to the endpoint
@@ -272,7 +295,37 @@ class SimpleHelper extends codeceptjs_1.Helper {
      */
     async cleaningSessionsPost(cleaningData) {
         const restPlugin = codeceptjs.container.helpers("REST");
-        return restPlugin.sendPostRequest("/v1/cleaning-sessions", cleaningData);
+        let response = null;
+        let err = null;
+        try {
+            response =
+                await restPlugin.sendPostRequest("/v1/cleaning-sessions", cleaningData);
+        }
+        catch (err1) {
+            err = err1;
+        }
+        // only do this if we had success
+        if (null !== response) {
+            /**
+             * If this was a 5xx error, we will attach a log file if this the allure plugin is
+             * enabled
+             */
+            const curLogFile = this.performSimpleActionGetLogFile();
+            if (curLogFile && response.status >= 500 && response.status < 600) {
+                (0, utils_1.addAllureFileAttachmentToTest)(curLogFile, "text/plain", "application.log");
+            }
+        }
+        return new Promise((resolve, reject) => {
+            if (err) {
+                reject(err);
+            }
+            if (null === response) {
+                const newErr = new Error("Response was null but there was no exception set");
+                reject(newErr);
+                throw newErr;
+            }
+            resolve(response);
+        });
     }
 }
 exports.SimpleHelper = SimpleHelper;

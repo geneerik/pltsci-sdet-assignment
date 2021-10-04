@@ -15,13 +15,6 @@ import {
  */
 const debug: Debugger = debugLoggerFactory("com.geneerik.sdet-assignment.steps-definitions.steps");
 
-/**
- * @property {CodeceptJSAllurePlugin} allurePlugin Plugin object instance used to set allure
- *                                                 specific labels on the currently running test
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const allurePlugin: CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
-
 // Make the I actor instance available in BDD calls
 const { I } = inject();
 
@@ -122,6 +115,8 @@ async function ensureServerFreshlyStarted(): Promise<ProcessInfoHolderObject|nul
     const serverReadyFile =
         (process.env.SERVER_RESTART_TRIGGER_FILE ??
             `/usr/local/demo-app/logs/application-${threadId}.log`);
+
+    await I.performSimpleActionSetLogFile(serverReadyFile);
 
     /**
      * delete the "ready" file if it exists; if the server process is external, this should
@@ -300,10 +295,50 @@ Given(
 );
 
 Given(
+    "I supply raw room size parameter values of {word} width units and {word} height units",
+    async (x: string, y: string) => {
+        const coords = [JSON.parse(x), JSON.parse(y)];
+        await I.performSimpleAction(()=>{
+            state.request.roomSize = coords;
+        });
+    }
+);
+
+Given(
+    "I have known issues {string}",
+    async (knownIssuesList: string) => {
+        const trimmedIssuesList = knownIssuesList.trim();
+        if(trimmedIssuesList) {
+            const allurePlugin: CodeceptJSAllurePlugin = codeceptjs.container.plugins("allure");
+
+            if (!allurePlugin){
+                return;
+            }
+            trimmedIssuesList.split(",").forEach(
+                (issueId) => {
+                    allurePlugin.issue(issueId);
+                }
+            );
+        }
+    } 
+);
+
+Given(
     "I have a hoover at coordinates {int} width units and {int} height units",
     async (x: number, y: number) => {
 
         const coords = [x, y];
+        await I.performSimpleAction(()=>{
+            state.request.coords = coords;
+        });
+    }
+);
+
+Given(
+    "I supply raw hoover coordinates parameter values of {word} width units and {word} height " +
+        "units",
+    async (x: string, y: string) => {
+        const coords = [JSON.parse(x), JSON.parse(y)];
         await I.performSimpleAction(()=>{
             state.request.coords = coords;
         });
@@ -322,6 +357,17 @@ Given(
     
         await I.performSimpleAction(()=>{
             appendDirtPatchesToRequest(patchesTable);
+        });
+    }
+);
+
+Given(
+    "I supply some raw dirt patch coordinates parameter values of {word} width units and {word} " +
+        "height units",
+    async (x: string, y: string) => {
+        const coords = [[JSON.parse(x), JSON.parse(y)]];
+        await I.performSimpleAction(()=>{
+            state.request.patches = coords;
         });
     }
 );
@@ -410,5 +456,33 @@ Then(
         
         await I.assertObjectToHaveProperty(data, "coords");
         await I.assertToEqual(data.coords, coords);
+    }
+);
+
+Then(
+    "I should see a response from the server indicating it handled an error",
+    async () => {
+
+        // Bail out if this is a dry run
+        if (isDryRun()){
+            // Need this for the step to show up
+            I.performSimpleAction(
+                ()=>{
+                    debug(`(${threadId}) Dry run place holder`);
+                }
+            );
+            return;
+        }
+
+        if (!isAxiosResponse(state.response.actualResponse)) {
+            throw new Error(
+                "Response object expected to implement AxiosResponse interface, but did not");
+        }
+
+        const serverResponse = state.response.actualResponse as AxiosResponse;
+        await I.assertToEqual(serverResponse.status, 400);
+        const data: CleaningResponseObject = serverResponse.data;
+        
+        I.assertNotToBeEmpty(data);
     }
 );

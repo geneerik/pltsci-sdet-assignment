@@ -336,11 +336,13 @@ interface CodeceptJSAllurePlugin {
      * attachments
      *
      * @param  {string} name The name of the attachment (file name)
-     * @param  {any} buffer The content comprising the attachment
-     * @param  {string} type The type of the attachment
+     * @param  {any} buffer The content comprising the attachment (binary bytes)
+     * @param  {string} type The type of the attachment (fileMime). If the value is null or
+     *                       undefined, the fileType can be automatically guessed (not recomended)
+     *                       by the file-type library
      * @returns void
      */
-    addAttachment(name: string, buffer: any, type: string): void;
+    addAttachment(name: string, buffer: any, type: string | null | undefined): void;
     /**
      * Sets a description
      *

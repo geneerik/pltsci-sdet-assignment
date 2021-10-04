@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.traslateAllureTagsForTest = exports.issueTagRegex = exports.isDryRun = exports.escapeStringRegexp = exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
+exports.addAllureFileAttachmentToTest = exports.addAllureAttachmentToTest = exports.traslateAllureTagsForTest = exports.issueTagRegex = exports.isDryRun = exports.escapeStringRegexp = exports.spawnWithConsoleIo = exports.isAxiosResponse = exports.waitForLogFileToContainString = exports.deleteFileIfExisted = exports.waitForProcessToBeKilled = exports.checkExistsWithTimeout = exports.setModuleConsolePrefix = exports.generateAllureReport = exports.cleanDir = exports.allureCli = void 0;
 const exceptions_1 = require("./exceptions");
 const path = __importStar(require("path"));
 const fs_extra_1 = require("fs-extra");
@@ -499,7 +499,6 @@ exports.issueTagRegex = issueTagRegex;
  * the allure report can accurately reflect the information they convey, such as issues associated
  * with a given feature or scenario
  *
- * @memberof SimplePlugin
  * @param  {Mocha.Test} test The test to be modified
  */
 function traslateAllureTagsForTest(test) {
@@ -508,7 +507,7 @@ function traslateAllureTagsForTest(test) {
         return;
     }
     const testTitle = test.fullTitle();
-    debug(`(${moduleConsolePrefix}Plugin before test event trigger for '${testTitle}'`);
+    debug(`(${moduleConsolePrefix}traslateAllureTagsForTest for '${testTitle}'`);
     // todo: deal with suite level tags
     // todo: implement this for other allure tag types:
     /**
@@ -619,3 +618,39 @@ FRAMEWORK("framework"),
     */
 }
 exports.traslateAllureTagsForTest = traslateAllureTagsForTest;
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ *
+ * @param  {string} path The name of the file
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @returns void
+ */
+function addAllureFileAttachmentToTest(filePath, mimeType, desiredFileName) {
+    const targetFileName = desiredFileName !== null && desiredFileName !== void 0 ? desiredFileName : path.basename(filePath);
+    const fileContents = (0, fs_extra_1.readFileSync)(filePath);
+    addAllureAttachmentToTest(targetFileName, fileContents, mimeType);
+}
+exports.addAllureFileAttachmentToTest = addAllureFileAttachmentToTest;
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ *
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @param  {Buffer} fileContents The content comprising the attachment (binary bytes)
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @returns void
+ */
+function addAllureAttachmentToTest(desiredFileName, fileContents, mimeType) {
+    const allurePlugin = codeceptjs.container.plugins("allure");
+    if (!allurePlugin) {
+        return;
+    }
+    debug(`(${moduleConsolePrefix}Adding attchment '${desiredFileName}' of type '${mimeType}' to ` +
+        "current test");
+    allurePlugin.addAttachment(desiredFileName, fileContents, mimeType);
+}
+exports.addAllureAttachmentToTest = addAllureAttachmentToTest;

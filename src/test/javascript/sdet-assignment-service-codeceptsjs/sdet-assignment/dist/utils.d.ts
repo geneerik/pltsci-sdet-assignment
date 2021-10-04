@@ -141,8 +141,29 @@ declare const issueTagRegex: RegExp;
  * the allure report can accurately reflect the information they convey, such as issues associated
  * with a given feature or scenario
  *
- * @memberof SimplePlugin
  * @param  {Mocha.Test} test The test to be modified
  */
 declare function traslateAllureTagsForTest(test: Mocha.Test): void;
-export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo, escapeStringRegexp, isDryRun, issueTagRegex, traslateAllureTagsForTest };
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ *
+ * @param  {string} path The name of the file
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @returns void
+ */
+declare function addAllureFileAttachmentToTest(filePath: string, mimeType: string, desiredFileName?: string): void;
+/**
+ * Add an attachment to current test / suite. This is meant for general user supplied attachments
+ *
+ * @param  {string} desiredFileName The name for the attachment (file name)
+ * @param  {Buffer} fileContents The content comprising the attachment (binary bytes)
+ * @param  {string} mimeType The type of the attachment (fileMime). If the value is null or
+ *                           undefined, the fileType can be automatically guessed (not recomended)
+ *                           by the file-type library
+ * @returns void
+ */
+declare function addAllureAttachmentToTest(desiredFileName: string, fileContents: Buffer, mimeType: string): void;
+export { allureCli, cleanDir, generateAllureReport, setModuleConsolePrefix, checkExistsWithTimeout, waitForProcessToBeKilled, deleteFileIfExisted, waitForLogFileToContainString, isAxiosResponse, spawnWithConsoleIo, escapeStringRegexp, isDryRun, issueTagRegex, traslateAllureTagsForTest, addAllureAttachmentToTest, addAllureFileAttachmentToTest };
