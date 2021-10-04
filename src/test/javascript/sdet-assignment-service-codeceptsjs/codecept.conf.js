@@ -51,7 +51,7 @@ exports.config = {
         },
         pauseOnFail: {},
         retryFailedStep: {
-            enabled: true
+            enabled: false
         },
         tryTo: {
             enabled: true

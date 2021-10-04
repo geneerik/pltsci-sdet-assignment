@@ -480,8 +480,16 @@ Then(
         }
 
         const serverResponse = state.response.actualResponse as AxiosResponse;
-        await I.assertToEqual(serverResponse.status, 400);
-        const data: CleaningResponseObject = serverResponse.data;
+        const httpStatusCode = serverResponse.status;
+        let data: CleaningResponseObject|null = null;
+        // This is a trick to make the response body always show up in the report
+        try{
+            data = serverResponse.data;
+            await I.assertToBeTruthy(data);
+        } catch{
+            // Eat this exception
+        }
+        await I.assertToEqual(httpStatusCode, 400);
         
         I.assertNotToBeEmpty(data);
     }
