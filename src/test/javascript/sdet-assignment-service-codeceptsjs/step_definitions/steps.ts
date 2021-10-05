@@ -483,12 +483,12 @@ Then(
         const httpStatusCode = serverResponse.status;
         let data: CleaningResponseObject|null = null;
         // This is a trick to make the response body always show up in the report
-        try{
+        try {
             data = serverResponse.data;
-            await I.assertToBeTruthy(data);
         } catch{
             // Eat this exception
         }
+        I.performNoop(data);
         await I.assertToEqual(httpStatusCode, 400);
         
         I.assertNotToBeEmpty(data);

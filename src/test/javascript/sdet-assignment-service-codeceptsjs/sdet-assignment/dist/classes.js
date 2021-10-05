@@ -327,5 +327,15 @@ class SimpleHelper extends codeceptjs_1.Helper {
             resolve(response);
         });
     }
+    /**
+     * This method is a noop that tricks the data passed into being tracked as a step.
+     *
+     * @param  {unknown} junkData Data that is to be exposed in the step report, but not ever used
+     * @returns void
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    performNoop(junkData) {
+        // We are not actually doing anything; this is a noop to allow step tracking but do nothing
+    }
 }
 exports.SimpleHelper = SimpleHelper;
