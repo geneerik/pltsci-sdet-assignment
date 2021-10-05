@@ -488,7 +488,7 @@ Then(
         } catch{
             // Eat this exception
         }
-        I.performNoop(data);
+        I.observeData(data);
         await I.assertToEqual(httpStatusCode, 400);
         
         I.assertNotToBeEmpty(data);

@@ -214,11 +214,11 @@ declare class SimpleHelper extends Helper {
      */
     cleaningSessionsPost(cleaningData: unknown): Promise<AxiosResponse>;
     /**
-     * This method is a noop that tricks the data passed into being tracked as a step.
+     * This method is a no-op that tricks the data passed into being tracked as a step.
      *
-     * @param  {unknown} junkData Data that is to be exposed in the step report, but not ever used
+     * @param  {unknown} data Data that is to be exposed in the step report, but not ever used
      * @returns void
      */
-    performNoop(junkData: unknown): void;
+    observeData(data: unknown): void;
 }
 export { SimpleHelper };
