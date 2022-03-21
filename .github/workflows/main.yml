@@ -55,7 +55,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-server-cache
           key: ${{ runner.os }}-buildx-server-${{ github.sha }}
@@ -150,7 +150,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-test-cache
           key: ${{ runner.os }}-buildx-test-${{ github.sha }}
@@ -211,7 +211,7 @@ jobs:
           docker run --rm -v "$(pwd)"/test_output/report:/report --entrypoint /bin/bash "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-tests:sha-${{ steps.shortsha.outputs.sha_short }}" -c 'chmod -R 777 /report/docs'
 
       - name: Cache documentation for next stage
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: test_output/report/docs
           key: ${{ runner.os }}-documentation-${{ github.sha }}
@@ -264,7 +264,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-server-cache
           key: ${{ runner.os }}-buildx-server-${{ github.sha }}
@@ -272,7 +272,7 @@ jobs:
             ${{ runner.os }}-buildx-server-
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-test-cache
           key: ${{ runner.os }}-buildx-test-${{ github.sha }}
@@ -297,7 +297,7 @@ jobs:
 
       # TODO: de-cache documentation
       - name: De-cache documentation from previous stage
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: test_output/report/docs
           key: ${{ runner.os }}-documentation-${{ github.sha }}
