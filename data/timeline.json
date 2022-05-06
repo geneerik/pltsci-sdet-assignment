@@ -1,0 +1,1422 @@
+{
+  "uid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+  "children" : [ {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"0.1\",\"known_issues\":\"10\"}",
+    "uid" : "5be00ad7d65538dd",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848408032,
+      "stop" : 1651848447530,
+      "duration" : 39498
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"-1\",\"known_issues\":\"10\"}",
+    "uid" : "c18904d9bee9d7dd",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848312270,
+      "stop" : 1651848349263,
+      "duration" : 36993
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"0\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "5e8528940854a268",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848448284,
+      "stop" : 1651848486753,
+      "duration" : 38469
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"false\",\"known_issues\":\"\"}",
+    "uid" : "8f5abfced1edb486",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848191492,
+      "stop" : 1651848222970,
+      "duration" : 31478
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit west wall",
+    "uid" : "1568f46efd3e3ffa",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847982828,
+      "stop" : 1651848010067,
+      "duration" : 27239
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"\\\"a\\\"\",\"known_issues\":\"\"}",
+    "uid" : "cd904b302549c065",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848560648,
+      "stop" : 1651848595845,
+      "duration" : 35197
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"true\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "cbb2098a5eb843e8",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848291715,
+      "stop" : 1651848327174,
+      "duration" : 35459
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"\\\"\\\"\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "831faa4219b9ccdf",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848075786,
+      "stop" : 1651848108356,
+      "duration" : 32570
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"[]\",\"known_issues\":\"\"}",
+    "uid" : "dcc737a4b67a2f91",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848223064,
+      "stop" : 1651848259232,
+      "duration" : 36168
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"false\",\"known_issues\":\"\"}",
+    "uid" : "859e2532bec2998f",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848396613,
+      "stop" : 1651848429162,
+      "duration" : 32549
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"true\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "b1f2a96f8f2292b0",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848080613,
+      "stop" : 1651848117415,
+      "duration" : 36802
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"[]\",\"known_issues\":\"\"}",
+    "uid" : "1395fb70b271a221",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848429228,
+      "stop" : 1651848457630,
+      "duration" : 28402
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit southwest corner",
+    "uid" : "489245471971527b",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847996928,
+      "stop" : 1651848038860,
+      "duration" : 41932
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"{\\\"a\\\":\\\"b\\\"}\",\"known_issues\":\"\"}",
+    "uid" : "1d49258e2e42ac5d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848633628,
+      "stop" : 1651848671621,
+      "duration" : 37993
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "No move instructions after previous pickup",
+    "uid" : "7bac6cd61189c037",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848674408,
+      "stop" : 1651848700974,
+      "duration" : 26566
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"{\\\"a\\\":\\\"b\\\"}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "c5483e1bbb0e720d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848117464,
+      "stop" : 1651848153164,
+      "duration" : 35700
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"0\",\"y\":\"5\",\"known_issues\":\"9\"}",
+    "uid" : "2ba70152a265212d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848230576,
+      "stop" : 1651848262785,
+      "duration" : 32209
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"{}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "1d8e83251ab762c8",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848530348,
+      "stop" : 1651848564661,
+      "duration" : 34313
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "No patches covered",
+    "uid" : "b8e8d7c037b984b5",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847949677,
+      "stop" : 1651847982769,
+      "duration" : 33092
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"{}\",\"known_issues\":\"\"}",
+    "uid" : "e4edbe6b0be3cc9a",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848384508,
+      "stop" : 1651848420610,
+      "duration" : 36102
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"0.1\",\"y\":\"5\",\"known_issues\":\"9\"}",
+    "uid" : "ae04e99ef1ef7082",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848274108,
+      "stop" : 1651848311853,
+      "duration" : 37745
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"\\\"\\\"\",\"known_issues\":\"5\"}",
+    "uid" : "3ede0cd8b96b9c48",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848136254,
+      "stop" : 1651848165026,
+      "duration" : 28772
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Starts on a patch with no move instructions @issue:1",
+    "uid" : "f29db0caf7dabec8",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651847919010,
+      "stop" : 1651847957830,
+      "duration" : 38820
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "3b8ec817d81507a5",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848120896,
+      "stop" : 1651848156158,
+      "duration" : 35262
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"null\",\"y\":\"5\",\"known_issues\":\"3\"}",
+    "uid" : "3bf5513f6bce15b9",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848511363,
+      "stop" : 1651848539237,
+      "duration" : 27874
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"0\",\"known_issues\":\"\"}",
+    "uid" : "b13387b74c159fab",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848569281,
+      "stop" : 1651848600919,
+      "duration" : 31638
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"{\\\"a\\\":\\\"b\\\"}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "3e61f361f4417fae",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848327267,
+      "stop" : 1651848363829,
+      "duration" : 36562
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"false\",\"known_issues\":\"\"}",
+    "uid" : "4f44bf5db5404a24",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848601112,
+      "stop" : 1651848638670,
+      "duration" : 37558
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"-10\",\"known_issues\":\"10\"}",
+    "uid" : "82966086e7b9bf82",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848342836,
+      "stop" : 1651848375251,
+      "duration" : 32415
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"[1]\",\"known_issues\":\"\"}",
+    "uid" : "54abfc29ae8c75be",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848196077,
+      "stop" : 1651848230527,
+      "duration" : 34450
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "3d5935bec3d21753",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848539604,
+      "stop" : 1651848575836,
+      "duration" : 36232
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"{}\",\"known_issues\":\"\"}",
+    "uid" : "d85bad24fdc3dfb3",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848165413,
+      "stop" : 1651848203193,
+      "duration" : 37780
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"{}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "4cd73ece45f033ce",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848108697,
+      "stop" : 1651848143482,
+      "duration" : 34785
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"-10\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "411419c07a76b36f",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848457710,
+      "stop" : 1651848494357,
+      "duration" : 36647
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"-1\",\"known_issues\":\"7\"}",
+    "uid" : "a5f6dd4b63d4966d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848100297,
+      "stop" : 1651848135836,
+      "duration" : 35539
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "multiple pickups",
+    "uid" : "7cda27743a54fa8e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847962243,
+      "stop" : 1651847998522,
+      "duration" : 36279
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "No move instructions",
+    "uid" : "ba492dd178886ef",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847917650,
+      "stop" : 1651847949630,
+      "duration" : 31980
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"\\\"a\\\"\",\"known_issues\":\"\"}",
+    "uid" : "55dc43ef5a6edbfb",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848336755,
+      "stop" : 1651848372959,
+      "duration" : 36204
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"-10\",\"y\":\"5\",\"known_issues\":\"9\"}",
+    "uid" : "f37337517465d5fe",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848259284,
+      "stop" : 1651848291334,
+      "duration" : 32050
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"known_issues\":\"\"}",
+    "uid" : "4057b21a82f31b4d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848447917,
+      "stop" : 1651848480812,
+      "duration" : 32895
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"-1\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "550bb63895b14a09",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848037085,
+      "stop" : 1651848075326,
+      "duration" : 38241
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"\\\"\\\"\",\"known_issues\":\"3\"}",
+    "uid" : "2c98cb7d5697fedd",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848563297,
+      "stop" : 1651848598037,
+      "duration" : 34740
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Nothing to clean",
+    "uid" : "450cb4378ee1e77",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847920364,
+      "stop" : 1651847962216,
+      "duration" : 41852
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"null\",\"known_issues\":\"5\"}",
+    "uid" : "f5f8a9ea6bd4eb52",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848158953,
+      "stop" : 1651848195826,
+      "duration" : 36873
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "ee4bb90de1abd30a",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848631455,
+      "stop" : 1651848662655,
+      "duration" : 31200
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"null\",\"y\":\"5\",\"known_issues\":\"9\"}",
+    "uid" : "7f83db4bb6fd205d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848295050,
+      "stop" : 1651848335253,
+      "duration" : 40203
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"0\",\"known_issues\":\"10\"}",
+    "uid" : "9c9a4b324dab76ec",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848363854,
+      "stop" : 1651848396203,
+      "duration" : 32349
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"null\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "4f5d39edff24b71e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848079909,
+      "stop" : 1651848120464,
+      "duration" : 40555
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"{}\",\"known_issues\":\"\"}",
+    "uid" : "8664e8efd99c8046",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848598304,
+      "stop" : 1651848631406,
+      "duration" : 33102
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"\\\"aa\\\"\",\"known_issues\":\"\"}",
+    "uid" : "3741a31c070c8270",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848156224,
+      "stop" : 1651848191137,
+      "duration" : 34913
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"-10\",\"known_issues\":\"7\"}",
+    "uid" : "d6f1a61b2f7d1d0f",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848143515,
+      "stop" : 1651848176557,
+      "duration" : 33042
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "New patches covered after previous pickup",
+    "uid" : "40da22d203a6abf2",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848670043,
+      "stop" : 1651848698916,
+      "duration" : 28873
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"-10\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "f20a565dba5b8e68",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848041248,
+      "stop" : 1651848080207,
+      "duration" : 38959
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"true\",\"known_issues\":\"\"}",
+    "uid" : "73b442eef5db5dc2",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848598729,
+      "stop" : 1651848633574,
+      "duration" : 34845
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit northeast corner",
+    "uid" : "bfca4bf4d26cfad8",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847996373,
+      "stop" : 1651848035990,
+      "duration" : 39617
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"0.1\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "557e455484c38fd9",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848490458,
+      "stop" : 1651848525342,
+      "duration" : 34884
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Tiny room",
+    "uid" : "4576f3986cc82453",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847958136,
+      "stop" : 1651847996841,
+      "duration" : 38705
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"[1]\",\"known_issues\":\"\"}",
+    "uid" : "63725707e94f2630",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848410062,
+      "stop" : 1651848448197,
+      "duration" : 38135
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "No patches covered after previous pickup @issue:2",
+    "uid" : "cb011ed1e994b0e0",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848665800,
+      "stop" : 1651848689914,
+      "duration" : 24114
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"\\\"a\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "f3f287cdc3b1c550",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848261030,
+      "stop" : 1651848294993,
+      "duration" : 33963
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"\\\"a\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "f6286ba62d53a672",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848039235,
+      "stop" : 1651848079849,
+      "duration" : 40614
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"{\\\"a\\\":\\\"b\\\"}\",\"known_issues\":\"\"}",
+    "uid" : "656994f9dedd923a",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848209091,
+      "stop" : 1651848240446,
+      "duration" : 31355
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"0.1\",\"known_issues\":\"5\"}",
+    "uid" : "d7d4b0fa852ca496",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848191247,
+      "stop" : 1651848226329,
+      "duration" : 35082
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"[]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "d4c49c03c11bf93",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848298684,
+      "stop" : 1651848336705,
+      "duration" : 38021
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"null\",\"known_issues\":\"3\"}",
+    "uid" : "1955d842e492d1b",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848595895,
+      "stop" : 1651848628494,
+      "duration" : 32599
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"{\\\"a\\\":\\\"b\\\"}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "aa9bd31c0e53e3fc",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848532334,
+      "stop" : 1651848569224,
+      "duration" : 36890
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"0.1\",\"known_issues\":\"\"}",
+    "uid" : "21fa819d9cc89599",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848606246,
+      "stop" : 1651848637325,
+      "duration" : 31079
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit east wall",
+    "uid" : "c68d1073bc626862",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847998560,
+      "stop" : 1651848036912,
+      "duration" : 38352
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"{}\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "9be79a8933bd4b30",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848305897,
+      "stop" : 1651848342782,
+      "duration" : 36885
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"[]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "1f1bc33b903d806d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848524447,
+      "stop" : 1651848560564,
+      "duration" : 36117
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"\\\"a\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "cad958321bb82a5d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848480855,
+      "stop" : 1651848511329,
+      "duration" : 30474
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "334988fbaa343032",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848335682,
+      "stop" : 1651848370941,
+      "duration" : 35259
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "duplicate dirt patch positions @issue:4",
+    "uid" : "44edf6fe61d439be",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848671649,
+      "stop" : 1651848700835,
+      "duration" : 29186
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"null\",\"known_issues\":\"10\"}",
+    "uid" : "69aede2768f7c65f",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848373033,
+      "stop" : 1651848409811,
+      "duration" : 36778
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"[1]\",\"known_issues\":\"\"}",
+    "uid" : "2abe874c5ee13de3",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848628788,
+      "stop" : 1651848665415,
+      "duration" : 36627
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"known_issues\":\"\"}",
+    "uid" : "3769eb35821dd92e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848226667,
+      "stop" : 1651848260979,
+      "duration" : 34312
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit south wall",
+    "uid" : "14b32cf7934c9847",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847998308,
+      "stop" : 1651848041138,
+      "duration" : 42830
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"\\\"aa\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "1147ecbddb478461",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848036186,
+      "stop" : 1651848067409,
+      "duration" : 31223
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "service is running example",
+    "uid" : "e65c8bf8d5ba5713",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847920883,
+      "stop" : 1651847961663,
+      "duration" : 40780
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"-1\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "9760c6bb5d54c85e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848449468,
+      "stop" : 1651848490420,
+      "duration" : 40952
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"0\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "f182439ac66c427c",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848010280,
+      "stop" : 1651848046556,
+      "duration" : 36276
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"known_issues\":\"\"}",
+    "uid" : "c870b23b33d4b11a",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848637618,
+      "stop" : 1651848669639,
+      "duration" : 32021
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"-10\",\"known_issues\":\"\"}",
+    "uid" : "fef6d70ad8624823",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848564755,
+      "stop" : 1651848598420,
+      "duration" : 33665
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"[]\",\"known_issues\":\"\"}",
+    "uid" : "d2f8cb943aded4fb",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848638694,
+      "stop" : 1651848674188,
+      "duration" : 35494
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "fe49005386bf1827",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848203235,
+      "stop" : 1651848237401,
+      "duration" : 34166
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"\\\"\\\"\",\"y\":\"5\",\"known_issues\":\"9\"}",
+    "uid" : "7057b61910cf554d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848272065,
+      "stop" : 1651848305454,
+      "duration" : 33389
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"\\\"aa\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "981bb9d786347806",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848237449,
+      "stop" : 1651848274071,
+      "duration" : 36622
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"{\\\"a\\\":\\\"b\\\"}\",\"known_issues\":\"\"}",
+    "uid" : "6b74507d69d25647",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848413546,
+      "stop" : 1651848449429,
+      "duration" : 35883
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"\\\"\\\"\",\"y\":\"5\",\"known_issues\":\"3\"}",
+    "uid" : "d55792cd794f6f1a",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848490992,
+      "stop" : 1651848530029,
+      "duration" : 39037
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"0.1\",\"y\":\"5\",\"known_issues\":\"6\"}",
+    "uid" : "a1d48fd58617c471",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848067495,
+      "stop" : 1651848099935,
+      "duration" : 32440
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"true\",\"known_issues\":\"\"}",
+    "uid" : "d17cbf1c052bf199",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848176880,
+      "stop" : 1651848209044,
+      "duration" : 32164
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"-1\",\"known_issues\":\"\"}",
+    "uid" : "b13f55623ddfcb12",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848525676,
+      "stop" : 1651848562954,
+      "duration" : 37278
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"false\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "582dcc32b577c561",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848487098,
+      "stop" : 1651848524353,
+      "duration" : 37255
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"5\",\"y\":\"\\\"aa\\\"\",\"known_issues\":\"\"}",
+    "uid" : "35eb4c1bbf32cd5",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848575889,
+      "stop" : 1651848606172,
+      "duration" : 30283
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Revisting already cleaned spots",
+    "uid" : "c40ca0b45922228e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847961782,
+      "stop" : 1651847998207,
+      "duration" : 36425
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"\\\"aa\\\"\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "534cfa2102a4910e",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848453800,
+      "stop" : 1651848490422,
+      "duration" : 36622
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"-1\",\"y\":\"5\",\"known_issues\":\"8\"}",
+    "uid" : "f41cbd611cc3c3f2",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848240481,
+      "stop" : 1651848271601,
+      "duration" : 31120
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"0\",\"known_issues\":\"5\"}",
+    "uid" : "5e6bad2aba1ab645",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848153190,
+      "stop" : 1651848190893,
+      "duration" : 37703
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"false\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "9a9c962fc2c98cc6",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848046977,
+      "stop" : 1651848085765,
+      "duration" : 38788
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"false\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "fd799f0824dc9cff",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848263123,
+      "stop" : 1651848298618,
+      "duration" : 35495
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"\\\"aa\\\"\",\"known_issues\":\"\"}",
+    "uid" : "9d3a2c2d2bb361cd",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848370997,
+      "stop" : 1651848407968,
+      "duration" : 36971
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "starts on patch",
+    "uid" : "dd195eb65feee7f7",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847917431,
+      "stop" : 1651847955518,
+      "duration" : 38087
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"true\",\"known_issues\":\"\"}",
+    "uid" : "64c96f9a11e8747d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848375610,
+      "stop" : 1651848413508,
+      "duration" : 37898
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid dirt patch position values {\"x\":\"true\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "619517966b588f9d",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848494547,
+      "stop" : 1651848532314,
+      "duration" : 37767
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"5\",\"y\":\"\\\"a\\\"\",\"known_issues\":\"\"}",
+    "uid" : "ee15a4f10f345488",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848124925,
+      "stop" : 1651848158929,
+      "duration" : 34004
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"9999999999999999999999999999999999999999999999999999999999999999999999999999\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "e5a61e59ba5a1c72",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848420680,
+      "stop" : 1651848453768,
+      "duration" : 33088
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid room size values {\"x\":\"[]\",\"y\":\"5\",\"known_issues\":\"\"}",
+    "uid" : "e3a1255a0da61c58",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651848085847,
+      "stop" : 1651848124864,
+      "duration" : 39017
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "invalid hoover start position values {\"x\":\"5\",\"y\":\"\\\"\\\"\",\"known_issues\":\"10\"}",
+    "uid" : "ca9a7ee201d9b891",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "failed",
+    "time" : {
+      "start" : 1651848349753,
+      "stop" : 1651848384130,
+      "duration" : 34377
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "Hit north wall",
+    "uid" : "5ea5984ed6f06696",
+    "parentUid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "status" : "passed",
+    "time" : {
+      "start" : 1651847955589,
+      "stop" : 1651847996332,
+      "duration" : 40743
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  } ],
+  "name" : "timeline"
+}

@@ -1,0 +1,296 @@
+{
+  "uid" : "334988fbaa343032",
+  "name" : "invalid hoover start position values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}",
+  "fullName" : "Cleaning Session Service (Input validation).invalid hoover start position values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}",
+  "historyId" : "e2c367a8513f34f04b60a368a14254bf",
+  "time" : {
+    "start" : 1651848335682,
+    "stop" : 1651848370941,
+    "duration" : 35259
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "Given I have freshly started hoover web server instance ",
+      "time" : {
+        "start" : 1651848336025,
+        "stop" : 1651848368525,
+        "duration" : 32500
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action get rest endpoint ",
+        "time" : {
+          "start" : 1651848336025,
+          "stop" : 1651848336026,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I perform simple action set log file \"/usr/local/demo-app/logs/application-4.log\"",
+        "time" : {
+          "start" : 1651848336026,
+          "stop" : 1651848336026,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I set after suite async () => {\n                                    await performAfterSuiteActions();\n                                }",
+        "time" : {
+          "start" : 1651848368502,
+          "stop" : 1651848368523,
+          "duration" : 21
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "Given I have a room with 15 width units and 15 height units ",
+      "time" : {
+        "start" : 1651848368525,
+        "stop" : 1651848368527,
+        "duration" : 2
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    state.request.roomSize = coords;\n                                }",
+        "time" : {
+          "start" : 1651848368525,
+          "stop" : 1651848368525,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "And I supply raw hoover coordinates parameter values of [1] width units and 5 height units ",
+      "time" : {
+        "start" : 1651848368527,
+        "stop" : 1651848368528,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    state.request.coords = coords;\n                                }",
+        "time" : {
+          "start" : 1651848368527,
+          "stop" : 1651848368527,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "And I have dirt to clean at some coordinates ",
+      "time" : {
+        "start" : 1651848368528,
+        "stop" : 1651848368536,
+        "duration" : 8
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    appendDirtPatchesToRequest(patchesTable);\n                                }",
+        "time" : {
+          "start" : 1651848368528,
+          "stop" : 1651848368528,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "When I give cleaning instructions to move NNESEESWNWW ",
+      "time" : {
+        "start" : 1651848368536,
+        "stop" : 1651848370940,
+        "duration" : 2404
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I cleaning sessions post {\"roomSize\":[15,15],\"coords\":[[1],5],\"patches\":[[1,0],[2,2],[2,3]],\"instructions\":\"NNESEESWNWW\"}",
+        "time" : {
+          "start" : 1651848368536,
+          "stop" : 1651848370938,
+          "duration" : 2402
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "Then I should see a response from the server indicating it handled an error ",
+      "time" : {
+        "start" : 1651848370940,
+        "stop" : 1651848370941,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I observe data {\"timestamp\":\"2022-05-06T14:46:10.668+0000\",\"path\":\"/v1/cleaning-sessions\",\"status\":400,\"error\":\"Bad Request\",\"message\":\"Failed to read HTTP message\"}",
+        "time" : {
+          "start" : 1651848370940,
+          "stop" : 1651848370940,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I assert to equal 400, 400",
+        "time" : {
+          "start" : 1651848370940,
+          "stop" : 1651848370940,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I assert not to be empty {\"timestamp\":\"2022-05-06T14:46:10.668+0000\",\"path\":\"/v1/cleaning-sessions\",\"status\":400,\"error\":\"Bad Request\",\"message\":\"Failed to read HTTP message\"}",
+        "time" : {
+          "start" : 1651848370940,
+          "stop" : 1651848370941,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 16,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : true
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "Cleaning Session Service (Input validation)"
+  }, {
+    "name" : "testClass",
+    "value" : "Cleaning Session Service (Input validation)"
+  }, {
+    "name" : "testMethod",
+    "value" : "invalid hoover start position values {\"x\":\"[1]\",\"y\":\"5\",\"known_issues\":\"\"}"
+  }, {
+    "name" : "package",
+    "value" : "Cleaning Session Service (Input validation)"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "334988fbaa343032.json",
+  "parameterValues" : [ ]
+}
