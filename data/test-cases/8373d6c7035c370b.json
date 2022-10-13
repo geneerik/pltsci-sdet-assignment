@@ -1,0 +1,319 @@
+{
+  "uid" : "8373d6c7035c370b",
+  "name" : "Starts on a patch with no move instructions @issue:1",
+  "fullName" : "Cleaning Session Service (basic).Starts on a patch with no move instructions @issue:1",
+  "historyId" : "25097ec50d90fd034bf7f2f7ca8aee5",
+  "time" : {
+    "start" : 1665672073788,
+    "stop" : 1665672096116,
+    "duration" : 22328
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "failed",
+  "statusMessage" : "expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0",
+  "statusTrace" : "Error: expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0\n                    at SimpleHelper.assertToEqual (/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/classes.js:137:46)\n                    at Step.run (/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/step.js:66:47)\n                    at /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/actor.js:116:23\n                    at processTicksAndRejections (node:internal/process/task_queues:96:5)",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0",
+    "statusTrace" : "Error: expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0\n                    at SimpleHelper.assertToEqual (/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/classes.js:137:46)\n                    at Step.run (/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/step.js:66:47)\n                    at /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/actor.js:116:23\n                    at processTicksAndRejections (node:internal/process/task_queues:96:5)",
+    "steps" : [ {
+      "name" : "Given I have freshly started hoover web server instance ",
+      "time" : {
+        "start" : 1665672074929,
+        "stop" : 1665672094481,
+        "duration" : 19552
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action get rest endpoint ",
+        "time" : {
+          "start" : 1665672074930,
+          "stop" : 1665672074931,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I perform simple action set log file \"/usr/local/demo-app/logs/application-4.log\"",
+        "time" : {
+          "start" : 1665672074932,
+          "stop" : 1665672074932,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I set after suite async () => {\n                                    await performAfterSuiteActions();\n                                }",
+        "time" : {
+          "start" : 1665672094457,
+          "stop" : 1665672094467,
+          "duration" : 10
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "Given I have a room with 5 width units and 5 height units ",
+      "time" : {
+        "start" : 1665672094481,
+        "stop" : 1665672094489,
+        "duration" : 8
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    state.request.roomSize = coords;\n                                }",
+        "time" : {
+          "start" : 1665672094481,
+          "stop" : 1665672094481,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "And I have a hoover at coordinates 1 width units and 2 height units ",
+      "time" : {
+        "start" : 1665672094489,
+        "stop" : 1665672094491,
+        "duration" : 2
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    state.request.coords = coords;\n                                }",
+        "time" : {
+          "start" : 1665672094489,
+          "stop" : 1665672094490,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "And I have dirt to clean at some coordinates ",
+      "time" : {
+        "start" : 1665672094491,
+        "stop" : 1665672094494,
+        "duration" : 3
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I perform simple action () => {\n                                    appendDirtPatchesToRequest(patchesTable);\n                                }",
+        "time" : {
+          "start" : 1665672094491,
+          "stop" : 1665672094493,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "When I give no cleaning instructions ",
+      "time" : {
+        "start" : 1665672094494,
+        "stop" : 1665672096111,
+        "duration" : 1617
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "I cleaning sessions post {\"roomSize\":[5,5],\"coords\":[1,2],\"patches\":[[1,2],[2,2],[2,3]],\"instructions\":\"\"}",
+        "time" : {
+          "start" : 1665672094494,
+          "stop" : 1665672096109,
+          "duration" : 1615
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "Then I should see that total number of clean spots is 1 ",
+      "time" : {
+        "start" : 1665672096111,
+        "stop" : 1665672096116,
+        "duration" : 5
+      },
+      "status" : "failed",
+      "statusMessage" : "Error: expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0\n                    at SimpleHelper.assertToEqual (/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/classes.js:137:46)\n                    at Step.run (/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/step.js:66:47)\n                    at /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/actor.js:116:23\n                    at processTicksAndRejections (node:internal/process/task_queues:96:5)",
+      "steps" : [ {
+        "name" : "I assert to equal 200, 200",
+        "time" : {
+          "start" : 1665672096111,
+          "stop" : 1665672096113,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I assert object to have property {\"coords\":[1,2],\"patches\":0}, \"patches\"",
+        "time" : {
+          "start" : 1665672096113,
+          "stop" : 1665672096113,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "hasContent" : false
+      }, {
+        "name" : "I assert to equal , 1",
+        "time" : {
+          "start" : 1665672096114,
+          "stop" : 1665672096116,
+          "duration" : 2
+        },
+        "status" : "failed",
+        "statusMessage" : "Error: expect(received).toEqual(expected) // deep equality\n                \n                Expected: 1\n                Received: 0\n                    at SimpleHelper.assertToEqual (/src/test/javascript/sdet-assignment-service-codeceptsjs/sdet-assignment/dist/classes.js:137:46)\n                    at Step.run (/src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/step.js:66:47)\n                    at /src/test/javascript/sdet-assignment-service-codeceptsjs/node_modules/codeceptjs/lib/actor.js:116:23\n                    at processTicksAndRejections (node:internal/process/task_queues:96:5)",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : true,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "d5161a54d3d20c4d",
+      "name" : "Last Seen Screenshot",
+      "source" : "d5161a54d3d20c4d.png",
+      "type" : "image/png",
+      "size" : 5320
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 16,
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : true,
+    "hasContent" : true
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "issue",
+    "value" : "1"
+  }, {
+    "name" : "suite",
+    "value" : "Cleaning Session Service (basic)"
+  }, {
+    "name" : "testClass",
+    "value" : "Cleaning Session Service (basic)"
+  }, {
+    "name" : "testMethod",
+    "value" : "Starts on a patch with no move instructions @issue:1"
+  }, {
+    "name" : "package",
+    "value" : "Cleaning Session Service (basic)"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ {
+    "name" : "1",
+    "url" : "https://github.com/geneerik/pltsci-sdet-assignment/issues/1",
+    "type" : "issue"
+  } ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "8373d6c7035c370b.json",
+  "parameterValues" : [ ]
+}

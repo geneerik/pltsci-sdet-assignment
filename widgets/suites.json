@@ -1,0 +1,37 @@
+{
+  "total" : 3,
+  "items" : [ {
+    "uid" : "47e344456ec9db37fd73643a8c71bf25",
+    "name" : "Cleaning Session Service (Input validation)",
+    "statistic" : {
+      "failed" : 37,
+      "broken" : 0,
+      "skipped" : 0,
+      "passed" : 54,
+      "unknown" : 0,
+      "total" : 91
+    }
+  }, {
+    "uid" : "7995d923231c50e321a4f5c3c198652b",
+    "name" : "Cleaning Session Service (basic)",
+    "statistic" : {
+      "failed" : 1,
+      "broken" : 0,
+      "skipped" : 0,
+      "passed" : 14,
+      "unknown" : 0,
+      "total" : 15
+    }
+  }, {
+    "uid" : "ce24b057e149e43492bdabefdeda2465",
+    "name" : "Cleaning Session Service (reuse server instance)",
+    "statistic" : {
+      "failed" : 1,
+      "broken" : 0,
+      "skipped" : 0,
+      "passed" : 2,
+      "unknown" : 0,
+      "total" : 3
+    }
+  } ]
+}
